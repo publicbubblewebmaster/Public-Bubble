@@ -1,0 +1,13 @@
+@(event: Event)
+
+@main("Welcome to Play") {
+
+<section>
+    <h1>@{event.title}</h1>
+    <h2>@{event.location}</h2>
+    <p id="eventDescription">
+        @{event.description}
+    </p>
+</section>
+
+}
