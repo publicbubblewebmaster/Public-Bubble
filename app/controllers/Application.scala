@@ -15,7 +15,7 @@ object Application extends Controller {
   }
 
   def events = Action {
-    val event = new Event("Nicky Morgan - Faith schools and literacy", "Westiminster Abbey",
+    val event = new Event("Nicky Morgan - Faith schools and literacy", "Westminster Abbey",
       "Nicky Morgan will be talking about the role faith schools can play in reaching national literacy targets.")
     Ok(views.html.events(event))
 
