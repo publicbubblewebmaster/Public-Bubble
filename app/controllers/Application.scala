@@ -14,9 +14,8 @@ object Application extends Controller {
     Ok(views.html.blog("Public Bubble"))
   }
 
-  def events = Action {
-    val event = new Event("Nicky Morgan - Faith schools and literacy", "Westminster Abbey",
-      "Nicky Morgan will be talking about the role faith schools can play in reaching national literacy targets.")
+  def events(id : Long) = Action {
+    val event = Event.getById(id)
     Ok(views.html.events(event))
 
   }
