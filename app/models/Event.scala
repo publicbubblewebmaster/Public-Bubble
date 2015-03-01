@@ -3,6 +3,7 @@ package models
 import anorm.SQL
 import anorm.SqlQuery
 import play.api.db.DB
+import play.api.Play.current
 
 /**
  * Created by ian on 24/02/15.
@@ -11,8 +12,8 @@ case class Event (id : Long, title: String, location: String, description: Strin
 
 object Event {
 
-  val GET_ALL_EVENTS_SQL : SqlQuery = SQL("select * from EVENT order by id desc")
-  val GET_EVENT_BY_ID_SQL : SqlQuery = SQL("select * from EVENT where id = {id}")
+  val GET_ALL_EVENTS_SQL : SqlQuery = SQL("select * from EVENTS order by id desc")
+  val GET_EVENT_BY_ID_SQL : SqlQuery = SQL("select * from EVENTS where id = {id}")
 
   def getAll : List[Event] = DB.withConnection {
     implicit connection =>
