@@ -11,5 +11,6 @@ libraryDependencies ++= Seq(
   anorm,
   cache,
   ws,
-  "org.xerial" % "sqlite-jdbc"
+  "org.xerial" % "sqlite-jdbc" % "3.8.7"
 )
+
