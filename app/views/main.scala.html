@@ -17,36 +17,35 @@
         <script src="@routes.Assets.at("javascripts/vendor/modernizr.js")"></script>
 
     </head>
-    <header id="bubble-banner" class="row">
 
-
+    <header id="bubble-banner"></header>
+    <nav id="bubble-banner-nav" class="icon-bar five-up block">
         <a class="item">
-            <img src="../assets/img/images/fi-home.svg">
-            <label>Home</label>
+            <img src="@routes.Assets.at("icons/fi-calendar.svg")">
+            <label>Events</label>
         </a>
         <a class="item">
-            <img src="../assets/img/images/fi-bookmark.svg">
-            <label>Bookmark</label>
+            <img src="@routes.Assets.at("icons/fi-comments.svg")">
+            <label>Blogs</label>
         </a>
         <a class="item">
-            <img src="../assets/img/images/fi-info.svg">
-            <label>Info</label>
+            <img src="@routes.Assets.at("icons/fi-social-twitter.svg")">
+            <label>Follow us</label>
         </a>
         <a class="item">
-            <img src="../assets/img/images/fi-mail.svg">
-            <label>Mail</label>
+            <img src="@routes.Assets.at("icons/fi-like.svg")">
+            <label>Like us</label>
         </a>
         <a class="item">
-            <img src="../assets/img/images/fi-like.svg">
-            <label>Like</label>
+            <img src="@routes.Assets.at("icons/fi-mail.svg")">
+            <label>Email Us</label>
         </a>
-
-        <nav>
-
-        </nav>
-    </header>
-
+    </nav>
     <body>
         @content
     </body>
+
+    <footer class="top-bar">
+
+    </footer>
 </html>

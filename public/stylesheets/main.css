@@ -1,4 +1,3 @@
-
 #bubble-banner {
       background-image: url('../images/bubble-logo-large-transparent.png');
       background-size: 230px;
@@ -6,9 +5,11 @@
       background-repeat: no-repeat;
       height: 200px;
       background-position: 0 2px;
-      margin-bottom: 32px;
       min-width: 986px;
-      position: relative;
-      z-index: 5;
-       font-size: 16px;
+      font-size: 16px;
+      display: block;
     }
+
+#bubble-banner-nav {
+      background-color: #1371b7;
+}
