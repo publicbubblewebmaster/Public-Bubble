@@ -1,8 +1,8 @@
 
 #bubble-banner {
-      background-image: url('../images/bubble-logo-large.jpg');
-      background-size: 35%;
-      background-color: blue;
+      background-image: url('../images/bubble-logo-large-transparent.png');
+      background-size: 230px;
+      background-color: #2D2D87;
       background-repeat: no-repeat;
       height: 200px;
       background-position: 0 2px;
