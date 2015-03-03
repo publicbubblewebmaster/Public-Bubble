@@ -14,8 +14,8 @@ object Application extends Controller {
     Ok(views.html.blog("Public Bubble"))
   }
 
-  def events(id : Long) = Action {
-    val event = Event.getById(id)
+  def events = Action {
+    val event = Event.getLatest
     Ok(views.html.events(event))
 
   }

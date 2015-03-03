@@ -17,14 +17,13 @@
         <script src="@routes.Assets.at("javascripts/vendor/modernizr.js")"></script>
 
     </head>
-
-    <header id="bubble-banner"></header>
+    <header id="bubble-banner" ></header>
     <nav id="bubble-banner-nav" class="icon-bar five-up block">
-        <a class="item">
+        <a class="item" href="/events">
             <img src="@routes.Assets.at("icons/fi-calendar.svg")">
             <label>Events</label>
         </a>
-        <a class="item">
+        <a class="item" href="/blog">
             <img src="@routes.Assets.at("icons/fi-comments.svg")">
             <label>Blogs</label>
         </a>
@@ -42,10 +41,15 @@
         </a>
     </nav>
     <body>
+    <div class="small-8 column small-centered">
         @content
+    </div>
     </body>
 
-    <footer class="top-bar">
-
+    <footer id="page-footer">
+                <div class="large-6 columns large-centered">
+                    <p>&copy; Copyright no one at all. Go to town.</p>
+                </div>
     </footer>
+
 </html>
