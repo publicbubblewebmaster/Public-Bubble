@@ -20,4 +20,8 @@ object Application extends Controller {
 
   }
 
+  def twitter = Action {
+    Ok(views.html.twitter("Twitter"))
+  }
+
 }
