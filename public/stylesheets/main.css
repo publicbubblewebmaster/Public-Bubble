@@ -1,3 +1,5 @@
+
+
 #bubble-banner {
       background-image: url('../images/bubble-logo-large-transparent.png');
       background-size: 230px;
@@ -12,4 +14,10 @@
 
 #bubble-banner-nav {
       background-color: #1371b7;
+}
+
+#page-footer {
+    height: 80px;
+    color: grey;
+    background-color: black;
 }
