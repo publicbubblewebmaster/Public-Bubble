@@ -1,0 +1,26 @@
+$left2_color: #642A94;
+$left1_color: #4C2D9E;
+$dominant_color: #2D2D87;
+$right1_color: #2D4B9E;
+$right2_color: #2A6294;
+ 
+ 
+left2-color {
+  background-color : $left2_color;
+}
+ 
+left1-color {
+  background-color : $left1_color;
+}
+ 
+dom-color {
+  background-color : $dominant_color;
+}
+ 
+right1-color {
+  background-color : $right1_color;
+}
+ 
+right2-color {
+  background-color : $right2_color;
+}
