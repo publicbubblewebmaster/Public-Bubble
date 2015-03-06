@@ -3,7 +3,6 @@
 #bubble-banner {
       background-image: url('../images/bubble-logo-large-transparent.png');
       background-size: 230px;
-      background-color: #2D2D87;
       background-repeat: no-repeat;
       height: 200px;
       background-position: 0 2px;
@@ -11,10 +10,6 @@
       font-size: 16px;
       display: block;
     }
-
-#bubble-banner-nav {
-      background-color: #1371b7;
-}
 
 #page-footer {
     height: 80px;
@@ -25,3 +20,9 @@
 .address {
     color: #2D2D87;
 }
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: red;
+    }
