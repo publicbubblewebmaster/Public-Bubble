@@ -10,6 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta name="description" content="Documentation and reference library for ZURB Foundation. JavaScript, CSS, components, grid and more."/>
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/blue_theme.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/foundation/foundation.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/foundation/normalize.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
@@ -18,7 +19,7 @@
 
     </head>
     <header id="bubble-banner" ></header>
-    <nav id="bubble-banner-nav" class="icon-bar five-up block">
+    <nav id="bubble-banner-nav" class="icon-bar five-up block right1-color">
         <a class="item" href="/events">
             <img src="@routes.Assets.at("icons/fi-calendar.svg")">
             <label>Events</label>
@@ -41,13 +42,13 @@
         </a>
     </nav>
     <body>
-    <div class="small-8 column small-centered">
+
         @content
     </div>
     </body>
 
     <footer id="page-footer">
-                <div class="large-6 columns large-centered">
+                <div class="small-3 columns small-centered">
                     <p>&copy; Copyright no one at all. Go to town.</p>
                 </div>
     </footer>

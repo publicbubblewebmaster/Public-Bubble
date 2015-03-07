@@ -3,8 +3,23 @@
 @main("Welcome to Play") {
 
 <section>
-    <a class="twitter-timeline"  href="https://twitter.com/iPolding" data-widget-id="572746982012493824">Tweets by @@iPolding</a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <div class="small-5 small-centered column">
+    <a class="twitter-timeline"
+       href="https://twitter.com/publicbubble"
+       data-widget-id="572889086744084480"
+
+
+            >Loading Tweets by @@publicbubble...</a>
+    </div>
+    <script>!function(d,s,id){
+        var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+        if(!d.getElementById(id)){
+            js=d.createElement(s);
+            js.id=id;js.src=p+"://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js,fjs);
+            }
+        }(document,"script","twitter-wjs");
+</script>
 </section>
 
 }
