@@ -1,4 +1,4 @@
-package main
+package eventserver
 
 import (
 	"bytes"
@@ -69,7 +69,7 @@ func handleComments(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Cache-Control", "no-cache")
+			w.Header().Set("Cache-Control", "no-cache")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		io.Copy(w, bytes.NewReader(commentData))
 

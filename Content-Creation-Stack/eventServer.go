@@ -1,4 +1,4 @@
-package main
+package eventserver
  
 import (
     "log"
@@ -9,11 +9,7 @@ import (
     "io"
 )
  
-type Event struct {
-    Title string `json:"title"`
-    Location string `json:"location"`
-    Description string `json:"description"`
-}
+
  
 func main() {
     // your http.Handle calls here
