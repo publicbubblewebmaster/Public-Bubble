@@ -18,7 +18,7 @@ var EventForm = React.createClass(
             var description = this.refs.description.getDOMNode().value.trim();
             var address = this.refs.address.getDOMNode().value.trim();
             console.log("this.props.url = " + this.props.url);
-            
+            $.ajax();            
             this.props.onCommentSubmit({author: author, text: text});
             this.refs.author.getDOMNode().value = '';
             this.refs.description.getDOMNode().value = '';           
