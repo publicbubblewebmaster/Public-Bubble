@@ -6,19 +6,25 @@ import (
     "github.com/mattn/go-sqlite3"
 )
 
+var dataSourceName string
+var DB_DRIVER string
+
+func DbInit(dbLocation string) {
+    dataSourceName = dbLocation
+    sql.Register(DB_DRIVER, &sqlite3.SQLiteDriver{})
+    }
+
 func PersistEvent(event Event) {
 
-        var DB_DRIVER string
-        sql.Register(DB_DRIVER, &sqlite3.SQLiteDriver{})
-            
-        db, err := sql.Open(DB_DRIVER, "/home/ian/dev/Projects/public-bubble/database/test.db")
+        db, err := sql.Open(DB_DRIVER, dataSourceName)
+        log.Print(dataSourceName)
         tx, err := db.Begin()
         if err != nil {
             log.Fatal(err)
         }
          
         _, err = db.Exec(
-          "INSERT INTO events (title, location, description) values (?, ?, ?)", nil,
+          "INSERT INTO events (title, location, description) values (?, ?, ?)", 
               event.Title,
               event.Location, 
               event.Description,
@@ -26,7 +32,7 @@ func PersistEvent(event Event) {
 
         if err != nil {
               log.SetFlags(log.Llongfile)
-               log.Fatal(err)
+              log.Fatal(err)
                }
         tx.Commit()
 // close the DB?

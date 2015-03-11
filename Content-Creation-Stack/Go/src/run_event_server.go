@@ -13,10 +13,13 @@ import (
  
 func main() {
     // your http.Handle calls here
+    log.SetFlags(log.Llongfile)
+    eventserver.DbInit("/home/ian/dev/Projects/public-bubble/database/test.db")
     http.Handle("/healthcheck", http.HandlerFunc(healthCheck))
     http.Handle("/kill", http.HandlerFunc(kill))
     http.Handle("/events", http.HandlerFunc(EventsHandler))
     log.Fatal(http.ListenAndServe("localhost:4000", nil))
+    log.Println("Server started!")
 }
  
 func kill(w http.ResponseWriter, r *http.Request) {
