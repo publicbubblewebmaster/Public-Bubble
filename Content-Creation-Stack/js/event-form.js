@@ -17,11 +17,14 @@ var EventForm = React.createClass(
             var title = this.refs.title.getDOMNode().value.trim();
             var description = this.refs.description.getDOMNode().value.trim();
             var address = this.refs.address.getDOMNode().value.trim();
-            console.log("this.props.url = " + this.props.url);
-            $.ajax();            
-            this.props.onCommentSubmit({author: author, text: text});
-            this.refs.author.getDOMNode().value = '';
-            this.refs.description.getDOMNode().value = '';           
+            console.log("INSIDE event-form.js this.props.url = " + this.props.url);
+            var event = {title:title, description:description, address:address};
+            $.ajax({
+                type: "POST",
+                url: this.props.url,
+                data: event,
+                dataType: 'json'
+                });         
         },
 
         render : function() {
@@ -41,6 +44,6 @@ var EventForm = React.createClass(
     );
 
 React.render(
-    <EventForm url="http://localhost:3000" />,
+    <EventForm url="http://localhost/events" />,
     document.getElementById('eventForm')
     );

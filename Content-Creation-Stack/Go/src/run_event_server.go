@@ -13,6 +13,7 @@ import (
  
 func main() {
     // your http.Handle calls here
+    http.Handle("/healthcheck", http.HandlerFunc(healthCheck))
     http.Handle("/kill", http.HandlerFunc(kill))
     http.Handle("/events", http.HandlerFunc(EventsHandler))
     log.Fatal(http.ListenAndServe("localhost:4000", nil))
@@ -40,6 +41,12 @@ func EventsHandler(w http.ResponseWriter, r *http.Request) {
             eventserver.PersistEvent(event)         
             } 
         
-        default: http.Error(w, "Unsupported method", http.StatusNotImplemented)    
+        default: 
+            log.Println("Request method " + request_method)
+            http.Error(w, "Unsupported method", http.StatusNotImplemented)    
     }
     }
+
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprint(w, "All healthy and happy here!")
+}
