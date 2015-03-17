@@ -39,6 +39,7 @@ func EventsHandler(w http.ResponseWriter, r *http.Request) {
     request_method := r.Method
     switch request_method {
         case "POST":
+            log.Print("received POST")
             var body io.ReadCloser = r.Body
             dec := json.NewDecoder(body)
             for {
