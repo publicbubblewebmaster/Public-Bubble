@@ -2,7 +2,8 @@ var Event = React.createClass({
     render: function() {
         return (
             <li className="event">
-              <a href={this.props.idNum}>{this.props.idNum}{this.props.title}</a>
+              <a>{this.props.title}</a>
+              <p>href={"events/" + this.props.idNum}</p>
             </li>
         );
         }

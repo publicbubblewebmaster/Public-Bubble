@@ -9,7 +9,6 @@ var EventForm = React.createClass(
             console.log("description=" + description);
         },
 
-
         handleSubmit : function(e) {
             e.preventDefault();
             console.log("clicked submit");
@@ -33,12 +32,12 @@ var EventForm = React.createClass(
         render : function() {
             return (
         <div> 
-        <h1 className="small-6 small-centered column">Post an Event</h1>
-        <form className="small-6 small-centered column" onSubmit={this.handleSubmit}>
-            <input type="text" placeholder="Event Title..." ref="title" className="small-6 small-centered column"/>
-            <input type="text" placeholder="Event address..." ref="location" className="small-6 small-centered column"/>
-            <textarea placeholder="Event Description..." ref="description" className="small-6 small-centered column"/>
-            <input type="submit" value="Post" className="small-6 small-centered column"/>
+        <h1 >Post an Event</h1>
+        <form  onSubmit={this.handleSubmit}>
+            <input type="text" placeholder="Event Title..." ref="title" />
+            <input type="text" placeholder="Event address..." ref="location" />
+            <textarea placeholder="Event Description..." ref="description" />
+            <input type="submit" value="Post" />
         </form>
         </div>
            );
