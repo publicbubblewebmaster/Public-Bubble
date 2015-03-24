@@ -33,9 +33,4 @@ var EventList = React.createClass({
               {eventNodes}
             </div>
   )}
-});        
-  
-React.render(
-    <EventList url="events.json" />,
-    document.getElementById('eventList')
-);
+});     
