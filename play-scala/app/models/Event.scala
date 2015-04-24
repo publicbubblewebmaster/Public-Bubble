@@ -7,7 +7,9 @@ import play.api.Play.current
 /**
  * Created by ian on 24/02/15.
  */
-case class Event (id : Long, title: String, location: String, description: String)
+case class Event (val id : Long = 0, title: String, location: String, description: String)
+
+
 
 object Event {
 
@@ -16,6 +18,8 @@ object Event {
 
   // TODO incorporate publish date
   val GET_LATEST_EVENT : SqlQuery = SQL("select * from EVENTS order by id desc LIMIT 1")
+
+  val SAVE_EVENT : SqlQuery = SQL("insert into EVENTS values ({id}, {title}, {location}, {description})")
 
   def getLatest : Event = DB.withConnection{
         implicit connection =>
@@ -26,6 +30,17 @@ object Event {
             row[String] ("location"),
             row[String] ("description")
           )
+
+  }
+
+  def save(event : Event) = DB.withConnection {
+    implicit connection =>
+      val row = SAVE_EVENT.on(
+                  "id" -> event.id,
+                  "title" -> event.title,
+                  "location" -> event.location,
+                  "description" -> event.description
+    ).apply().head;
 
   }
 

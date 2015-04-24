@@ -1,0 +1,17 @@
+@(eventForm: Form[Event])
+
+@main("Event Form") {
+
+<form action="@routes.Events.save" method="post">
+
+    <div>
+        @helper.inputText(eventForm("id"))
+        @helper.inputText(eventForm("title"))
+        @helper.textarea(eventForm("description"))
+        @helper.inputText(eventForm("location"))
+    </div>
+        <button type="submit">Add Event</button>
+    </div>
+</form>
+
+}

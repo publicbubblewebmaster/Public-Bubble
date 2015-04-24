@@ -1,7 +1,6 @@
 package controllers
 
 import models.Event
-import play.api._
 import play.api.mvc._
 
 object Application extends Controller {
