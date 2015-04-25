@@ -13,7 +13,9 @@ object Events extends Controller {
           "id" -> Forms.optional(Forms.longNumber()),
           "title" -> Forms.text,
         "location" -> Forms.text,
-        "description" -> Forms.text
+        "description" -> Forms.text,
+        "displayFrom" -> Forms.date,
+        "displayUntil" -> Forms.date
       )(Event.apply)(Event.unapply)
   )
 
@@ -40,12 +42,7 @@ object Events extends Controller {
   }
 
   def deleteEvent(id : Int)= Action { implicit request =>
-
     Event.delete(id)
-
-
-    Ok("Event deleted")
+    Ok(views.html.createEvent(eventForm))
   }
-
-
-  }
+}

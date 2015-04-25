@@ -1,10 +1,17 @@
 package models
 
+import java.util.Date
 import anorm.{Row, SQL, SqlQuery}
 import play.api.db.DB
 import play.api.Play.current
 
-case class Event (val id : Option[Long], title: String, location: String, description: String)
+case class Event (
+                   val id : Option[Long],
+                   title: String,
+                   location: String,
+                   description: String,
+                   displayFrom: Date,
+                   displayUntil: Date)
 
 object Event {
 
@@ -47,12 +54,12 @@ object Event {
   def getById(eventId : Long) : Event = DB.withConnection {
     implicit connection =>
       val row = GET_EVENT_BY_ID_SQL.on("id" -> eventId).apply().head;
-      Event(
-          row[Option[Long]] ("id"),
-          row[String] ("title"),
-          row[String] ("location"),
-          row[String] ("description")
-        )
+      Event.createFrom(row)
+  }
+
+  def delete(id : Int) :Unit = DB.withConnection {
+    implicit connection =>
+      val result : Boolean = DELETE_EVENT_SQL.on("id" -> id).execute()
   }
 
   def createFrom(row : Row) : Event = {
@@ -60,12 +67,10 @@ object Event {
       row[Option[Long]] ("id"),
       row[String] ("title"),
       row[String] ("location"),
-      row[String] ("description")
+      row[String] ("description"),
+      row[Date] ("display_from"),
+      row[Date] ("display_until")
     )
   }
 
-  def delete(id : Int) :Unit = DB.withConnection {
-    implicit connection =>
-      DELETE_EVENT_SQL.on("id" -> id).apply()
-  }
 }

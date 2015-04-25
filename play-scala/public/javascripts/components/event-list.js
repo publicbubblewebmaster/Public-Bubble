@@ -1,15 +1,12 @@
-if (window.console) {
-  console.log("event-list.js has been loaded");
-}
-
-
 var Event = React.createClass({
     render: function() {
         return (
+        <div className="row">
             <li className="event">
               <a href={"/update/event/" + this.props.idNum}>{this.props.title}</a>
               <a className="alert round label" href={"/delete/event/" + this.props.idNum}>DELETE!</a>
             </li>
+        </div>
         );
         }
 });

@@ -1,4 +1,4 @@
-
+html, body, #container { height: 70%; }
 
 #bubble-banner {
       background-image: url('../images/bubble-logo-large-transparent.png');
@@ -17,7 +17,7 @@
 }
 
 #page-footer {
-    height: 80px;
+    height: 150px;
     color: grey;
     background-color: black;
 }
