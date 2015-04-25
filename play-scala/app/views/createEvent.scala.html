@@ -4,14 +4,14 @@
 
 <form action="@routes.Events.save" method="post">
 
-    <div>
+    <div class="small-8 columns large-centered" >
         @helper.inputText(eventForm("id"))
         @helper.inputText(eventForm("title"))
-        @helper.textarea(eventForm("description"))
         @helper.inputText(eventForm("location"))
+        @helper.textarea(eventForm("description"))
     </div>
-        <button type="submit">Add Event</button>
+    <div>
+        <button class="small-1 small-centered" type="submit">Add Event</button>
     </div>
 </form>
-
 }
