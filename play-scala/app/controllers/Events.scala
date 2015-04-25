@@ -10,10 +10,10 @@ object Events extends Controller {
 
   val eventForm = Form(
       Forms.mapping(
-          "id" -> Forms.longNumber,
+          "id" -> Forms.optional(Forms.longNumber()),
           "title" -> Forms.text,
-          "description" -> Forms.text,
-          "location" -> Forms.text
+        "location" -> Forms.text,
+        "description" -> Forms.text
       )(Event.apply)(Event.unapply)
   )
 
@@ -32,13 +32,19 @@ object Events extends Controller {
     eventForm.bindFromRequest.fold(
       formWithErrors => BadRequest("Oh noes, invalid submission!"),
 
-
-
       createdEvent => {
-        Event.save(createdEvent)
+        Event.insert(createdEvent)
         eventForm.fill(createdEvent)
         Ok(views.html.createEvent(eventForm.fill(createdEvent)))}
     )
+  }
+
+  def deleteEvent(id : Int)= Action { implicit request =>
+
+    Event.delete(id)
+
+
+    Ok("Event deleted")
   }
 
 

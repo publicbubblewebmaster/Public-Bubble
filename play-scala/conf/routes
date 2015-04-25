@@ -5,10 +5,12 @@
 POST   /create/event                controllers.Events.save
 GET    /create/event                controllers.Events.createEvent
 GET    /update/event/:id            controllers.Events.updateEvent(id : Int)
+GET    /delete/event/:id            controllers.Events.deleteEvent(id : Int)
 
 # Home page
 GET    /                           controllers.Application.index
 GET    /blog                       controllers.Application.blog
+GET    /events/all                 controllers.Application.eventsJson
 GET    /events                     controllers.Application.events
 GET    /twitter                    controllers.Application.twitter
 

@@ -2,6 +2,7 @@ package controllers
 
 import models.Event
 import play.api.mvc._
+import play.api.libs.json._
 
 object Application extends Controller {
 
@@ -21,6 +22,18 @@ object Application extends Controller {
 
   def twitter = Action {
     Ok(views.html.twitter("Twitter"))
+  }
+
+  def eventsJson = Action {
+    val jsonEvents : List[JsValue] =
+              Event.getAll.map(
+                event =>
+                  Json.obj(
+                    "id" -> event.id,
+                    "title" -> event.title
+                  )
+              )
+    Ok(JsArray(jsonEvents))
   }
 
 }

@@ -2,16 +2,24 @@
 
 @main("Event Form") {
 
-<form action="@routes.Events.save" method="post">
+<script src="@routes.Assets.at("javascripts/react/react.js")"></script>
+<script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
 
-    <div class="small-8 columns large-centered" >
-        @helper.inputText(eventForm("id"))
+    <div id="eventsBox" class="small-2 columns">
+        <li>React component should go here</li>
+    </div>
+
+<form class="row" action="@routes.Events.save" method="post">
+    <div class="small-10 columns" >
         @helper.inputText(eventForm("title"))
         @helper.inputText(eventForm("location"))
         @helper.textarea(eventForm("description"))
     </div>
-    <div>
-        <button class="small-1 small-centered" type="submit">Add Event</button>
+    <div class="row">
+        <button class="small-12 centered" type="submit">Add Event</button>
     </div>
 </form>
+
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/event-list.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-box.js")" ></script>
 }
