@@ -2,10 +2,10 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-POST   /create/event                controllers.Events.save
-GET    /create/event                controllers.Events.createEvent
-GET    /update/event/:id            controllers.Events.updateEvent(id : Int)
-GET    /delete/event/:id            controllers.Events.deleteEvent(id : Int)
+POST   /create/event                controllers.Application.save
+GET    /create/event                controllers.Application.createEvent
+GET    /update/event/:id            controllers.Application.updateEvent(id : Int)
+GET    /delete/event/:id            controllers.Application.deleteEvent(id : Int)
 
 # Home page
 GET    /                           controllers.Application.index

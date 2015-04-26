@@ -9,13 +9,25 @@
     <div id="eventsBox" class="small-2 columns">
     </div>
 
-<form class="row" action="@routes.Events.save" method="post">
+    <script>
+      $(function() {
+            $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+<form class="row" action="@routes.Application.save" method="post">
     <div class="small-8 columns" >
         @helper.inputText(eventForm("title"))
         @helper.inputText(eventForm("location"))
         @helper.textarea(eventForm("description"))
-
-        <input id="datepicker" class="hasDatepicker"></input>
+        <!--@helper.inputDate(eventForm("displayFrom"))-->
+        <!--@helper.textarea(eventForm("displayUntil"))-->
+     <div class="small-4 columns">Display from:
+         <input name="displayFrom" id="displayFrom" type="date" class="datepicker">
+     </div>
+     <div class="small-4 columns">
+        until
+         <input name="displayUntil" id="displayUntil" type="date" class="datepicker"></div>
     </div>
     <div class="row">
         <button class="small-12 centered" type="submit">Save</button>

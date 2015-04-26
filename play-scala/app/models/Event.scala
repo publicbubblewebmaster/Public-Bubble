@@ -1,9 +1,10 @@
 package models
 
 import java.util.Date
+
 import anorm.{Row, SQL, SqlQuery}
-import play.api.db.DB
 import play.api.Play.current
+import play.api.db.DB
 
 case class Event (
                    val id : Option[Long],
@@ -22,7 +23,11 @@ object Event {
   // TODO incorporate publish date
   val GET_LATEST_EVENT : SqlQuery = SQL("select * from EVENTS order by id desc LIMIT 1")
 
-  val SAVE_EVENT : SqlQuery = SQL("insert into EVENTS(title, location, description) values ({title}, {location}, {description})")
+  val SAVE_EVENT : SqlQuery = SQL("""
+    insert into EVENTS(title, location, description, display_from, display_until)
+                values
+                      ({title}, {location}, {description}, {display_from}, {display_until})
+    """)
 
   def getAll : List[Event] = DB.withConnection {
     implicit connection =>
@@ -45,7 +50,9 @@ object Event {
         SAVE_EVENT.on(
           "title" -> event.title,
           "location" -> event.location,
-          "description" -> event.description
+          "description" -> event.description,
+          "display_from" -> event.displayFrom,
+          "display_until" -> event.displayUntil
         ).executeInsert();
     }
     id

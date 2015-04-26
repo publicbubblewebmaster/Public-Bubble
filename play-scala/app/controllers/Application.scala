@@ -1,8 +1,9 @@
 package controllers
 
 import models.Event
-import play.api.mvc._
+import play.api.data.{Form, Forms}
 import play.api.libs.json._
+import play.api.mvc._
 
 object Application extends Controller {
 
@@ -16,6 +17,7 @@ object Application extends Controller {
 
   def events = Action {
     val event = Event.getLatest
+    print(event)
     Ok(views.html.events(event))
 
   }
@@ -36,4 +38,47 @@ object Application extends Controller {
     Ok(JsArray(jsonEvents))
   }
 
+  def createEvent = Action {
+
+    Ok(views.html.createEvent(eventForm))
+  }
+
+  def updateEvent(id : Int) = Action {
+
+    val event = Event.getById(id);
+    Ok(views.html.createEvent(eventForm.fill(event)))
+  }
+
+  def save = Action { implicit request =>
+    eventForm.bindFromRequest.fold(
+      formWithErrors =>     {
+        print(formWithErrors.errors)
+
+        Ok(views.html.createEvent(formWithErrors))},
+
+
+
+      createdEvent => {
+        print(createdEvent)
+        val event = Event.insert(createdEvent)
+        eventForm.fill(createdEvent)
+        Ok(views.html.createEvent(eventForm.fill(createdEvent)))}
+    )
+  }
+
+  def deleteEvent(id : Int)= Action { implicit request =>
+    Event.delete(id)
+    Ok(views.html.createEvent(eventForm))
+  }
+
+  val eventForm = Form(
+    Forms.mapping(
+      "id" -> Forms.optional(Forms.longNumber()),
+      "title" -> Forms.text,
+      "location" -> Forms.text,
+      "description" -> Forms.text,
+      "displayFrom" -> Forms.date("yyyy-MM-dd"),
+      "displayUntil" -> Forms.date("yyyy-MM-dd")
+    )(Event.apply)(Event.unapply)
+  )
 }
