@@ -26,7 +26,7 @@ object Event {
   val SAVE_EVENT : SqlQuery = SQL("""
     insert into EVENTS(title, location, description, display_from, display_until)
                 values
-                      ({title}, {location}, {description}, date("YYYY-MM-DD", {display_from}), date("YYYY-MM-DD", {display_until}))
+                      ({title}, {location}, {description}, {display_from}, {display_until})
     """)
 
   def getAll : List[Event] = DB.withConnection {

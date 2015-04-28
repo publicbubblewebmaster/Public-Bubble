@@ -1,5 +1,7 @@
 package controllers
 
+import java.text.SimpleDateFormat
+
 import models.Event
 import play.api.data.{Form, Forms}
 import play.api.libs.json._
@@ -61,7 +63,7 @@ object Application extends Controller {
       createdEvent => {
         print(createdEvent)
         val event = Event.insert(createdEvent)
-        eventForm.fill(createdEvent)
+
         Ok(views.html.createEvent(eventForm.fill(createdEvent)))}
     )
   }
@@ -71,14 +73,15 @@ object Application extends Controller {
     Ok(views.html.createEvent(eventForm))
   }
 
+  import java.text.SimpleDateFormat;
   val eventForm = Form(
     Forms.mapping(
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
       "location" -> Forms.text,
       "description" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-MM-dd"),
-      "displayUntil" -> Forms.date("yyyy-MM-dd")
+      "displayFrom" -> Forms.date("yyyy-mm-dd"),
+      "displayUntil" -> Forms.date("yyyy-mm-dd")
     )(Event.apply)(Event.unapply)
   )
 }

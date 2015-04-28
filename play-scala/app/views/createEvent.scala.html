@@ -11,7 +11,8 @@
 
     <script>
       $(function() {
-            $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+            $( "#displayUntil").datepicker({dateFormat: "yy-mm-dd"});
+            $( "#displayFrom").datepicker({dateFormat: "yy-mm-dd"});
     });
     </script>
 
@@ -20,15 +21,8 @@
         @helper.inputText(eventForm("title"))
         @helper.inputText(eventForm("location"))
         @helper.textarea(eventForm("description"))
-        <!--@helper.inputDate(eventForm("displayFrom"))-->
-        <!--@helper.textarea(eventForm("displayUntil"))-->
-     <div class="small-4 columns">Display from:
-         <input name="displayFrom" id="displayFrom" type="date" class="datepicker">
-     </div>
-     <div class="small-4 columns">
-        until
-         <input name="displayUntil" id="displayUntil" type="date" class="datepicker"></div>
-    </div>
+        @helper.inputDate(eventForm("displayFrom"))
+        @helper.inputDate(eventForm("displayUntil"))
     <div class="row">
         <button class="small-12 centered" type="submit">Save</button>
     </div>
