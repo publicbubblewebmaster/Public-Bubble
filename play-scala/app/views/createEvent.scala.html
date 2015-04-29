@@ -6,27 +6,42 @@
 <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
 <script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
 
-    <div id="eventsBox" class="small-2 columns">
-    </div>
+    <div id="eventsBox" class="small-2 columns"></div>
 
-    <script>
-      $(function() {
-            $( "#displayUntil").datepicker({dateFormat: "yy-mm-dd"});
-            $( "#displayFrom").datepicker({dateFormat: "yy-mm-dd"});
-    });
-    </script>
 
-<form class="row" action="@routes.Application.save" method="post">
-    <div class="small-8 columns" >
-        @helper.inputText(eventForm("title"))
-        @helper.inputText(eventForm("location"))
-        @helper.textarea(eventForm("description"))
-        @helper.inputDate(eventForm("displayFrom"))
-        @helper.inputDate(eventForm("displayUntil"))
+
+<form class="row" id="eventForm" action="@routes.Application.save" method="post">
+    <div class="small-8 columns small-centered" >
+        @helper.inputText(eventForm("title"), '_label -> "Title")
+        @helper.inputText(eventForm("location"), '_label -> "Location")
+        @helper.textarea(eventForm("description"), '_label -> "Description")
+        @helper.inputDate(eventForm("displayFrom"), 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
+        @helper.inputDate(eventForm("displayUntil"), 'class -> "datepicker small-4 columns", '_label -> "...until...")
+
+        <!--<input type="date" id="displayFrom" name="displayFrom" value="" class="datepicker"/>-->
     <div class="row">
-        <button class="small-12 centered" type="submit">Save</button>
+        <button id="saveButton" class="small-12 centered" type="submit">Save</button>
     </div>
 </form>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/event-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-box.js")" ></script>
+<script>
+      $(function() {
+            $( ".datepicker").datepicker({dateFormat: "dd-mm-yy"});
+      });
+
+    var validateDates = function() {
+            var start = document.getElementById("displayUntil");
+            var end = document.getElementById("displayFrom");
+            if (start.value == "") {
+                window.alert("Please enter a start date");
+            }
+
+            console.log("listener fired");
+            if (start.value < document.getElementById("displayFrom").value) {
+                            window.alert("Display from must be before display until!");
+                            return false;
+            };};
+    document.getElementById("displayUntil").addEventListener("click", validateDates);
+    </script>
 }

@@ -80,8 +80,8 @@ object Application extends Controller {
       "title" -> Forms.text,
       "location" -> Forms.text,
       "description" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-mm-dd"),
-      "displayUntil" -> Forms.date("yyyy-mm-dd")
+      "displayFrom" -> Forms.date("dd-MM-yyyy").verifying(),
+      "displayUntil" -> Forms.date("dd-MM-yyyy")
     )(Event.apply)(Event.unapply)
   )
 }
