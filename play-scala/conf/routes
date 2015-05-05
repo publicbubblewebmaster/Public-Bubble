@@ -2,10 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#Content Creation
 POST   /create/event                controllers.Application.save
 GET    /create/event                controllers.Application.createEvent
 GET    /update/event/:id            controllers.Application.updateEvent(id : Int)
 GET    /delete/event/:id            controllers.Application.deleteEvent(id : Int)
+POST   /upload/picture              controllers.Application.uploadImage
 
 # Home page
 GET    /                           controllers.Application.index

@@ -21,13 +21,23 @@ object Event {
   val GET_EVENT_BY_ID_SQL : SqlQuery = SQL("select * from EVENTS where id = {id}")
 
   // TODO incorporate publish date
-  val GET_LATEST_EVENT : SqlQuery = SQL("select * from EVENTS order by id desc LIMIT 1")
+  val GET_LATEST_EVENT : SqlQuery = SQL("select * from EVENTS " +
+    "where display_from <= current_date and display_until > current_date order by display_until asc LIMIT 1")
 
-  val SAVE_EVENT : SqlQuery = SQL("""
+  val CREATE_EVENT : SqlQuery = SQL("""
     insert into EVENTS(title, location, description, display_from, display_until)
                 values
                       ({title}, {location}, {description}, {display_from}, {display_until})
     """)
+
+  val UPDATE_EVENT : SqlQuery = SQL("""
+    UPDATE events SET title = {title},
+                   location = {location},
+                   description = {description},
+                   display_from = {display_from},
+                   display_until = {display_until}
+                   where id = {id}
+                                    """)
 
   def getAll : List[Event] = DB.withConnection {
     implicit connection =>
@@ -40,14 +50,13 @@ object Event {
         implicit connection =>
           val row : Row = GET_LATEST_EVENT.apply().head;
           Event.createFrom(row);
-
   }
 
-  def insert(event : Event) : Option[Long] = {
+  def create(event : Event) : Option[Long] = {
 
     val id: Option[Long] = DB.withConnection {
       implicit connection =>
-        SAVE_EVENT.on(
+        CREATE_EVENT.on(
           "title" -> event.title,
           "location" -> event.location,
           "description" -> event.description,
@@ -56,6 +65,21 @@ object Event {
         ).executeInsert();
     }
     id
+  }
+  
+  def update(event : Event) = {
+    DB.withConnection {
+      implicit connection =>
+      UPDATE_EVENT.on(
+        "title" -> event.title,
+        "location" -> event.location,
+        "description" -> event.description,
+        "display_from" -> event.displayFrom,
+        "display_until" -> event.displayUntil,
+        "id" -> event.id
+      ).executeUpdate()
+    }
+
   }
 
   def getById(eventId : Long) : Event = DB.withConnection {

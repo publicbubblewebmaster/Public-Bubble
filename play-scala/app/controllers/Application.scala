@@ -1,7 +1,5 @@
 package controllers
 
-import java.text.SimpleDateFormat
-
 import models.Event
 import play.api.data.{Form, Forms}
 import play.api.libs.json._
@@ -48,6 +46,7 @@ object Application extends Controller {
   def updateEvent(id : Int) = Action {
 
     val event = Event.getById(id);
+    print("event.id: " + event.id);
     Ok(views.html.createEvent(eventForm.fill(event)))
   }
 
@@ -55,16 +54,17 @@ object Application extends Controller {
     eventForm.bindFromRequest.fold(
       formWithErrors =>     {
         print(formWithErrors.errors)
-
         Ok(views.html.createEvent(formWithErrors))},
 
-
-
       createdEvent => {
-        print(createdEvent)
-        val event = Event.insert(createdEvent)
-
-        Ok(views.html.createEvent(eventForm.fill(createdEvent)))}
+        if (createdEvent.id.isEmpty) {
+          Event.create(createdEvent)
+        }
+        else {
+          Event.update(createdEvent)
+        }
+        Ok(views.html.createEvent(eventForm.fill(createdEvent)))
+      }
     )
   }
 
@@ -73,7 +73,14 @@ object Application extends Controller {
     Ok(views.html.createEvent(eventForm))
   }
 
-  import java.text.SimpleDateFormat;
+  import java.io.File;
+  def uploadImage() = Action(parse.multipartFormData) { request =>
+    request.body.file("image").map { file =>
+      file.ref.moveTo(new File("/tmp/image"))
+      Ok("Retrieved file %s" format file.filename)
+    }.getOrElse(BadRequest("File missing!"))
+  }
+
   val eventForm = Form(
     Forms.mapping(
       "id" -> Forms.optional(Forms.longNumber()),
