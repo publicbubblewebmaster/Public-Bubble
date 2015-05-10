@@ -16,16 +16,16 @@ case class Event (
 
 object Event {
 
-  val GET_ALL_EVENTS_SQL : SqlQuery = SQL("select * from EVENTS order by id desc")
-  val DELETE_EVENT_SQL : SqlQuery = SQL("delete from EVENTS where id = {id}")
-  val GET_EVENT_BY_ID_SQL : SqlQuery = SQL("select * from EVENTS where id = {id}")
+  val GET_ALL_EVENTS_SQL : SqlQuery = SQL("select * from EVENT order by id desc")
+  val DELETE_EVENT_SQL : SqlQuery = SQL("delete from EVENT where id = {id}")
+  val GET_EVENT_BY_ID_SQL : SqlQuery = SQL("select * from EVENT where id = {id}")
 
   // TODO incorporate publish date
-  val GET_LATEST_EVENT : SqlQuery = SQL("select * from EVENTS " +
+  val GET_LATEST_EVENT : SqlQuery = SQL("select * from EVENT " +
     "where display_from <= current_date and display_until > current_date order by display_until asc LIMIT 1")
 
   val CREATE_EVENT : SqlQuery = SQL("""
-    insert into EVENTS(title, location, description, display_from, display_until)
+    insert into EVENT(title, location, description, display_from, display_until)
                 values
                       ({title}, {location}, {description}, {display_from}, {display_until})
     """)

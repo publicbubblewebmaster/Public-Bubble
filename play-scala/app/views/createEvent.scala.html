@@ -21,15 +21,25 @@
     </div>
 </form>
 
-<form action="@routes.Application.uploadImage" method="post"
-enctype="multipart/form-data">
-<input type="file" name="image">
-<input type="submit">
+<form id="pictureForm" action="@routes.Application.uploadImage" method="post" enctype="multipart/form-data">
+    <input id="image1of2" type="file" name="image">
+    <button id="imageUploadButton" type="button" value="Upload"/>
 </form>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/event-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-components.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-calendar.js")" ></script>
 <script>
+    document.getElementById("imageUploadButton").addEventListener('click', function() {
+        console.log("click listener registered");
+
+        var x = new FormData()
+        x.append("image1", "document.getElementById("image1of2").files[0])
+
+        var request = new XMLHttpRequest();
+        request.open("POST", "@routes.Application.uploadImage");
+        request.send(x);
+    });
+
     $(function() {
         $( ".datepicker" ).datepicker({
           dateFormat: "dd-mm-yy",

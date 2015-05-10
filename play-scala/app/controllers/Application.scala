@@ -76,6 +76,7 @@ object Application extends Controller {
   import java.io.File;
   def uploadImage() = Action(parse.multipartFormData) { request =>
     request.body.file("image").map { file =>
+      print("I have uploaded " + file)
       file.ref.moveTo(new File("/tmp/image"))
       Ok("Retrieved file %s" format file.filename)
     }.getOrElse(BadRequest("File missing!"))
