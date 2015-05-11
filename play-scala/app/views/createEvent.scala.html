@@ -33,8 +33,12 @@
         console.log("click listener registered");
 
         var x = new FormData()
-        x.append("image1", "document.getElementById("image1of2").files[0])
+        x.append("image1", document.getElementById("image1of2").files[0]);
+        x.append("domainObject", "event");
 
+        var eventId = document.getElementById("id").value
+
+        x.append("id", eventId)
         var request = new XMLHttpRequest();
         request.open("POST", "@routes.Application.uploadImage");
         request.send(x);
@@ -46,5 +50,6 @@
           minDate: new Date()
          });
       });
+
 </script>
 }

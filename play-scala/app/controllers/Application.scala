@@ -1,9 +1,11 @@
 package controllers
 
 import models.Event
+import play.api.Play
 import play.api.data.{Form, Forms}
 import play.api.libs.json._
 import play.api.mvc._
+import play.mvc.Http.MultipartFormData.FilePart
 
 object Application extends Controller {
 
@@ -73,11 +75,21 @@ object Application extends Controller {
     Ok(views.html.createEvent(eventForm))
   }
 
-  import java.io.File;
-  def uploadImage() = Action(parse.multipartFormData) { request =>
-    request.body.file("image").map { file =>
-      print("I have uploaded " + file)
-      file.ref.moveTo(new File("/tmp/image"))
+
+  import java.nio.file.{Path, Paths, Files}
+  def uploadImage = Action(parse.multipartFormData) { request =>
+
+    val id : String = request.body.dataParts.get("id").get.head
+    val domainObject : String = request.body.dataParts.get("domainObject").get.head
+
+    val imageFolder: String = Play.current.configuration.getString("image.folder").get
+
+    request.body.file("image1").map { file =>
+
+      val pathToFile : Path = Paths.get(file.ref.file.getAbsolutePath)
+
+      Files.move(pathToFile, Paths.get(imageFolder + domainObject + "_" + id + ".jpg"))
+
       Ok("Retrieved file %s" format file.filename)
     }.getOrElse(BadRequest("File missing!"))
   }
