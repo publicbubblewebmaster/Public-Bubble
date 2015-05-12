@@ -12,7 +12,8 @@ case class Event (
                    location: String,
                    description: String,
                    displayFrom: Date,
-                   displayUntil: Date)
+                   displayUntil: Date,
+                   image1Url: Option[String])
 
 object Event {
 
@@ -30,8 +31,10 @@ object Event {
                       ({title}, {location}, {description}, {display_from}, {display_until})
     """)
 
+  val ADD_IMAGE : SqlQuery = SQL("""UPDATE event SET image_1_url = {image1Url} where ID = {id}""")
+
   val UPDATE_EVENT : SqlQuery = SQL("""
-    UPDATE events SET title = {title},
+    UPDATE event SET title = {title},
                    location = {location},
                    description = {description},
                    display_from = {display_from},
@@ -79,7 +82,16 @@ object Event {
         "id" -> event.id
       ).executeUpdate()
     }
+  }
 
+  def addImage(id : Long, url : String) = {
+    DB.withConnection {
+      implicit connection =>
+        UPDATE_EVENT.on(
+          "id" -> id,
+          "image1Url" -> url
+        ).executeUpdate()
+    }
   }
 
   def getById(eventId : Long) : Event = DB.withConnection {
@@ -100,7 +112,8 @@ object Event {
       row[String] ("location"),
       row[String] ("description"),
       row[Date] ("display_from"),
-      row[Date] ("display_until")
+      row[Date] ("display_until"),
+      None
     )
   }
 
