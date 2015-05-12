@@ -23,13 +23,13 @@ func PersistEvent(event Event) {
             log.Fatal(err)
         }
          
-         insert_event, err := db.Prepare("INSERT INTO events(id, title, location, description) values ($1, $2, $3, $4)")
+         insert_event, err := db.Prepare("INSERT INTO events(title, location, description) values ($1, $2, $3)")
          if err != nil {
               log.SetFlags(log.Llongfile)
               log.Fatal(err)
          }        
 
-        _, err = insert_event.Exec(2, event.Title, event.Location, event.Description,)
+        _, err = insert_event.Exec(event.Title, event.Location, event.Description,)
 
         if err != nil {
               log.SetFlags(log.Llongfile)
