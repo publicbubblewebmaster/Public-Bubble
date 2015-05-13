@@ -80,6 +80,8 @@ object Application extends Controller {
   import java.nio.file.{Path, Paths, Files}
   def uploadImage = Action(parse.multipartFormData) { request =>
 
+    print("upload request received")
+
     val id : String = request.body.dataParts.get("id").get.head
     val domainObject : String = request.body.dataParts.get("domainObject").get.head
 
@@ -87,8 +89,10 @@ object Application extends Controller {
 
     request.body.file("image1").map { file =>
 
+
+
       val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", "eventWithImage",
+        "cloud_name", "hhih43y5p",
         "api_key", "135878543169511",
         "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
 
@@ -96,7 +100,7 @@ object Application extends Controller {
 
       val imageUrl = uploadResult.get("url").asInstanceOf[String]
 
-      val eventWithImage = Event.addImage(id.asInstanceOf[Long], imageUrl);
+      val eventWithImage = Event.addImage(id.toLong, imageUrl);
 
       Ok("Retrieved file %s" format eventWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))

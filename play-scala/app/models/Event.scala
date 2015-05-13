@@ -87,7 +87,7 @@ object Event {
   def addImage(id : Long, url : String) : Event = {
     DB.withConnection {
       implicit connection =>
-        UPDATE_EVENT.on(
+        ADD_IMAGE.on(
           "id" -> id,
           "image1Url" -> url
         ).executeUpdate()
