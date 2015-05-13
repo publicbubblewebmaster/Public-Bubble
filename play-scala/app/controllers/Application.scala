@@ -5,9 +5,7 @@ import models.Event
 import play.api.Play
 import play.api.data.{Form, Forms}
 import play.api.libs.json._
-import play.api.libs.ws.{WSRequestHolder, WS}
 import play.api.mvc._
-import play.mvc.Http.MultipartFormData.FilePart
 import com.cloudinary._
 
 object Application extends Controller {
@@ -90,21 +88,17 @@ object Application extends Controller {
     request.body.file("image1").map { file =>
 
       val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", "my_cloud_name",
-        "api_key", "my_api_key",
-        "api_secret", "my_api_secret"));
+        "cloud_name", "eventWithImage",
+        "api_key", "135878543169511",
+        "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
 
       val uploadResult = cloudinary.uploader().upload(file.ref.file, null);
 
       val imageUrl = uploadResult.get("url").asInstanceOf[String]
 
-      Event.addImage(id.asInstanceOf[Long], imageUrl);
+      val eventWithImage = Event.addImage(id.asInstanceOf[Long], imageUrl);
 
-      val pathToFile : Path = Paths.get(file.ref.file.getAbsolutePath)
-
-      Files.move(pathToFile, Paths.get(imageFolder + domainObject + "_" + id + ".jpg"))
-
-      Ok("Retrieved file %s" format file.filename)
+      Ok("Retrieved file %s" format eventWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))
   }
 
@@ -116,7 +110,6 @@ object Application extends Controller {
       "description" -> Forms.text,
       "displayFrom" -> Forms.date("dd-MM-yyyy").verifying(),
       "displayUntil" -> Forms.date("dd-MM-yyyy")
-
-    )(Event.apply)(Event.unapply)
+    )(Event.apply)(Event.extract)
   )
 }

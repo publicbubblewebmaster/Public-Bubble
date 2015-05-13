@@ -7,13 +7,13 @@ import play.api.Play.current
 import play.api.db.DB
 
 case class Event (
-                   val id : Option[Long],
+                   id : Option[Long],
                    title: String,
                    location: String,
                    description: String,
                    displayFrom: Date,
                    displayUntil: Date,
-                   image1Url: Option[String])
+                   image1Url: Option[String] = null)
 
 object Event {
 
@@ -84,13 +84,14 @@ object Event {
     }
   }
 
-  def addImage(id : Long, url : String) = {
+  def addImage(id : Long, url : String) : Event = {
     DB.withConnection {
       implicit connection =>
         UPDATE_EVENT.on(
           "id" -> id,
           "image1Url" -> url
         ).executeUpdate()
+        Event.getById(id)
     }
   }
 
@@ -113,8 +114,16 @@ object Event {
       row[String] ("description"),
       row[Date] ("display_from"),
       row[Date] ("display_until"),
-      None
+      row[Option[String]] ("IMAGE_1_URL")
     )
+  }
+
+  def apply(id : Option[Long], title: String, location: String, description: String, displayFrom: Date, displayUntil: Date) = {
+    new Event(id, title, location, description, displayFrom, displayUntil)
+  }
+
+  def extract(event: Event) = {
+     Option(Tuple6(event.id, event.title, event.location, event.description, event.displayFrom, event.displayUntil))
   }
 
 }
