@@ -10,7 +10,9 @@ import play.api.mvc._
 
 object Security extends Controller {
 
-  def login = Action {
+  def showLoginForm = Action {
     Ok(views.html.loginForm())
   }
+
+  def handleLogin
 }
