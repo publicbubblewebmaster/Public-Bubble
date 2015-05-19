@@ -6,7 +6,11 @@
     <div class="small-8 column small-centered">
     <h1>@{event.title}</h1>
     <div class="vcard address">@{event.location}</div>
-    <img src="@{event.image1Url}" />
+
+        <div class="row">
+        <img src="http://placehold.it/400x240&text=[img]"/>
+        </div>
+    <!--<img src="@{event.image1Url}" />-->
         <p id="eventDescription">
         @Html(event.description)
     </p>

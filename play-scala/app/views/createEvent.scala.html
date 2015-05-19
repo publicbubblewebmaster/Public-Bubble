@@ -6,6 +6,9 @@
 <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
 <script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
 
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+
 <div id="eventsBox" class="small-2 columns"></div>
 
 <form class="row" id="eventForm" action="@routes.Application.save" method="post">
@@ -52,4 +55,6 @@
       });
 
 </script>
+
+
 }

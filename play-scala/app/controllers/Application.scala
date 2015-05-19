@@ -1,9 +1,12 @@
 package controllers
 
+import java.io.{FileOutputStream, BufferedOutputStream, FileInputStream, File}
+
 import com.cloudinary.utils.ObjectUtils
 import models.Event
 import play.api.Play
 import play.api.data.{Form, Forms}
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json._
 import play.api.mvc._
 import com.cloudinary._
@@ -89,14 +92,14 @@ object Application extends Controller {
 
     request.body.file("image1").map { file =>
 
-
-
       val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
         "cloud_name", "hhih43y5p",
         "api_key", "135878543169511",
         "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
 
-      val uploadResult = cloudinary.uploader().upload(file.ref.file, null);
+      val uploadResult = cloudinary.uploader().upload(file.ref.file,
+          ObjectUtils.asMap("transformation", new Transformation().width(400))
+      );
 
       val imageUrl = uploadResult.get("url").asInstanceOf[String]
 
