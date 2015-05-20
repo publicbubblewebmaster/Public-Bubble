@@ -14,7 +14,7 @@ case class UserData(id : String)
 
 object Security extends Controller {
 
-  val userFormTuple = Form(
+  val userFormSingle = Form(
     Forms.single("id" -> Forms.text) // tuples come with built-in apply/unapply
   )
 
@@ -22,5 +22,12 @@ object Security extends Controller {
     Ok(views.html.loginForm())
   }
 
+  def handleLogin = Action {
+    implicit request =>
+      userFormSingle.bindFromRequest().fold(
+        errorForm => {Unauthorized(views.html.unauthorized())},
+        boundId => {Ok(views.html.portal(boundId))}
+      )
+  }
 }
 
