@@ -1,7 +1,7 @@
 @main("Event Form") {
 
 <form id="loginForm" action="/login" method="POST">
-    <input type="hidden" id="id"/>
+    <input id="id" type="hidden" name="id" value="default">
 </form>
 
 <div class="g-signin2 small-centered column small-1" data-onsuccess="onSignIn"></div>
@@ -11,15 +11,14 @@
 <script>
     function onSignIn(googleUser) {
           console.log("id value before change: " + document.getElementById("id").value)
-          //
-          
+
           document.getElementById("id").value = googleUser.getBasicProfile().getId();
           console.log("posting " + googleUser.getBasicProfile().getId() + "to server");
-          console.log("id value after change: " + document.getElementById("id").value)
-          
-          // defer form submit using
+          console.log("id value after change: " + document.getElementById("id").value);
+
+          // defer form submit using-->
           setTimeout(function() {document.getElementById("loginForm").submit();}, 1000);
-          
+          document.getElementById("loginForm").submit();
     }
 </script>
 
