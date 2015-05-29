@@ -11,13 +11,13 @@
 <script>
     function onSignIn(googleUser) {
           console.log("id value before change: " + document.getElementById("id").value)
-
-          document.getElementById("id").value = googleUser.getBasicProfile().getId();
-          console.log("posting " + googleUser.getBasicProfile().getId() + "to server");
+            var token = googleUser.getAuthResponse().id_token;
+          document.getElementById("id").value = token;
+          console.log("posting " + token + "to server");
           console.log("id value after change: " + document.getElementById("id").value);
 
           // defer form submit using-->
-          setTimeout(function() {document.getElementById("loginForm").submit();}, 1000);
+          <!--setTimeout(function() {document.getElementById("loginForm").submit();}, 1000);-->
           document.getElementById("loginForm").submit();
     }
 </script>
