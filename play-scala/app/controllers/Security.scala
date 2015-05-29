@@ -26,7 +26,11 @@ object Security extends Controller {
     implicit request =>
       userFormSingle.bindFromRequest().fold(
         errorForm => {Unauthorized(views.html.unauthorized())},
-        boundId => {Ok(views.html.portal(boundId))}
+        boundId => {
+
+
+
+          Ok(views.html.portal(boundId))}
       )
   }
 }
