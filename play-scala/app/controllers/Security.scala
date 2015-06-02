@@ -31,6 +31,8 @@ object Security extends Controller {
 
           if (!authenticatedUserOption.isEmpty) {
             Ok(views.html.portal("You are logged in as "+ authenticatedUserOption.get.email +"!"))
+              //the session is signed by the framework so the client cannot tamper with it
+              .withSession("email" -> authenticatedUserOption.get.email)
           } else {
             Unauthorized(views.html.unauthorized())
           }
