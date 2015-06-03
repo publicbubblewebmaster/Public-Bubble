@@ -1,7 +1,5 @@
 package controllers
 
-import java.io.{FileOutputStream, BufferedOutputStream, FileInputStream, File}
-
 import com.cloudinary.utils.ObjectUtils
 import models.Event
 import play.api.Play
@@ -119,4 +117,11 @@ object Application extends Controller {
       "displayUntil" -> Forms.date("dd-MM-yyyy")
     )(Event.apply)(Event.extract)
   )
+
+  // here we are calling the ActionBuilder apply method
+  // the apply method can accept a function
+  def authenticatedEventForm = Authenticated { request  =>
+    Ok(views.html.createEvent(eventForm))
+  }
+
 }

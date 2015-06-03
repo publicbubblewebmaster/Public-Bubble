@@ -1,14 +1,11 @@
 package controllers
 
-import akka.actor.FSM.->
-import com.cloudinary._
-import com.cloudinary.utils.ObjectUtils
 import models.User
 import play.api.Play
 import play.api.data.{Form, Forms}
 import play.api.libs.json._
 import play.api.mvc._
-
+import scala.concurrent.Future
 
 case class UserData(id : String)
 
@@ -40,4 +37,3 @@ object Security extends Controller {
       )
   }
 }
-
