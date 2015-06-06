@@ -7,12 +7,13 @@ import play.api.Play.current
 import play.api.db.DB
 
 case class Event (
-                   val id : Option[Long],
+                   id : Option[Long],
                    title: String,
                    location: String,
                    description: String,
                    displayFrom: Date,
-                   displayUntil: Date)
+                   displayUntil: Date,
+                   image1Url: Option[String] = null)
 
 object Event {
 
@@ -30,8 +31,10 @@ object Event {
                       ({title}, {location}, {description}, {display_from}, {display_until})
     """)
 
+  val ADD_IMAGE : SqlQuery = SQL("""UPDATE event SET image_1_url = {image1Url} where ID = {id}""")
+
   val UPDATE_EVENT : SqlQuery = SQL("""
-    UPDATE events SET title = {title},
+    UPDATE event SET title = {title},
                    location = {location},
                    description = {description},
                    display_from = {display_from},
@@ -79,7 +82,17 @@ object Event {
         "id" -> event.id
       ).executeUpdate()
     }
+  }
 
+  def addImage(id : Long, url : String) : Event = {
+    DB.withConnection {
+      implicit connection =>
+        ADD_IMAGE.on(
+          "id" -> id,
+          "image1Url" -> url
+        ).executeUpdate()
+        Event.getById(id)
+    }
   }
 
   def getById(eventId : Long) : Event = DB.withConnection {
@@ -100,8 +113,17 @@ object Event {
       row[String] ("location"),
       row[String] ("description"),
       row[Date] ("display_from"),
-      row[Date] ("display_until")
+      row[Date] ("display_until"),
+      row[Option[String]] ("IMAGE_1_URL")
     )
+  }
+
+  def apply(id : Option[Long], title: String, location: String, description: String, displayFrom: Date, displayUntil: Date) = {
+    new Event(id, title, location, description, displayFrom, displayUntil)
+  }
+
+  def extract(event: Event) = {
+     Option(Tuple6(event.id, event.title, event.location, event.description, event.displayFrom, event.displayUntil))
   }
 
 }

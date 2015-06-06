@@ -1,11 +1,13 @@
 package controllers
 
+import com.cloudinary.utils.ObjectUtils
 import models.Event
 import play.api.Play
 import play.api.data.{Form, Forms}
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json._
 import play.api.mvc._
-import play.mvc.Http.MultipartFormData.FilePart
+import com.cloudinary._
 
 object Application extends Controller {
 
@@ -40,8 +42,7 @@ object Application extends Controller {
     Ok(JsArray(jsonEvents))
   }
 
-  def createEvent = Action {
-
+  def createEvent = Authenticated {
     Ok(views.html.createEvent(eventForm))
   }
 
@@ -79,6 +80,8 @@ object Application extends Controller {
   import java.nio.file.{Path, Paths, Files}
   def uploadImage = Action(parse.multipartFormData) { request =>
 
+    print("upload request received")
+
     val id : String = request.body.dataParts.get("id").get.head
     val domainObject : String = request.body.dataParts.get("domainObject").get.head
 
@@ -86,11 +89,20 @@ object Application extends Controller {
 
     request.body.file("image1").map { file =>
 
-      val pathToFile : Path = Paths.get(file.ref.file.getAbsolutePath)
+      val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
+        "cloud_name", "hhih43y5p",
+        "api_key", "135878543169511",
+        "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
 
-      Files.move(pathToFile, Paths.get(imageFolder + domainObject + "_" + id + ".jpg"))
+      val uploadResult = cloudinary.uploader().upload(file.ref.file,
+          ObjectUtils.asMap("transformation", new Transformation().width(400))
+      );
 
-      Ok("Retrieved file %s" format file.filename)
+      val imageUrl = uploadResult.get("url").asInstanceOf[String]
+
+      val eventWithImage = Event.addImage(id.toLong, imageUrl);
+
+      Ok("Retrieved file %s" format eventWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))
   }
 
@@ -102,6 +114,13 @@ object Application extends Controller {
       "description" -> Forms.text,
       "displayFrom" -> Forms.date("dd-MM-yyyy").verifying(),
       "displayUntil" -> Forms.date("dd-MM-yyyy")
-    )(Event.apply)(Event.unapply)
+    )(Event.apply)(Event.extract)
   )
+
+  // here we are calling the ActionBuilder apply method
+  // the apply method can accept a function
+  def authenticatedEventForm = Authenticated { request  =>
+    Ok(views.html.createEvent(eventForm))
+  }
+
 }
