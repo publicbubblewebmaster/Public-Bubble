@@ -1,13 +1,11 @@
 @(id: String)
 
 @main("Welcome to Play") {
-    <h1>Hello Stranger! @{id}</h1>
 
-    <li><a href="/create/event">Add or Edit an Event</a></li>
+<h1>Hello Stranger! @{id}</h1>
 
-<a href="#" onclick="signOut();">Sign out</a>
+<li><a href="/create/event">Add or Edit an Event</a></li>
 
+@logoutButton()
 
 }
-
-@securityTag()

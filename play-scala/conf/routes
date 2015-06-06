@@ -17,6 +17,7 @@ GET    /events                     controllers.Application.events
 GET    /twitter                    controllers.Application.twitter
 
 GET    /login                      controllers.Security.showLoginForm
+GET    /logout                     controllers.Security.logout
 POST   /login                      controllers.Security.handleLogin
 
 # Map static resources from the /public folder to the /assets URL path

@@ -6,33 +6,20 @@
 
 <div class="g-signin2 small-centered column small-1" data-onsuccess="onSignIn"></div>
 
-<a href="#" onclick="signOut();">Sign out</a>
+
+
+<script src="https://apis.google.com/js/client:platform.js" async defer></script>
+<meta name="google-signin-client_id"
+content="347923709382-r0flg6bnis72vg1hur50jv94epcgvv71.apps.googleusercontent.com">
 
 <script>
     function onSignIn(googleUser) {
           console.log("id value before change: " + document.getElementById("id").value)
             var token = googleUser.getAuthResponse().id_token;
           document.getElementById("id").value = token;
-          console.log("posting " + token + "to server");
-          console.log("id value after change: " + document.getElementById("id").value);
-
-          // defer form submit using-->
-          <!--setTimeout(function() {document.getElementById("loginForm").submit();}, 1000);-->
           document.getElementById("loginForm").submit();
     }
 </script>
 
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
-</script>
 
-
-<script src="https://apis.google.com/js/client:platform.js" async defer></script>
-<meta name="google-signin-client_id"
-      content="347923709382-r0flg6bnis72vg1hur50jv94epcgvv71.apps.googleusercontent.com">
 }

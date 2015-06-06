@@ -42,8 +42,7 @@ object Application extends Controller {
     Ok(JsArray(jsonEvents))
   }
 
-  def createEvent = Action {
-
+  def createEvent = Authenticated {
     Ok(views.html.createEvent(eventForm))
   }
 

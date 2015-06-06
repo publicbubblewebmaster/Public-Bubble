@@ -3,6 +3,7 @@ package controllers
 import play.api.mvc.ActionBuilder
 import play.api.mvc.Request
 import play.api.mvc.Results.Ok
+import play.api.mvc.Results.Unauthorized
 import play.api.mvc.Result
 import play.api.mvc.WrappedRequest
 
@@ -15,7 +16,7 @@ object Authenticated extends ActionBuilder[AuthenticatedRequest] {
     request.session.get("email").map { email =>
       block(new AuthenticatedRequest(email, request))
     } getOrElse {
-      Future.successful(Ok(views.html.loginForm()))
+      Future.successful(Unauthorized(views.html.loginForm()))
     }
   }
 }

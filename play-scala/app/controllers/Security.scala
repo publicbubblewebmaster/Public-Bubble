@@ -19,6 +19,10 @@ object Security extends Controller {
     Ok(views.html.loginForm())
   }
 
+  def logout = Action {
+    Ok(views.html.logout())
+  }
+
   def handleLogin = Action {
     implicit request =>
       userFormSingle.bindFromRequest().fold(
