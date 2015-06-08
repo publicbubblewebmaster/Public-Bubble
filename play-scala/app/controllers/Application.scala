@@ -8,6 +8,9 @@ import play.api.libs.Files.TemporaryFile
 import play.api.libs.json._
 import play.api.mvc._
 import com.cloudinary._
+import play.api.i18n.Messages.Implicits._
+import play.api.i18n._
+import play.api.Play.current
 
 object Application extends Controller {
 
