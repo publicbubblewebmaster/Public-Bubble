@@ -1,1 +1,0 @@
-INSERT INTO EVENTS(title, location, description) VALUES("Nicky Morgan on Faith Schools", "Asquith Centre", "Nicky Morgan discusses how faith schools can help increase national literacy and numeracy levels.");
