@@ -1,0 +1,8 @@
+CREATE TABLE Blog
+(
+ID INTEGER PRIMARY KEY,
+TITLE varchar(255) NOT NULL,
+AUTHOR varchar(255),
+CONTENT varchar(255)
+);
+

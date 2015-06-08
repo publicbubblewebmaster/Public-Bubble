@@ -1,0 +1,24 @@
+<meta name="google-signin-client_id"
+      content="347923709382-r0flg6bnis72vg1hur50jv94epcgvv71.apps.googleusercontent.com">
+
+<a href="#" onclick="signOut();" class="alert bbutton round">Sign out</a>
+
+<script>
+
+    function gapiInit() {
+    gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
+
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      window.location.replace("/logout");
+    });
+  }
+</script>
+
+</script>
+
+<script src="https://apis.google.com/js/client:platform.js?onload=gapiInit" async defer></script>
