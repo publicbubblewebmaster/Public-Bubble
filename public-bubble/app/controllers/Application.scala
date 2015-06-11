@@ -33,6 +33,10 @@ object Application extends Controller {
     Ok(views.html.twitter("Twitter"))
   }
 
+  def facebook = Action {
+    Ok(views.html.facebook())
+  }
+
   def eventsJson = Action {
     val jsonEvents : List[JsValue] =
               Event.getAll.map(
@@ -88,7 +92,6 @@ object Application extends Controller {
     val id : String = request.body.dataParts.get("id").get.head
     val domainObject : String = request.body.dataParts.get("domainObject").get.head
 
-    val imageFolder: String = Play.current.configuration.getString("image.folder").get
 
     request.body.file("image1").map { file =>
 
@@ -125,5 +128,4 @@ object Application extends Controller {
   def authenticatedEventForm = Authenticated { request  =>
     Ok(views.html.createEvent(eventForm))
   }
-
 }

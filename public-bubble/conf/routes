@@ -3,23 +3,27 @@
 # ~~~~
 
 #Content Creation
-POST   /create/event                controllers.Application.save
-GET    /create/event                controllers.Application.authenticatedEventForm
-GET    /update/event/:id            controllers.Application.updateEvent(id : Int)
-GET    /delete/event/:id            controllers.Application.deleteEvent(id : Int)
-POST   /upload/picture              controllers.Application.uploadImage
+POST    /create/event                controllers.Application.save
+GET     /create/event                controllers.Application.authenticatedEventForm
+GET     /update/event/:id            controllers.Application.updateEvent(id : Int)
+GET     /delete/event/:id            controllers.Application.deleteEvent(id : Int)
+POST    /upload/picture              controllers.Application.uploadImage
 
 # Home page
-GET    /                           controllers.Application.index
-GET    /blog                       controllers.Application.blog
-GET    /events/all                 controllers.Application.eventsJson
-GET    /events                     controllers.Application.events
-GET    /twitter                    controllers.Application.twitter
+GET     /                           controllers.Application.index
+GET     /blog                       controllers.Application.blog
+GET     /events/all                 controllers.Application.eventsJson
+GET     /events                     controllers.Application.events
+GET     /twitter                    controllers.Application.twitter
+GET     /facebook                   controllers.Application.facebook
 
-GET    /login                      controllers.Security.showLoginForm
-GET    /logout                     controllers.Security.logout
-POST   /login                      controllers.Security.handleLogin
+GET     /emailUs                    controllers.Email.emailUs
+POST    /emailUs                    controllers.Email.sendEmail
+
+GET     /login                      controllers.Security.showLoginForm
+GET     /logout                     controllers.Security.logout
+POST    /login                      controllers.Security.handleLogin
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
