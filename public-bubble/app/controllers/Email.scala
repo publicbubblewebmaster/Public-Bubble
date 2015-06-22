@@ -26,17 +26,17 @@ object Email extends Controller {
     implicit request =>
       val emailTuple3: (String, String, String) = emailForm.bindFromRequest().get
 
-      val emailUser = Play.current.configuration.getString("email.username").get
-      val emailPassword = Play.current.configuration.getString("email.password").get
+//      val emailUser = Play.current.configuration.getString("email.username").get
+//      val emailPassword = Play.current.configuration.getString("email.password").get
 
       var email = new SimpleEmail;
       email.setHostName("smtp.googlemail.com");
       email.setSmtpPort(465);
-      email.setAuthenticator(new DefaultAuthenticator("username", "password"));
+      email.setAuthenticator(new DefaultAuthenticator("ian.wowcher@gmail.com", "alp1nemarm0t"));
       email.setSSLOnConnect(true);
       email.setSubject(emailTuple3._1);
       email.setMsg(emailTuple3._3);
-      email.send();
+      email.send;
 
       Ok(views.html.emailUs())
 

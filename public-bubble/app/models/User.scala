@@ -23,7 +23,7 @@ case class User(email: String, role : String) {
 object User {
 
 
-  val FIND_ROLE_BY_EMAIL : SqlQuery = SQL("SELECT role FROM public_bubble_user WHERE email = {email}")
+  val FIND_ROLE_BY_EMAIL : SqlQuery = SQL("SELECT role FROM public_bubble.user WHERE email = {email}")
 
   val HTTP_TRANSPORT = new NetHttpTransport();
   val JSON_FACTORY = new JacksonFactory();

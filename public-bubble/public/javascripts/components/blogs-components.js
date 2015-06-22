@@ -1,15 +1,14 @@
-
-var EventsBox = React.createClass({
+var BlogsBox = React.createClass({
     render: function(){
 
-        return(<div className="eventBox">
-                    I am an event box and I have an events list
-                    <EventList url={this.props.url} />
+        return(<div className="blogBox">
+                    I am an blog box and I have an blogs list
+                    <BlogList url={this.props.url} />
                </div>);
     }
 });
 
 React.render(
-            <EventList url="/events/all"/>,
-            document.getElementById('eventsBox')
+            <BlogList url="/blogs/all"/>,
+            document.getElementById('blogsBox')
         );

@@ -1,17 +1,17 @@
-var Event = React.createClass({
+var Blog = React.createClass({
     render: function() {
         return (
         <div className="row">
-            <li className="event">
-              <a href={"/update/event/" + this.props.idNum}>{this.props.title}</a>
-              <a className="alert round label" href={"/delete/event/" + this.props.idNum}>DELETE!</a>
+            <li className="blog">
+              <a href={"/update/blog/" + this.props.idNum}>{this.props.title}</a>
+              <a className="alert round label" href={"/delete/blog/" + this.props.idNum}>DELETE!</a>
             </li>
         </div>
         );
         }
 });
 
-var EventList = React.createClass({
+var BlogList = React.createClass({
 
   getInitialState: function() {
       return {data: []};
@@ -29,10 +29,10 @@ var EventList = React.createClass({
   },
 
   render: function() {
-    var eventNodes = this.state.data.map(function(event) {return (<Event title={event.title} idNum={event.id}/>)});
+    var blogNodes = this.state.data.map(function(blog) {return (<Blog title={blog.title} idNum={blog.id}/>)});
         return (
-            <div className="eventList">
-              {eventNodes}
+            <div className="blogList">
+              {blogNodes}
             </div>
   )}
 });     

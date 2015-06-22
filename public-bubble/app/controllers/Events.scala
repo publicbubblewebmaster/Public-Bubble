@@ -1,89 +1,85 @@
 package controllers
 
-import com.cloudinary.{Transformation, Cloudinary}
+import com.cloudinary._
 import com.cloudinary.utils.ObjectUtils
-import controllers.Events._
-import models.Blog
+import controllers.Application._
+import models.Event
 import play.api.Play.current
 import play.api.data.{Form, Forms}
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 
-object Blogs extends Controller {
+object Events extends Controller {
 
-  def blogs = Action {
-    val blog = Blog.getLatest
-
-    Ok(views.html.blogs(blog))
+  def events = Action {
+    val event = Event.getLatest
+    Ok(views.html.events(event))
 
   }
 
 
-  def createBlog = Authenticated {
-    Ok(views.html.createBlog(blogForm))
+  def createEvent = Authenticated {
+    Ok(views.html.createEvent(eventForm))
   }
 
 
-  def updateBlog(id : Int) = Action {
+  def updateEvent(id : Int) = Action {
 
-    val blog = Blog.getById(id);
-    print("blog.id: " + blog.id);
-    Ok(views.html.createBlog(blogForm.fill(blog)))
+    val event = Event.getById(id);
+    Ok(views.html.createEvent(eventForm.fill(event)))
   }
 
   def save = Action { implicit request =>
-    blogForm.bindFromRequest.fold(
+    eventForm.bindFromRequest.fold(
       formWithErrors =>     {
-        print(formWithErrors.errors)
-        Ok(views.html.createBlog(formWithErrors))},
+        Ok(views.html.createEvent(formWithErrors))},
 
-      createdBlog => {
-        if (createdBlog.id.isEmpty) {
-          Blog.create(createdBlog)
+      createdEvent => {
+        if (createdEvent.id.isEmpty) {
+          Event.create(createdEvent)
         }
         else {
-          Blog.update(createdBlog)
+          Event.update(createdEvent)
         }
-        Ok(views.html.createBlog(blogForm.fill(createdBlog)))
+        Ok(views.html.createEvent(eventForm.fill(createdEvent)))
       }
     )
   }
 
-  def deleteBlog(id : Int)= Action { implicit request =>
-    Blog.delete(id)
-    Ok(views.html.createBlog(blogForm))
+  def deleteEvent(id : Int)= Action { implicit request =>
+    Event.delete(id)
+    Ok(views.html.createEvent(eventForm))
   }
 
-  def blogsJson = Action {
-    val jsonBlogs : List[JsValue] =
-      Blog.getAll.map(
-        blog =>
+  def eventsJson = Action {
+    val jsonEvents : List[JsValue] =
+      Event.getAll.map(
+        event =>
           Json.obj(
-            "id" -> blog.id,
-            "title" -> blog.title
+            "id" -> event.id,
+            "title" -> event.title
           )
       )
-    Ok(JsArray(jsonBlogs))
+    Ok(JsArray(jsonEvents))
   }
 
-  val blogForm = Form(
+  val eventForm = Form(
     Forms.mapping(
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
-      "author" -> Forms.text,
-      "content" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-MM-dd"),
-      "displayUntil" -> Forms.date("yyyy-MM-dd")
-    )(Blog.apply)(Blog.extract)
+      "location" -> Forms.text,
+      "description" -> Forms.text,
+      "displayFrom" -> Forms.date("yyyy-MM-dd"), //TODO fixme
+      "displayUntil" -> Forms.date("yyyy-MM-dd") //TODO fixme
+    )(Event.apply)(Event.extract)
   )
 
   // here we are calling the ActionBuilder apply method
   // the apply method can accept a function
-  def authenticatedBlogForm = Authenticated { request  =>
-    Ok(views.html.createBlog(blogForm))
+  def authenticatedEventForm = Authenticated { request  =>
+    Ok(views.html.createEvent(eventForm))
   }
-
 
   import java.nio.file.{Path, Paths, Files}
   def uploadImage = Action(parse.multipartFormData) { request =>
