@@ -1,0 +1,15 @@
+@main("Email Us!") {
+
+<form class="row" id="emailForm" action="@routes.Email.emailUs" method="post">
+    <div class="small-8 columns small-centered" >
+
+        <input name="subject" type="text">
+        <input name="body" type="textarea">
+        <input name="from" type="text">
+
+        <div class="row">
+            <button id="send" class="small-12 centered" type="submit">Send</button>
+        </div>
+</form>
+
+}

@@ -2,6 +2,8 @@
 
 @main("Event Form") {
 
+@wysiwyg()
+
 <script src="@routes.Assets.at("javascripts/react/react.js")"></script>
 <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
 <script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
@@ -11,12 +13,12 @@
 
 <div id="eventsBox" class="small-2 columns"></div>
 
-<form class="row" id="eventForm" action="@routes.Application.save" method="post">
+<form class="row" id="eventForm" action="@routes.Events.save" method="post">
     <div class="small-8 columns small-centered" >
         @helper.inputText(eventForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(eventForm("title"), '_label -> "Title")
         @helper.inputText(eventForm("location"), '_label -> "Location")
-        @helper.textarea(eventForm("description"), '_label -> "Description")
+        @helper.textarea(eventForm("description"), '_label -> "Description", '_id -> "wysiwyg-editor")
         @helper.inputDate(eventForm("displayFrom"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
         @helper.inputDate(eventForm("displayUntil"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
     <div class="row">
@@ -24,10 +26,13 @@
     </div>
 </form>
 
-<form id="pictureForm" action="@routes.Application.uploadImage" method="post" enctype="multipart/form-data">
+<form id="pictureForm" action="@routes.Events.uploadImage" method="post" enctype="multipart/form-data">
     <input id="image1of2" type="file" name="image">
     <button id="imageUploadButton" type="button" value="Upload"/>
 </form>
+
+
+
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/event-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-components.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-calendar.js")" ></script>
@@ -43,7 +48,7 @@
 
         x.append("id", eventId)
         var request = new XMLHttpRequest();
-        request.open("POST", "@routes.Application.uploadImage");
+        request.open("POST", "@routes.Events.uploadImage");
         request.send(x);
     });
 

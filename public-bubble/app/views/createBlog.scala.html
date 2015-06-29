@@ -1,0 +1,61 @@
+@(blogForm: Form[Blog])(implicit messages: Messages)
+
+@main("Blog Form") {
+
+<script src="@routes.Assets.at("javascripts/react/react.js")"></script>
+<script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
+
+
+@wysiwyg()
+
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+
+<div id="blogsBox" class="small-2 columns"></div>
+
+<form class="row" id="blogForm" action="@routes.Blogs.save" method="post">
+    <div class="small-8 columns small-centered" >
+        @helper.inputText(blogForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
+        @helper.inputText(blogForm("title"), '_label -> "Author")
+        @helper.inputText(blogForm("author"), '_label -> "Title")
+        @helper.inputText(blogForm("content"), '_label -> "Content", 'id -> "wysiwyg-editor")
+        @helper.inputDate(blogForm("displayFrom"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
+        @helper.inputDate(blogForm("displayUntil"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
+    <div class="row">
+        <button id="saveButton" class="small-12 centered" type="submit">Save</button>
+    </div>
+</form>
+
+<form id="pictureForm" action="@routes.Blogs.uploadImage" method="post" enctype="multipart/form-data">
+    <input id="image1of2" type="file" name="image">
+    <button id="imageUploadButton" type="button" value="Upload"/>
+</form>
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/blog-list.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-components.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-calendar.js")" ></script>
+<script>
+    document.getElementById("imageUploadButton").addEventListener('click', function() {
+        console.log("click listener registered");
+
+        var x = new FormData()
+        x.append("image1", document.getElementById("image1of2").files[0]);
+        x.append("domainObject", "blog");
+
+        var blogId = document.getElementById("id").value
+
+        x.append("id", blogId)
+        var request = new XMLHttpRequest();
+        request.open("POST", "@routes.Blogs.uploadImage");
+        request.send(x);
+    });
+
+    $(function() {
+        $( ".datepicker" ).datepicker({
+          dateFormat: "dd-mm-yy",
+          minDate: new Date()
+         });
+      });
+
+</script>
+}
