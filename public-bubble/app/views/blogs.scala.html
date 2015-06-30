@@ -2,12 +2,14 @@
 
 @main("Welcome to Play") {
     <section>
-        <div class="row">
-            <div class="small-10 small-centered column">
-            <h3>@{blog.title}</h3>
-            <h6>by @{blog.author}</h6>
+        <!--<div style="background:blue">-->
+            <div class="row">
+                <div class="small-10 small-centered column" >
+                <h3>@{blog.title}</h3>
+                <h6>by @{blog.author}</h6>
+                </div>
             </div>
-        </div>
+        <!--</div>-->
         <div class="row">
             <div class="small-10 small-centered column">
                 <i style="color:#1371b7">
@@ -18,7 +20,7 @@
         </div>
         <div class="row">
             <div class="small-10 small-centered column">
-                <img src="http://placehold.it/800x370&text=[img]">
+                <img src="@{blog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
             </div>
         </div>
         <div class="row">

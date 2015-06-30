@@ -2,7 +2,6 @@ package controllers
 
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
-import controllers.Events._
 import models.Blog
 import play.api.Play.current
 import play.api.data.{Form, Forms}
@@ -14,19 +13,14 @@ object Blogs extends Controller {
 
   def blogs = Action {
     val blog = Blog.getLatest
-
     Ok(views.html.blogs(blog))
-
   }
-
 
   def createBlog = Authenticated {
     Ok(views.html.createBlog(blogForm))
   }
 
-
   def updateBlog(id : Int) = Action {
-
     val blog = Blog.getById(id);
     print("blog.id: " + blog.id);
     Ok(views.html.createBlog(blogForm.fill(blog)))
@@ -84,13 +78,11 @@ object Blogs extends Controller {
     Ok(views.html.createBlog(blogForm))
   }
 
-
   import java.nio.file.{Path, Paths, Files}
   def uploadImage = Action(parse.multipartFormData) { request =>
 
     val id : String = request.body.dataParts.get("id").get.head
     val domainObject : String = request.body.dataParts.get("domainObject").get.head
-
 
     request.body.file("image1").map { file =>
 
@@ -100,16 +92,14 @@ object Blogs extends Controller {
         "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
 
       val uploadResult = cloudinary.uploader().upload(file.ref.file,
-        ObjectUtils.asMap("transformation", new Transformation().width(400))
+        ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))
       );
 
       val imageUrl = uploadResult.get("url").asInstanceOf[String]
 
-      val eventWithImage = models.Event.addImage(id.toLong, imageUrl);
+      val blogWithImage = models.Blog.addImage(id.toLong, imageUrl);
 
-      Ok("Retrieved file %s" format eventWithImage.image1Url)
+      Ok("Retrieved file %s" format blogWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))
   }
-
-
 }
