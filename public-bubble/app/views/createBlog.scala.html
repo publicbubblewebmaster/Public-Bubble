@@ -17,8 +17,8 @@
 <form class="row" id="blogForm" action="@routes.Blogs.save" method="post">
     <div class="small-8 columns small-centered" >
         @helper.inputText(blogForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
-        @helper.inputText(blogForm("title"), '_label -> "Author")
-        @helper.inputText(blogForm("author"), '_label -> "Title")
+        @helper.inputText(blogForm("title"), '_label -> "Title")
+        @helper.inputText(blogForm("author"), '_label -> "Author")
         @helper.inputText(blogForm("content"), '_label -> "Content", 'id -> "wysiwyg-editor")
         @helper.inputDate(blogForm("displayFrom"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
         @helper.inputDate(blogForm("displayUntil"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
