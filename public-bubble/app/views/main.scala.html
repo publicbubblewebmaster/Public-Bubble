@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 <html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
-<head>
+    <head>
         <title>@title</title>
 
         <meta charset="utf-8"/>
@@ -18,32 +18,32 @@
         <script src="@routes.Assets.at("javascripts/vendor/jquery.js")" type="text/javascript"></script>
 
     </head>
-
-<body>
+    <body>
     <header id="bubble-banner" >
-        <nav id="bubble-banner-nav" class="icon-bar five-up block">
-            <a class="item" href="/events">
-                <img src="@routes.Assets.at("icons/fi-calendar.svg")">
-                <label>Events</label>
-            </a>
-            <a class="item" href="/blogs">
-                <img src="@routes.Assets.at("icons/fi-comments.svg")">
-                <label>Blogs</label>
-            </a>
-            <a class="item" href="/twitter">
-                <img src="@routes.Assets.at("icons/fi-social-twitter.svg")">
-                <label>Follow us</label>
-            </a>
-            <a class="item" href="/facebook">
-                <img src="@routes.Assets.at("icons/fi-like.svg")">
-                <label>Like us</label>
-            </a>
-            <a class="item" href="/emailUs">
-                <img src="@routes.Assets.at("icons/fi-mail.svg")">
-                <label>Email Us</label>
-            </a>
-        </nav>
+
     </header>
+    <nav id="bubble-banner-nav" class="icon-bar five-up block right1-color">
+        <a class="item" href="/events">
+            <img src="@routes.Assets.at("icons/fi-calendar.svg")">
+            <label>Events</label>
+        </a>
+        <a class="item" href="/blogs">
+            <img src="@routes.Assets.at("icons/fi-comments.svg")">
+            <label>Blogs</label>
+        </a>
+        <a class="item" href="/twitter">
+            <img src="@routes.Assets.at("icons/fi-social-twitter.svg")">
+            <label>Follow us</label>
+        </a>
+        <a class="item" href="/facebook">
+            <img src="@routes.Assets.at("icons/fi-like.svg")">
+            <label>Like us</label>
+        </a>
+        <a class="item" href="/emailUs">
+            <img src="@routes.Assets.at("icons/fi-mail.svg")">
+            <label>Email Us</label>
+        </a>
+    </nav>
     <div id="content">
         @content
     </div>

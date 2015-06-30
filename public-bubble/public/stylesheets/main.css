@@ -13,8 +13,7 @@ html, body, #container { height: 70%; }
     }
 
 #bubble-banner-nav {
-      height:10%;
-      /*background-color: #1371b7;*/
+      background-color: #1371b7;
 }
 
 #page-footer {
