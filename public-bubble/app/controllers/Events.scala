@@ -70,8 +70,8 @@ object Events extends Controller {
       "title" -> Forms.text,
       "location" -> Forms.text,
       "description" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-MM-dd"), //TODO fixme
-      "displayUntil" -> Forms.date("yyyy-MM-dd") //TODO fixme
+      "displayFrom" -> Forms.date("dd-MM-yyyy"), //TODO fixme
+      "displayUntil" -> Forms.date("dd-MM-yyyy") //TODO fixme
     )(Event.apply)(Event.extract)
   )
 

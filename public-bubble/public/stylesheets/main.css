@@ -2,10 +2,10 @@ html, body, #container { height: 70%; }
 
 #bubble-banner {
       background-image: url('../images/bubble-logo-large-transparent.png');
-      background-size: 230px;
-      background-color: #2D2D87;
+      background-size: 400px;
+      /*background-color: #2D2D87;*/
       background-repeat: no-repeat;
-      height: 200px;
+      height: 150px;
       background-position: 0 2px;
       min-width: 986px;
       font-size: 16px;
@@ -13,11 +13,24 @@ html, body, #container { height: 70%; }
     }
 
 #bubble-banner-nav {
-      background-color: #1371b7;
+      /*background-color: #1371b7;*/
+}
+
+.nav-button {
+        background:#2D2D87;
+        margin:0px;
+        color:white;
+        height:100px;
+        font-color:white;
+}
+
+.nav-icon {
+    height:50px;
+
 }
 
 #page-footer {
-    height: 150px;
+    height: 100px;
     color: grey;
     background-color: black;
 }

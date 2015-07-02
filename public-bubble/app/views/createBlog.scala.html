@@ -6,11 +6,9 @@
 <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
 <script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
 
-
 @wysiwyg()
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
 
 <div id="blogsBox" class="small-2 columns"></div>
 
@@ -19,9 +17,12 @@
         @helper.inputText(blogForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(blogForm("title"), '_label -> "Title")
         @helper.inputText(blogForm("author"), '_label -> "Author")
+        @helper.inputText(blogForm("intro"), '_label -> "Intro")
         @helper.inputText(blogForm("content"), '_label -> "Content", 'id -> "wysiwyg-editor")
-        @helper.inputDate(blogForm("displayFrom"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
-        @helper.inputDate(blogForm("displayUntil"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
+        @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
+            @helper.inputDate(blogForm("displayFrom"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
+            @helper.inputDate(blogForm("displayUntil"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
+        }
     <div class="row">
         <button id="saveButton" class="small-12 centered" type="submit">Save</button>
     </div>
@@ -49,13 +50,5 @@
         request.open("POST", "@routes.Blogs.uploadImage");
         request.send(x);
     });
-
-    $(function() {
-        $( ".datepicker" ).datepicker({
-          dateFormat: "dd-mm-yy",
-          minDate: new Date()
-         });
-      });
-
 </script>
 }
