@@ -66,6 +66,7 @@ object Blogs extends Controller {
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
       "author" -> Forms.text,
+      "intro" -> Forms.text,
       "content" -> Forms.text,
       "displayFrom" -> Forms.date("yyyy-MM-dd"),
       "displayUntil" -> Forms.date("yyyy-MM-dd")

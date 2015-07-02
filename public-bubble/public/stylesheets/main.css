@@ -2,7 +2,7 @@ html, body, #container { height: 70%; }
 
 #bubble-banner {
       background-image: url('../images/bubble-logo-large-transparent.png');
-      background-size: 150px;
+      background-size: 400px;
       /*background-color: #2D2D87;*/
       background-repeat: no-repeat;
       height: 150px;
@@ -21,6 +21,7 @@ html, body, #container { height: 70%; }
         margin:0px;
         color:white;
         height:100px;
+        font-color:white;
 }
 
 .nav-icon {
@@ -29,7 +30,7 @@ html, body, #container { height: 70%; }
 }
 
 #page-footer {
-    height: 150px;
+    height: 100px;
     color: grey;
     background-color: black;
 }
