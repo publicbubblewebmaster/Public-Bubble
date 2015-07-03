@@ -1,0 +1,39 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                           controllers.Application.index
+GET     /login                      controllers.Security.showLoginForm
+GET     /logout                     controllers.Security.logout
+POST    /login                      controllers.Security.handleLogin
+
+#Events
+GET     /events/all                 controllers.Events.eventsJson
+GET     /events                     controllers.Events.events
+POST    /create/event                controllers.Events.save
+GET     /create/event                controllers.Events.authenticatedEventForm
+GET     /update/event/:id            controllers.Events.updateEvent(id : Int)
+GET     /delete/event/:id            controllers.Events.deleteEvent(id : Int)
+POST    /upload/event/picture              controllers.Events.uploadImage
+
+# Blogs
+GET     /blogs/all                  controllers.Blogs.blogsJson
+GET     /blogs                      controllers.Blogs.blogs
+POST    /create/blog                controllers.Blogs.save
+GET     /create/blog                controllers.Blogs.authenticatedBlogForm
+GET     /update/blog/:id            controllers.Blogs.updateBlog(id : Int)
+GET     /delete/blog/:id            controllers.Blogs.deleteBlog(id : Int)
+POST    /upload/blog/picture             controllers.Blogs.uploadImage
+
+
+# Social Media
+GET     /twitter                    controllers.Application.twitter
+GET     /facebook                   controllers.Application.facebook
+
+# Email
+GET     /emailUs                    controllers.Email.emailUs
+POST    /emailUs                    controllers.Email.sendEmail
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
