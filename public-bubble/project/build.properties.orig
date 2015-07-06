@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+sbt.version=0.13.8
+scala.version=2.11.1
+=======
+sbt.version=0.13.5
+>>>>>>> master
