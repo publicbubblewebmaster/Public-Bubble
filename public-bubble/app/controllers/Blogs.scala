@@ -5,10 +5,11 @@ import com.cloudinary.utils.ObjectUtils
 import models.Blog
 import play.api.Play
 import play.api.data.{Form, Forms}
+import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.i18n.Messages
+
 
 object Blogs extends Controller {
 
