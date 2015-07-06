@@ -3,13 +3,19 @@ package controllers
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import models.Blog
-import play.api.Play.current
+import play.api.Play
 import play.api.data.{Form, Forms}
+import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 
+
 object Blogs extends Controller {
+
+  lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
+  lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
+  lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
   def blogs = Action {
     val blog = Blog.getLatest
@@ -88,9 +94,9 @@ object Blogs extends Controller {
     request.body.file("image1").map { file =>
 
       val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", "hhih43y5p",
-        "api_key", "135878543169511",
-        "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
+        "cloud_name", CLOUD_NAME,
+        "api_key", CLOUD_KEY,
+        "api_secret", CLOUD_SECRET));
 
       val uploadResult = cloudinary.uploader().upload(file.ref.file,
         ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))
