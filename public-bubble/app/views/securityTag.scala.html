@@ -1,5 +1,7 @@
+@import play.api.Play
+
 <meta name="google-signin-client_id"
-      content="347923709382-r0flg6bnis72vg1hur50jv94epcgvv71.apps.googleusercontent.com">
+      content="@{Play.current.configuration.getString("google.clientId")}">
 <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 <script>
 function onSignIn(googleUser) {
