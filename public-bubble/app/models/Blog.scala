@@ -18,24 +18,24 @@ case class Blog (
 
 object Blog {
 
-  val GET_ALL_BLOGS_SQL : SqlQuery = SQL("select * from BLOG order by id desc")
-  val DELETE_BLOG_SQL : SqlQuery = SQL("delete from BLOG where id = {id}")
-  val GET_BLOG_BY_ID_SQL : SqlQuery = SQL("select * from BLOG where id = {id}")
+  val GET_ALL_BLOGS_SQL : SqlQuery = SQL("select * from PUBLIC_BUBBLE.BLOG order by id desc")
+  val DELETE_BLOG_SQL : SqlQuery = SQL("delete from PUBLIC_BUBBLE.BLOG where id = {id}")
+  val GET_BLOG_BY_ID_SQL : SqlQuery = SQL("select * from PUBLIC_BUBBLE.BLOG where id = {id}")
 
   // TODO incorporate publish date
-  val GET_LATEST_BLOG : SqlQuery = SQL("select * from BLOG " +
+  val GET_LATEST_BLOG : SqlQuery = SQL("select * from PUBLIC_BUBBLE.BLOG " +
     "where display_from <= current_date and display_until > current_date order by display_until asc LIMIT 1")
 
   val CREATE_BLOG : SqlQuery = SQL("""
-    insert into BLOG(title, author, content, display_from, display_until)
+    insert into PUBLIC_BUBBLE.BLOG(title, author, content, display_from, display_until)
                 values
                       ({title}, {author}, {intro}, {content}, {display_from}, {display_until})
     """)
 
-  val ADD_IMAGE : SqlQuery = SQL("""UPDATE blog SET image_1_url = {image1Url} where ID = {id}""")
+  val ADD_IMAGE : SqlQuery = SQL("""UPDATE public_bubble.blog SET image_1_url = {image1Url} where ID = {id}""")
 
   val UPDATE_BLOG : SqlQuery = SQL("""
-    UPDATE blog SET title = {title},
+    UPDATE public_bubble.blog SET title = {title},
                    author = {author},
                    intro = {intro},
                    content = {content},
