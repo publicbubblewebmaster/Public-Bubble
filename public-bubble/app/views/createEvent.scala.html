@@ -10,7 +10,6 @@
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
-
 <div id="eventsBox" class="small-2 columns"></div>
 
 <form class="row" id="eventForm" action="@routes.Events.save" method="post">
@@ -22,9 +21,8 @@
 
         @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
 
-            @helper.inputDate(eventForm("displayFrom"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
-
-            @helper.inputDate(eventForm("displayUntil"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
+        @helper.inputDate(eventForm("displayFrom"), 'min -> today, '_help -> "", 'class -> "small-4 columns", '_label -> "Display on site from...")
+        @helper.inputDate(eventForm("displayUntil"), 'min -> today, '_help -> "", 'class -> "small-4 columns", '_label -> "...until...")
         }
     <div class="row">
         <button id="saveButton" class="small-12 centered" type="submit">Save</button>
@@ -56,15 +54,5 @@
         request.open("POST", "@routes.Events.uploadImage");
         request.send(x);
     });
-
-    $(function() {
-        $( ".datepicker" ).datepicker({
-          dateFormat: "dd-mm-yy",
-          minDate: new Date()
-         });
-      });
-
-</script>
-
-
+ </script>
 }
