@@ -40,12 +40,9 @@ object User {
     val idToken: GoogleIdToken = verifier.verify(idTokenString);
     if (idToken != null) {
       val payload = idToken.getPayload();
-      println(payload)
-      println("hosted domain is : " + payload.getHostedDomain())
       if (true) {
 
         val email = payload.getEmail();
-        println("User ID: " + payload.getSubject());
         val roleOption: Option[String] = findRoleByEmail(payload.getEmail);
 
         if (!roleOption.isEmpty) {
