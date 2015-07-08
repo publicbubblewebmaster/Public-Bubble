@@ -27,7 +27,7 @@ object Blog {
     "where display_from <= current_date and display_until > current_date order by display_until asc LIMIT 1")
 
   val CREATE_BLOG : SqlQuery = SQL("""
-    insert into PUBLIC_BUBBLE.BLOG(title, author, content, display_from, display_until)
+    insert into PUBLIC_BUBBLE.BLOG(title, author, content, intro, display_from, display_until)
                 values
                       ({title}, {author}, {intro}, {content}, {display_from}, {display_until})
     """)
