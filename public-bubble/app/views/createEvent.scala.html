@@ -17,7 +17,7 @@
         @helper.inputText(eventForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(eventForm("title"), '_label -> "Title")
         @helper.inputText(eventForm("location"), '_label -> "Location")
-        @helper.textarea(eventForm("description"), '_label -> "Description", '_id -> "wysiwyg-editor")
+        @helper.inputText(eventForm("description"), '_label -> "Description", 'id -> "wysiwyg-editor")
 
         @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
 
