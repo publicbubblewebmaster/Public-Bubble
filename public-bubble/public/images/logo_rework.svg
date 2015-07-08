@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -8,48 +6,22 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="273.17136mm"
-   height="129.99338mm"
-   viewBox="0 0 967.93023 460.60646"
-   id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="logo_rework.svg">
+   id="svg2"
+   viewBox="0 0 967.93023 460.60646"
+   height="129.99338mm"
+   width="273.17136mm">
   <defs
      id="defs4">
     <linearGradient
-       id="linearGradient4298"
-       osb:paint="solid">
+       osb:paint="solid"
+       id="linearGradient4298">
       <stop
-         style="stop-color:#000000;stop-opacity:1;"
+         id="stop4300"
          offset="0"
-         id="stop4300" />
+         style="stop-color:#000000;stop-opacity:1;" />
     </linearGradient>
   </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="846.21784"
-     inkscape:cy="-171.31727"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer3"
-     showgrid="false"
-     inkscape:window-width="1333"
-     inkscape:window-height="744"
-     inkscape:window-x="33"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     fit-margin-top="1"
-     fit-margin-left="1.1"
-     fit-margin-right="0.7"
-     fit-margin-bottom="0.3" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -63,139 +35,109 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(-33.245587,-359.10453)">
+     transform="translate(-33.245587,-359.10453)"
+     id="layer1">
     <circle
-       style="fill:#bdd0e8;fill-opacity:0.77421959"
-       id="path3342-3-1"
-       cx="257.14285"
-       cy="564.36218"
-       r="185.71428" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer7"
-     inkscape:label="Layer 7"
-     transform="translate(-33.245587,-359.10453)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="Layer 4"
-     transform="translate(-33.245587,-359.10453)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer 2"
-     transform="translate(-33.245587,-359.10453)">
-    <circle
-       style="fill:#12b8e8;fill-opacity:0.77421959"
-       id="path3342-3"
-       cx="239.99998"
-       cy="560.64789"
-       r="185.71428" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="Layer 3"
-     transform="translate(-33.245587,-359.10453)">
-    <circle
-       style="fill:#125fe8;fill-opacity:0.77421959"
-       id="path3342"
-       cx="215.42744"
-       cy="551.32336"
        r="185.71428"
-       transform="matrix(0.9999087,-0.01351228,0.01351228,0.9999087,0,0)" />
+       cy="564.36218"
+       cx="257.14285"
+       id="path3342-3-1"
+       style="fill:#bdd0e8;fill-opacity:0.77421959" />
+  </g>
+  <g
+     transform="translate(-33.245587,-359.10453)"
+     id="layer7" />
+  <g
+     transform="translate(-33.245587,-359.10453)"
+     id="layer4" />
+  <g
+     transform="translate(-33.245587,-359.10453)"
+     id="layer2">
+    <circle
+       r="185.71428"
+       cy="560.64789"
+       cx="239.99998"
+       id="path3342-3"
+       style="fill:#12b8e8;fill-opacity:0.77421959" />
+  </g>
+  <g
+     transform="translate(-33.245587,-359.10453)"
+     id="layer3">
+    <circle
+       transform="matrix(0.9999087,-0.01351228,0.01351228,0.9999087,0,0)"
+       r="185.71428"
+       cy="551.32336"
+       cx="215.42744"
+       id="path3342"
+       style="fill:#125fe8;fill-opacity:0.77421959" />
     <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:81.63547516px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="468.64694"
-       y="619.29974"
+       transform="scale(1.0211796,0.97925967)"
        id="text4182"
-       sodipodi:linespacing="125%"
-       transform="scale(1.0211796,0.97925967)"><tspan
-         sodipodi:role="line"
-         x="468.64694"
+       y="619.29974"
+       x="468.64694"
+       style="font-style:normal;font-weight:normal;font-size:81.63547516px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         id="tspan4345"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75000763px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          y="619.29974"
+         x="468.64694">A thinking space for </tspan><tspan
+         id="tspan4347"
          style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75000763px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-         id="tspan4345">A thinking space for </tspan><tspan
-         sodipodi:role="line"
-         x="468.64694"
          y="673.98724"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75000763px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-         id="tspan4347">public sector graduatess</tspan></text>
+         x="468.64694">public sector graduatess</tspan></text>
     <circle
-       style="fill:#0ac2ff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path4226"
-       cx="380"
+       r="88.571426"
        cy="718.64795"
-       r="88.571426" />
+       cx="380"
+       id="path4226"
+       style="fill:#0ac2ff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none" />
     <ellipse
-       style="fill:#ffffff;fill-opacity:0.9559748;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path4226-9"
-       cx="378.28568"
-       cy="718.93365"
+       ry="77.14286"
        rx="75.714279"
-       ry="77.14286" />
+       cy="718.93365"
+       cx="378.28568"
+       id="path4226-9"
+       style="fill:#ffffff;fill-opacity:0.9559748;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none" />
     <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:59.89380264px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="126.66307"
-       y="487.20547"
+       transform="scale(0.99186285,1.0082039)"
        id="text4182-1"
-       sodipodi:linespacing="125%"
-       transform="scale(0.99186285,1.0082039)"><tspan
-         sodipodi:role="line"
-         id="tspan4184-1"
-         x="126.66307"
+       y="487.20547"
+       x="126.66307"
+       style="font-style:normal;font-weight:normal;font-size:59.89380264px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          y="487.20547"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">  THE</tspan><tspan
-         sodipodi:role="line"
          x="126.66307"
-         y="562.07275"
+         id="tspan4184-1">  THE</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          id="tspan4186-4"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">PUBLIC</tspan><tspan
-         sodipodi:role="line"
-         x="126.66307"
-         y="636.94"
+         y="562.07275"
+         x="126.66307">PUBLIC</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          id="tspan4188-0"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none">BUBBLE</tspan></text>
+         y="636.94"
+         x="126.66307">BUBBLE</tspan></text>
   </g>
   <g
-     inkscape:groupmode="layer"
-     id="layer6"
-     inkscape:label="Layer 6"
-     transform="translate(-33.245587,-359.10453)">
+     transform="translate(-33.245587,-359.10453)"
+     id="layer6">
     <circle
-       style="fill:#000bff;fill-opacity:0.9559748;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path4250"
-       cx="437.14285"
+       r="37.142857"
        cy="781.50513"
-       r="37.142857" />
+       cx="437.14285"
+       id="path4250"
+       style="fill:#000bff;fill-opacity:0.9559748;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none" />
     <path
-       style="fill:#ffffff;fill-opacity:0.87421384;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 437.23047,748.13086 a 34.285713,32.857143 0 0 0 -34.28516,32.85742 34.285713,32.857143 0 0 0 34.28516,32.85742 34.285713,32.857143 0 0 0 34.28515,-32.85742 34.285713,32.857143 0 0 0 -34.28515,-32.85742 z"
        id="path4250-3"
-       inkscape:connector-curvature="0" />
+       d="m 437.23047,748.13086 a 34.285713,32.857143 0 0 0 -34.28516,32.85742 34.285713,32.857143 0 0 0 34.28516,32.85742 34.285713,32.857143 0 0 0 34.28515,-32.85742 34.285713,32.857143 0 0 0 -34.28515,-32.85742 z"
+       style="fill:#ffffff;fill-opacity:0.87421384;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none" />
   </g>
   <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="Layer 5"
-     transform="translate(-33.245587,-359.10453)">
+     transform="translate(-33.245587,-359.10453)"
+     id="layer5">
     <path
-       style="fill:none;fill-opacity:0.96855349;stroke:#ffffff;stroke-width:7.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.81761008"
+       d="M 63.092348,515.66564 A 164.0224,164.0224 0 0 1 240.62491,385.49337"
        id="path4309"
-       sodipodi:type="arc"
-       sodipodi:cx="223.76463"
-       sodipodi:cy="548.64691"
-       sodipodi:rx="164.0224"
-       sodipodi:ry="164.0224"
-       sodipodi:start="3.3440508"
-       sodipodi:end="4.8153634"
-       sodipodi:open="true"
-       d="M 63.092348,515.66564 A 164.0224,164.0224 0 0 1 240.62491,385.49337" />
+       style="fill:none;fill-opacity:0.96855349;stroke:#ffffff;stroke-width:7.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.81761008" />
   </g>
 </svg>

@@ -1,7 +1,7 @@
 html, body, #container { height: 70%; }
 
 #bubble-banner {
-      background-image: url('../images/logo_rework.svg');
+      /*background-image: url('../images/logo_rework.svg');*/
       background-size: 15%;
       /*background-color: #2D2D87;*/
       background-repeat: no-repeat;
