@@ -20,8 +20,7 @@
         @helper.inputText(blogForm("intro"), '_label -> "Intro")
         @helper.inputText(blogForm("content"), '_label -> "Content", 'id -> "wysiwyg-editor")
         @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
-            @helper.inputDate(blogForm("displayFrom"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
-            @helper.inputDate(blogForm("displayUntil"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
+            @helper.inputDate(blogForm("publishDate"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Publish Date")
         }
     <div class="row">
         <button id="saveButton" class="small-12 centered" type="submit">Save</button>

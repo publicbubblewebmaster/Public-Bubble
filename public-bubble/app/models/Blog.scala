@@ -12,8 +12,7 @@ case class Blog (
                    author: String,
                    intro: String,
                    content: String,
-                   displayFrom: Date,
-                   displayUntil: Date,
+                   publishDate: Date,
                    image1Url: Option[String] = null)
 
 object Blog {
@@ -24,12 +23,12 @@ object Blog {
 
   // TODO incorporate publish date
   val GET_LATEST_BLOG : SqlQuery = SQL("select * from PUBLIC_BUBBLE.BLOG " +
-    "where display_from <= current_date order by display_from desc LIMIT 1")
+    "where publish_date <= current_date order by publish_date desc LIMIT 1")
 
   val CREATE_BLOG : SqlQuery = SQL("""
-    insert into PUBLIC_BUBBLE.BLOG(title, author, content, intro, display_from, display_until)
+    insert into PUBLIC_BUBBLE.BLOG(title, author, content, intro, publish_date, display_until)
                 values
-                      ({title}, {author}, {intro}, {content}, {display_from}, {display_until})
+                      ({title}, {author}, {intro}, {content}, {publish_date}, {display_until})
     """)
 
   val ADD_IMAGE : SqlQuery = SQL("""UPDATE public_bubble.blog SET image_1_url = {image1Url} where ID = {id}""")
@@ -39,7 +38,7 @@ object Blog {
                    author = {author},
                    intro = {intro},
                    content = {content},
-                   display_from = {display_from},
+                   publish_date = {publish_date},
                    display_until = {display_until}
                    where id = {id}
                                     """)
@@ -70,8 +69,7 @@ object Blog {
           "author" -> blog.author,
           "intro" -> blog.intro,
           "content" -> blog.content,
-          "display_from" -> blog.displayFrom,
-          "display_until" -> blog.displayUntil
+          "publish_date" -> blog.publishDate
         ).executeInsert();
     }
     id
@@ -85,8 +83,7 @@ object Blog {
         "author" -> blog.author,
         "intro" -> blog.intro,
         "content" -> blog.content,
-        "display_from" -> blog.displayFrom,
-        "display_until" -> blog.displayUntil,
+        "publish_date" -> blog.publishDate,
         "id" -> blog.id
       ).executeUpdate()
     }
@@ -121,17 +118,16 @@ object Blog {
       row[String] ("author"),
       row[String] ("intro"),
       row[String] ("content"),
-      row[Date] ("display_from"),
-      row[Date] ("display_until"),
+      row[Date] ("publish_date"),
       row[Option[String]] ("IMAGE_1_URL")
     )
   }
 
-  def apply(id : Option[Long], title: String, author: String, intro: String, content: String, displayFrom: Date, displayUntil: Date) = {
-    new Blog(id, title, author, intro, content, displayFrom, displayUntil)
+  def apply(id : Option[Long], title: String, author: String, intro: String, content: String, publishDate: Date) = {
+    new Blog(id, title, author, intro, content, publishDate)
   }
 
   def extract(blog: Blog) = {
-     Option(Tuple7(blog.id, blog.title, blog.author, blog.intro, blog.content, blog.displayFrom, blog.displayUntil))
+     Option(Tuple6(blog.id, blog.title, blog.author, blog.intro, blog.content, blog.publishDate))
   }
 }

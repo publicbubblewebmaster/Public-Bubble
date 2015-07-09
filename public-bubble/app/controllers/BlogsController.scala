@@ -78,8 +78,7 @@ object BlogsController extends Controller {
       "author" -> Forms.text,
       "intro" -> Forms.text,
       "content" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-MM-dd"),
-      "displayUntil" -> Forms.date("yyyy-MM-dd")
+      "publishDate" -> Forms.date("yyyy-MM-dd")
     )(Blog.apply)(Blog.extract)
   )
 
