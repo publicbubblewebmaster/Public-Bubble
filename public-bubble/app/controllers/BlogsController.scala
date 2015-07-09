@@ -9,15 +9,19 @@ import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
+import play.api.cache.Cached
+import javax.inject.Inject
 
 
 object BlogsController extends Controller {
 
+  val BLOGS_CACHE = "blogs"
+  val BLOGS_JSON_CACHE = "blogsJson"
   lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def blogs = Action {
+  def blogs = Cached(BLOGS_CACHE) {Action {
     val blogOption = Blog.getLatest
 
     blogOption match {
@@ -25,12 +29,15 @@ object BlogsController extends Controller {
       case _ => Ok(views.html.noContent("blogs"))
     }
   }
+  }
 
   def createBlog = Authenticated {
+    clearCache
     Ok(views.html.createBlog(blogForm))
   }
 
   def updateBlog(id : Int) = Action {
+    clearCache
     val blog = Blog.getById(id);
     print("blog.id: " + blog.id);
     Ok(views.html.createBlog(blogForm.fill(blog)))
@@ -55,20 +62,23 @@ object BlogsController extends Controller {
   }
 
   def deleteBlog(id : Int)= Action { implicit request =>
+    clearCache
     Blog.delete(id)
     Ok(views.html.createBlog(blogForm))
   }
 
-  def blogsJson = Action {
-    val jsonBlogs : List[JsValue] =
-      Blog.getAll.map(
-        blog =>
-          Json.obj(
-            "id" -> blog.id,
-            "title" -> blog.title
-          )
-      )
-    Ok(JsArray(jsonBlogs))
+  def blogsJson = Cached(BLOGS_JSON_CACHE) {
+    Action {
+      val jsonBlogs: List[JsValue] =
+        Blog.getAll.map(
+          blog =>
+            Json.obj(
+              "id" -> blog.id,
+              "title" -> blog.title
+            )
+        )
+      Ok(JsArray(jsonBlogs))
+    }
   }
 
   val blogForm = Form(
@@ -111,5 +121,10 @@ object BlogsController extends Controller {
 
       Ok("Retrieved file %s" format blogWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))
+  }
+
+  private def clearCache = {
+    Cache.remove(BLOGS_CACHE)
+    Cache.remove(BLOGS_JSON_CACHE)
   }
 }

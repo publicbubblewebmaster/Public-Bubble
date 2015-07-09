@@ -38,8 +38,7 @@ object Blog {
                    author = {author},
                    intro = {intro},
                    content = {content},
-                   publish_date = {publish_date},
-                   display_until = {display_until}
+                   publish_date = {publish_date}
                    where id = {id}
                                     """)
 
