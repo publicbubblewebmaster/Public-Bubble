@@ -12,7 +12,7 @@
 
 <div id="blogsBox" class="small-2 columns"></div>
 
-<form class="row" id="blogForm" action="@routes.Blogs.save" method="post">
+<form class="row" id="blogForm" action="@routes.BlogsController.save" method="post">
     <div class="small-8 columns small-centered" >
         @helper.inputText(blogForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(blogForm("title"), '_label -> "Title")
@@ -28,7 +28,7 @@
     </div>
 </form>
 
-<form id="pictureForm" action="@routes.Blogs.uploadImage" method="post" enctype="multipart/form-data">
+<form id="pictureForm" action="@routes.BlogsController.uploadImage" method="post" enctype="multipart/form-data">
     <input id="image1of2" type="file" name="image">
     <button id="imageUploadButton" type="button" value="Upload"/>
 </form>
@@ -45,9 +45,9 @@
 
         var blogId = document.getElementById("id").value
 
-        x.append("id", blogId)
+        <x class="ap"></x>pend("id", blogId)
         var request = new XMLHttpRequest();
-        request.open("POST", "@routes.Blogs.uploadImage");
+        request.open("POST", "@routes.BlogsController.uploadImage");
         request.send(x);
     });
 </script>

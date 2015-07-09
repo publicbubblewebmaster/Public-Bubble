@@ -49,10 +49,14 @@ object Event {
     ).toList
   }
 
-  def getLatest : Event = DB.withConnection{
+  def getLatest : Option[Event] = DB.withConnection{
         implicit connection =>
-          val row : Row = GET_LATEST_EVENT.apply().head;
-          Event.createFrom(row);
+          val optionRow = GET_LATEST_EVENT.apply().headOption;
+
+          optionRow match {
+            case _ : Row => Some(Event.createFrom(optionRow.get))
+            case _ => None
+          }
   }
 
   def create(event : Event) : Option[Long] = {

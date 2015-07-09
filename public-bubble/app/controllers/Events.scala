@@ -13,9 +13,13 @@ import play.api.mvc._
 object Events extends Controller {
 
   def events = Action {
-    val event = Event.getLatest
-    Ok(views.html.events(event))
 
+    val eventOption = Event.getLatest
+
+    eventOption match {
+      case _ : Some[Event] => Ok(views.html.events(eventOption.get))
+      case _ => Ok(views.html.noContent("events"))
+    }
   }
 
 
