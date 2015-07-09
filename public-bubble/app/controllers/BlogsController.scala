@@ -11,15 +11,19 @@ import play.api.libs.json._
 import play.api.mvc._
 
 
-object Blogs extends Controller {
+object BlogsController extends Controller {
 
   lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
   def blogs = Action {
-    val blog = Blog.getLatest
-    Ok(views.html.blogs(blog))
+    val blogOption = Blog.getLatest
+
+    blogOption match {
+      case _ : Some[Blog] => Ok(views.html.blogs(blogOption.get))
+      case _ => Ok(views.html.noContent("blogs"))
+    }
   }
 
   def createBlog = Authenticated {

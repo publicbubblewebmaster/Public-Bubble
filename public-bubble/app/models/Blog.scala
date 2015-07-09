@@ -24,7 +24,7 @@ object Blog {
 
   // TODO incorporate publish date
   val GET_LATEST_BLOG : SqlQuery = SQL("select * from PUBLIC_BUBBLE.BLOG " +
-    "where display_from <= current_date and display_until > current_date order by display_until asc LIMIT 1")
+    "where display_from <= current_date order by display_from desc LIMIT 1")
 
   val CREATE_BLOG : SqlQuery = SQL("""
     insert into PUBLIC_BUBBLE.BLOG(title, author, content, intro, display_from, display_until)
@@ -51,10 +51,14 @@ object Blog {
     ).toList
   }
 
-  def getLatest : Blog = DB.withConnection{
+  def getLatest : Option[Blog] = DB.withConnection{
         implicit connection =>
-          val row : Row = GET_LATEST_BLOG.apply().head;
-          Blog.createFrom(row);
+          val optionRow : Option[Row] = GET_LATEST_BLOG.apply().headOption;
+
+          optionRow match {
+            case _ : Row => Some(Blog.createFrom(optionRow.get))
+            case _ => None
+          }
   }
 
   def create(blog : Blog) : Option[Long] = {
