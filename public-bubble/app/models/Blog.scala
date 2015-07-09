@@ -26,9 +26,9 @@ object Blog {
     "where publish_date <= current_date order by publish_date desc LIMIT 1")
 
   val CREATE_BLOG : SqlQuery = SQL("""
-    insert into PUBLIC_BUBBLE.BLOG(title, author, content, intro, publish_date, display_until)
+    insert into PUBLIC_BUBBLE.BLOG(title, author, intro, content, publish_date)
                 values
-                      ({title}, {author}, {intro}, {content}, {publish_date}, {display_until})
+                      ({title}, {author}, {intro}, {content}, {publish_date})
     """)
 
   val ADD_IMAGE : SqlQuery = SQL("""UPDATE public_bubble.blog SET image_1_url = {image1Url} where ID = {id}""")
