@@ -61,17 +61,18 @@ object Blog {
 
   def create(blog : Blog) : Option[Long] = {
 
-    val id: Option[Long] = DB.withConnection {
-      implicit connection =>
-        CREATE_BLOG.on(
-          "title" -> blog.title,
-          "author" -> blog.author,
-          "intro" -> blog.intro,
-          "content" -> blog.content,
-          "publish_date" -> blog.publishDate
-        ).executeInsert();
-    }
-    id
+
+//    val id: Option[Long] = DB.withConnection {
+//      implicit connection =>
+//        CREATE_BLOG.on(
+//          "title" -> blog.title,
+//          "author" -> blog.author,
+//          "intro" -> blog.intro,
+//          "content" -> blog.content,
+//          "publish_date" -> blog.publishDate
+//        ).executeInsert();
+//    }
+//    id
   }
   
   def update(blog : Blog) = {
