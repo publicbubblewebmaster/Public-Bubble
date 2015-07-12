@@ -14,7 +14,7 @@ trait BlogTable {
     def publishDate = column[String]("PUBLISH_DATE")
     def image1url = column[String]("IMAGE_1_URL")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, title, author, intro, content, image1url)
+    def * = (id, title, author, intro, content, image1url) <> (Blog.)
   }
   val blogs = TableQuery[Blog]
   
