@@ -1,4 +1,4 @@
-@(blog: Blog)
+@(blogSequence: Seq[Blog])
 
 @main("Welcome to Play") {
 
@@ -6,27 +6,26 @@
         <!--<div style="background:blue">-->
             <div class="row">
                 <div class="small-10 small-centered column" >
-                <h3>@{blog.title}</h3>
-                <h6>by @{blog.author}</h6>
+                <h3>@{blogSequence.head.title}</h3>
+                <h6>by @{blogSequence.head.author}</h6>
                 </div>
             </div>
         <!--</div>-->
         <div class="row">
             <div class="small-10 small-centered column">
                 <i style="color:#1371b7">
-                Child Sexual Exploitation is an important issue in today’s society. The media are constantly reporting
-                the latest case of CSE and the public sector is eager to find solutions.
+                    @{blogSequence.head.title}
                 </i>
             </div>
         </div>
         <div class="row">
             <div class="small-10 small-centered column">
-                <img src="@{blog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+                <img src="@{blogSequence.head.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
             </div>
         </div>
         <div class="row">
             <div class="small-10 small-centered columns">
-                @Html(blog.content)
+                @Html(blogSequence.head.content)
             </div>
         </div>
     </section>

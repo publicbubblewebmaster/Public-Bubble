@@ -3,9 +3,6 @@ package dao
 import models.Blog
 import scala.concurrent.Future
 
-/**
- * Created by ian on 11/07/15.
- */
 trait BlogDao {
 
   def update(blog : Blog)
@@ -16,9 +13,9 @@ trait BlogDao {
 
   def delete(id : Int)
 
-  def getAll : List[Blog]
+  def sortedByDate : Future[Seq[Blog]]
 
-  def getLatest : Option[Blog]
+  def sortedById : Future[Seq[Blog]]
 
   def create(blog : Blog) : Option[Long]
   }

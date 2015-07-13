@@ -13,15 +13,15 @@ import slick.driver.PostgresDriver.api._
 trait EventsComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
 
-  class Blogs(tag: Tag) extends Table[Event](tag, "EVENT") {
+  class Blogs(tag: Tag) extends Table[Event](tag, "event") {
 
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-    def title = column[String]("TITLE")
-    def author = column[String]("LOCATION")
-    def intro = column[String]("DESCRIPTION")
-    def displayFrom = column[Date]("DISPLAY_FROM")
-    def displayUntil = column[Date]("DISPLAY_UNTIL")
-    def image1Url = column[Option[String]]("IMAGE_1_URL")
+    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def title = column[String]("title")
+    def author = column[String]("location")
+    def intro = column[String]("description")
+    def displayFrom = column[Date]("display_from")
+    def displayUntil = column[Date]("display_until")
+    def image1Url = column[Option[String]]("image_1_url")
 
     def * = (id.?, title, author, intro, displayFrom, displayUntil, image1Url) <> ((Event.apply _).tupled, Event.unapply)
  }

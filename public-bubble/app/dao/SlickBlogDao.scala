@@ -14,15 +14,15 @@ import scala.concurrent.Future
 trait BlogsComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
 
-  class Blogs(tag: Tag) extends Table[Blog](tag, Some("PUBLIC_BUBBLE"), "BLOG") {
+  class Blogs(tag: Tag) extends Table[Blog](tag, Some("public_bubble"), "blog") {
 
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-    def title = column[String]("TITLE")
-    def author = column[String]("AUTHOR")
-    def intro = column[String]("INTRO")
-    def content = column[String]("CONTENT")
-    def publishDate = column[Date]("PUBLISH_DATE")
-    def image1Url = column[Option[String]]("IMAGE_1_URL")
+    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def title = column[String]("title")
+    def author = column[String]("author")
+    def intro = column[String]("intro")
+    def content = column[String]("content")
+    def publishDate = column[Date]("publish_date")
+    def image1Url = column[Option[String]]("image_1_url")
 
     /* It is possible to define a mapped table
     that uses a custom type for its * projection
@@ -55,8 +55,7 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override def create(blog: Blog): Option[Long] = ???
 
-  override def getLatest: Option[Blog] = ???
-
-  override def getAll: List[Blog] = ???
+  override def sortedById : Future[Seq[Blog]] = db.run(blogs.result)
+  override def sortedByDate : Future[Seq[Blog]] = db.run(blogs.result)
 
 }

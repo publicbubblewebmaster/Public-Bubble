@@ -1,7 +1,5 @@
 package controllers
 
-import java.sql.Date
-
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import dao.{SlickBlogDao}
@@ -26,13 +24,13 @@ object BlogsController extends Controller {
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def blogs = Action.async { implicit rs =>
-    val futureBlogOption = blogDao.findById(1L)
+  def blogs = Action.async { implicit request =>
+    val futureBlogs : Future[Seq[Blog]] = blogDao.sortedByDate
 
-    futureBlogOption.map {case (blog) =>
-        blog match {
-          case _ : Some[Blog] => Ok(views.html.blogs(blog.get))
-          case _ => NotFound
+    futureBlogs.map {case (blogList) =>
+        blogList match {
+          case Nil => NotFound
+          case _ => Ok(views.html.blogs(blogList))
         }
     }
   }
@@ -81,19 +79,17 @@ object BlogsController extends Controller {
     Ok(views.html.createBlog(blogForm))
   }
 
-  def blogsJson = Cached(BLOGS_JSON_CACHE) {
-    Action {
-      val jsonBlogs: List[JsValue] =
-        blogDao.getAll.map(
-          blog =>
-            Json.obj(
-              "id" -> blog.id,
-              "title" -> blog.title
-            )
-        )
-      Ok(JsArray(jsonBlogs))
+  def blogsJson =
+    Action.async {
+
+    val blog : Future[Seq[Blog]] =
+      for {
+        blogList <- blogDao.sortedById
+
+      } yield {blogList      }
+      print(blog)
+      Future(NoContent)
     }
-  }
 
   val blogForm = Form(
     Forms.mapping(
