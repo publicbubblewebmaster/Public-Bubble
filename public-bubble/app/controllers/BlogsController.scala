@@ -14,6 +14,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cached, Cache}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object BlogsController extends Controller {
 
@@ -45,11 +46,13 @@ object BlogsController extends Controller {
 //    clearCache
     val futureBlogOption = Blog.getById(id)
 
-    futureBlogOption.map( blogOption =>
-        blogOption match {
-          case blog : Some[Blog] => {val blogFormData = BlogFormData(blog.get.id, blog.get.title, blog.get.author, blog.get.intro, blog.get.content, blog.get.publishDate); Ok(views.html.createBlog(blogForm.fill(blogFormData)))}
+    val result : Future[Result] = futureBlogOption.map(
+      _ match {
+          case blogOption : Some[Blog] => {val blogFormData = BlogFormData(blogOption.get.id, blogOption.get.title, blogOption.get.author, blogOption.get.intro, blogOption.get.content, blogOption.get.publishDate); Ok(views.html.createBlog(blogForm.fill(blogFormData)))}
           case _ => NotFound
         })
+
+    result
   }
 
   def save = Action { implicit request =>
