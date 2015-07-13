@@ -1,10 +1,7 @@
 package dao
 
-import java.util.Date
-
-import anorm.Row
 import models.Blog
-import play.api.db.DB
+import scala.concurrent.Future
 
 /**
  * Created by ian on 11/07/15.
@@ -15,7 +12,7 @@ trait BlogDao {
 
   def addImage(id : Long, url : String) : Blog
 
-  def getById(blogId : Long) : Blog
+  def findById(blogId : Long) : Future[Option[Blog]]
 
   def delete(id : Int)
 

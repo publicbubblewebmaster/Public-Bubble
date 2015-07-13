@@ -1,10 +1,6 @@
 package models
 
-import java.util.Date
-
-import anorm.{Row, SQL, SqlQuery}
-import play.api.Play.current
-import play.api.db.DB
+import java.sql.Date
 
 case class Event (
                    id : Option[Long],
@@ -15,116 +11,35 @@ case class Event (
                    displayUntil: Date,
                    image1Url: Option[String] = null)
 
+/* Same as model class but missing image url because this is handled via ajax*/
+case class EventFormData (
+                   id : Option[Long],
+                   title: String,
+                   location: String,
+                   description: String,
+                   displayFrom: Date,
+                   displayUntil: Date)
+
 object Event {
 
-  val GET_ALL_EVENTS_SQL : SqlQuery = SQL("select * from PUBLIC_BUBBLE.EVENT order by id desc")
-  val DELETE_EVENT_SQL : SqlQuery = SQL("delete from PUBLIC_BUBBLE.EVENT where id = {id}")
-  val GET_EVENT_BY_ID_SQL : SqlQuery = SQL("select * from PUBLIC_BUBBLE.EVENT where id = {id}")
+  def createFrom(eventFormData : EventFormData) : Event =
+    Event(eventFormData.id, eventFormData.title, eventFormData.location, eventFormData.description, eventFormData.displayFrom, eventFormData.displayUntil, None)
 
-  // TODO incorporate publish date
-  val GET_LATEST_EVENT : SqlQuery = SQL("select * from PUBLIC_BUBBLE.EVENT " +
-    "where display_from <= current_date and display_until > current_date order by display_until asc LIMIT 1")
+  lazy val dao = new SlickEventDao
 
-  val CREATE_EVENT : SqlQuery = SQL("""
-    insert into PUBLIC_BUBBLE.EVENT(title, location, description, display_from, display_until)
-                values
-                      ({title}, {location}, {description}, {display_from}, {display_until})
-    """)
+   def getAll : List[Event] = dao.getAll
 
-  val ADD_IMAGE : SqlQuery = SQL("""UPDATE PUBLIC_BUBBLE.EVENT SET image_1_url = {image1Url} where ID = {id}""")
+  def getLatest : Option[Event] = dao.getLatest
 
-  val UPDATE_EVENT : SqlQuery = SQL("""
-    UPDATE PUBLIC_BUBBLE.EVENT SET title = {title},
-                   location = {location},
-                   description = {description},
-                   display_from = {display_from},
-                   display_until = {display_until}
-                   where id = {id}
-                                    """)
+  def create(event : Event) : Option[Long] = dao.create(event)
 
-  def getAll : List[Event] = DB.withConnection {
-    implicit connection =>
-    GET_ALL_EVENTS_SQL().map(row =>
-        createFrom(row)
-    ).toList
-  }
+  def update(event : Event) = dao.update(event)
 
-  def getLatest : Option[Event] = DB.withConnection{
-        implicit connection =>
-          val optionRow = GET_LATEST_EVENT.apply().headOption;
+  def addImage(id : Long, url : String) : Event = dao.addImage(id, url)
 
-          optionRow match {
-            case _ : Row => Some(Event.createFrom(optionRow.get))
-            case _ => None
-          }
-  }
+  def getById(eventId : Long) : Event = dao.getById(eventId)
 
-  def create(event : Event) : Option[Long] = {
-
-    val id: Option[Long] = DB.withConnection {
-      implicit connection =>
-        CREATE_EVENT.on(
-          "title" -> event.title,
-          "location" -> event.location,
-          "description" -> event.description,
-          "display_from" -> event.displayFrom,
-          "display_until" -> event.displayUntil
-        ).executeInsert();
-    }
-    id
-  }
-  
-  def update(event : Event) = {
-    DB.withConnection {
-      implicit connection =>
-      UPDATE_EVENT.on(
-        "title" -> event.title,
-        "location" -> event.location,
-        "description" -> event.description,
-        "display_from" -> event.displayFrom,
-        "display_until" -> event.displayUntil,
-        "id" -> event.id
-      ).executeUpdate()
-    }
-  }
-
-  def addImage(id : Long, url : String) : Event = {
-    DB.withConnection {
-      implicit connection =>
-        ADD_IMAGE.on(
-          "id" -> id,
-          "image1Url" -> url
-        ).executeUpdate()
-        Event.getById(id)
-    }
-  }
-
-  def getById(eventId : Long) : Event = DB.withConnection {
-    implicit connection =>
-      val row = GET_EVENT_BY_ID_SQL.on("id" -> eventId).apply().head;
-      Event.createFrom(row)
-  }
-
-  def delete(id : Int) :Unit = DB.withConnection {
-    implicit connection =>
-      val result : Boolean = DELETE_EVENT_SQL.on("id" -> id).execute()
-  }
-
-  def createFrom(row : Row) : Event = {
-    Event(
-      row[Option[Long]] ("id"),
-      row[String] ("title"),
-      row[String] ("location"),
-      row[String] ("description"),
-      row[Date] ("display_from"),
-      row[Date] ("display_until"),
-      row[Option[String]] ("IMAGE_1_URL")
-    )
-  }
-
-  def apply(id : Option[Long], title: String, location: String, description: String, displayFrom: Date, displayUntil: Date) = {
-    new Event(id, title, location, description, displayFrom, displayUntil)
-  }
+  def delete(id : Int) :Unit = dao.delete(id)
 
   def extract(event: Event) = {
      Option(Tuple6(event.id, event.title, event.location, event.description, event.displayFrom, event.displayUntil))

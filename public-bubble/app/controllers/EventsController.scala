@@ -3,7 +3,7 @@ package controllers
 import com.cloudinary._
 import com.cloudinary.utils.ObjectUtils
 import controllers.Application._
-import models.Event
+import models.{BlogFormData, EventFormData, Event}
 import play.api.Play.current
 import play.api.data.{Form, Forms}
 import play.api.i18n.Messages.Implicits._
@@ -11,7 +11,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cache, Cached}
 
-object Events extends Controller {
+object EventsController extends Controller {
 
   val EVENTS_CACHE = "events"
 
@@ -27,16 +27,19 @@ object Events extends Controller {
     }
   }
 
-
   def createEvent = Authenticated {
     Ok(views.html.createEvent(eventForm))
   }
 
-
-  def updateEvent(id : Int) = Action {
+  def updateEvent(eventId : Long) = Action {
     clearCache
-    val event = Event.getById(id);
-    Ok(views.html.createEvent(eventForm.fill(event)))
+    val event : Event = Event.getById(eventId);
+
+    val (id, title, location, description, displayFrom, displayUntil, image1Url) = Event.unapply(event).get
+
+    val eventFormData = EventFormData(id, title, location, description, displayFrom, displayUntil)
+
+    Ok(views.html.createEvent(eventForm.fill(eventFormData)))
   }
 
   def save = Action { implicit request =>
@@ -46,10 +49,10 @@ object Events extends Controller {
 
       createdEvent => {
         if (createdEvent.id.isEmpty) {
-          Event.create(createdEvent)
+          Event.create(Event.createFrom(createdEvent))
         }
         else {
-          Event.update(createdEvent)
+          Event.update(Event.createFrom(createdEvent))
         }
         Ok(views.html.createEvent(eventForm.fill(createdEvent)))
       }
@@ -80,9 +83,9 @@ object Events extends Controller {
       "title" -> Forms.text,
       "location" -> Forms.text,
       "description" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-MM-dd"),
-      "displayUntil" -> Forms.date("yyyy-MM-dd")
-    )(Event.apply)(Event.extract)
+      "displayFrom" -> Forms.sqlDate("yyyy-MM-dd"),
+      "displayUntil" -> Forms.sqlDate("yyyy-MM-dd")
+    )(EventFormData.apply)(EventFormData.unapply)
   )
 
   // here we are calling the ActionBuilder apply method

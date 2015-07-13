@@ -13,6 +13,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cached, Cache}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object BlogsController extends Controller {
 
@@ -24,29 +25,31 @@ object BlogsController extends Controller {
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def blogs = Action {
-    val blogOption = blogDao.getLatest
+  def blogs = Action.async { implicit rs =>
+    val futureBlogOption = blogDao.findById(1L)
 
-    blogOption match {
-      case _ : Some[Blog] => Ok(views.html.blogs(blogOption.get))
-      case _ => Ok(views.html.noContent("blogs"))
+    futureBlogOption.map {case (blog) =>
+        blog match {
+          case _ : Some[Blog] => Ok(views.html.blogs(blog.get))
+          case _ => NotFound
+        }
     }
   }
-
 
   def createBlog = Authenticated {
 //    clearCache
     Ok(views.html.createBlog(blogForm))
   }
 
-  def updateBlog(id : Long) = Action {
+  def updateBlog(id : Long) = Action.async {
 //    clearCache
-    val blog = blogDao.getById(id);
+    val futureBlogOption = Blog.getById(id)
 
-//    val (id, title, author, intro, content, publishDate, image1Url) = Blog.unapply(blog).get
-    val blogFormData = BlogFormData(blog.id, blog.title, blog.author, blog.intro, blog.content, blog.publishDate)
-
-    Ok(views.html.createBlog(blogForm.fill(blogFormData)))
+    futureBlogOption.map( blogOption =>
+        blogOption match {
+          case blog : Some[Blog] => {val blogFormData = BlogFormData(blog.get.id, blog.get.title, blog.get.author, blog.get.intro, blog.get.content, blog.get.publishDate); Ok(views.html.createBlog(blogForm.fill(blogFormData)))}
+          case _ => NotFound
+        })
   }
 
   def save = Action { implicit request =>
@@ -59,10 +62,10 @@ object BlogsController extends Controller {
 
         createdBlog => {
         if (createdBlog.id.isEmpty) {
-          blogDao create(Blog.createFrom(createdBlog))
+          Blog.create(Blog.createFrom(createdBlog))
         }
         else {
-          blogDao update(Blog.createFrom(createdBlog))
+          Blog.update(Blog.createFrom(createdBlog))
         }
         Ok(views.html.createBlog(blogForm.fill(createdBlog)))
       }

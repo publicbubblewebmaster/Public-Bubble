@@ -2,19 +2,19 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                           controllers.Events.events
+#GET     /                           controllers.EventsController.events
 GET     /login                      controllers.Security.showLoginForm
 GET     /logout                     controllers.Security.logout
 POST    /login                      controllers.Security.handleLogin
 
 #Events
-GET     /events/all                 controllers.Events.eventsJson
-GET     /events                     controllers.Events.events
-POST    /create/event                controllers.Events.save
-GET     /create/event                controllers.Events.authenticatedEventForm
-GET     /update/event/:id            controllers.Events.updateEvent(id : Int)
-GET     /delete/event/:id            controllers.Events.deleteEvent(id : Int)
-POST    /upload/event/picture              controllers.Events.uploadImage
+GET     /events/all                 controllers.EventsController.eventsJson
+GET     /events                     controllers.EventsController.events
+POST    /create/event                controllers.EventsController.save
+GET     /create/event                controllers.EventsController.authenticatedEventForm
+GET     /update/event/:id            controllers.EventsController.updateEvent(id : Int)
+GET     /delete/event/:id            controllers.EventsController.deleteEvent(id : Int)
+POST    /upload/event/picture              controllers.EventsController.uploadImage
 
 # Blogs
 GET     /blogs/all                  controllers.BlogsController.blogsJson

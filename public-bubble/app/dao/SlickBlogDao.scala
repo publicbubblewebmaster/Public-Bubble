@@ -9,11 +9,12 @@ import slick.backend.DatabaseConfig
 import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
+import scala.concurrent.Future
 
 trait BlogsComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
 
-  class Blogs(tag: Tag) extends Table[Blog](tag, "BLOG") {
+  class Blogs(tag: Tag) extends Table[Blog](tag, Some("PUBLIC_BUBBLE"), "BLOG") {
 
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def title = column[String]("TITLE")
@@ -40,6 +41,8 @@ trait BlogsComponent {
 
 class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with BlogsComponent  {
 
+  private val blogs = TableQuery[Blogs]
+
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   override def update(blog: Blog): Unit = ???
@@ -48,7 +51,7 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override def delete(id: Int): Unit = ???
 
-  override def getById(blogId: Long): Blog = ???
+  override def findById(blogId: Long): Future[Option[Blog]] = db.run(blogs.filter(_.id === blogId).result.headOption)
 
   override def create(blog: Blog): Option[Long] = ???
 
