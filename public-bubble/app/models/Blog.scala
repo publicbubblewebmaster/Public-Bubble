@@ -23,10 +23,10 @@ case class BlogFormData(id : Option[Long],
                         publishDate : Date)
 
 object Blog {
-  
+
   lazy val dao = new SlickBlogDao
 
-  def createFrom(blogFormData : BlogFormData) : Blog =
+  def createFrom(blogFormData: BlogFormData): Blog =
     Blog(blogFormData.id, blogFormData.title, blogFormData.author, blogFormData.intro, blogFormData.content, blogFormData.publishDate, None)
 
   def extract(blog: Blog) = {
@@ -43,9 +43,4 @@ object Blog {
 
   def create(blog: Blog): Option[Long] = dao.create(blog)
 
-  def getLatest: Option[Blog] = dao.getLatest
-
-  def getAll: List[Blog] = dao.getAll
-  
 }
-

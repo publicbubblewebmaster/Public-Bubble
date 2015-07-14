@@ -12,7 +12,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cached, Cache}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{Promise, Future}
 
 object BlogsController extends Controller {
 
@@ -79,17 +79,17 @@ object BlogsController extends Controller {
     Ok(views.html.createBlog(blogForm))
   }
 
-  def blogsJson =
-    Action.async {
+  def blogsJson = Action.async { implicit request =>
 
-    val blog : Future[Seq[Blog]] =
-      for {
-        blogList <- blogDao.sortedById
+    val futureBlogs : Future[Seq[Blog]] = blogDao.sortedById
+    //map creates a new future
+   // working slightly messy code that i'm slightly happy with
+    val futureJson : Future[Seq[JsValue]] = futureBlogs.map(
+                                                blogList => blogList.map(
+                                                        blog => Json.obj("id" -> blog.id, "title" -> blog.title)))
 
-      } yield {blogList      }
-      print(blog)
-      Future(NoContent)
-    }
+    futureJson.map(jsList => Ok(JsArray(jsList)))
+  }
 
   val blogForm = Form(
     Forms.mapping(
