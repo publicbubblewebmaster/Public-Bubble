@@ -82,11 +82,7 @@ object BlogsController extends Controller {
   def blogsJson = Action.async { implicit request =>
 
     val futureBlogs : Future[Seq[Blog]] = blogDao.sortedById
-    //map creates a new future
-   // working slightly messy code that i'm slightly happy with
-    val futureJson : Future[Seq[JsValue]] = futureBlogs.map(
-                                                blogList => blogList.map(
-                                                        blog => Json.obj("id" -> blog.id, "title" -> blog.title)))
+    val futureJson : Future[Seq[JsValue]] = futureBlogs.map(_.map(blog => Json.obj("id" -> blog.id, "title" -> blog.title)))
 
     futureJson.map(jsList => Ok(JsArray(jsList)))
   }
