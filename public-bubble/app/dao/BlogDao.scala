@@ -17,5 +17,5 @@ trait BlogDao {
 
   def sortedById : Future[Seq[Blog]]
 
-  def create(blog : Blog) : Option[Long]
+  def create(blog : Blog)
   }

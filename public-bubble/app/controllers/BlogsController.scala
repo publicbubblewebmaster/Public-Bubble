@@ -27,6 +27,11 @@ object BlogsController extends Controller {
   def blogs = Action.async { implicit request =>
     val futureBlogs : Future[Seq[Blog]] = blogDao.sortedByDate
 
+    Logger.info(
+      s"""
+        |{"message" : "blogs retrieved"}
+      """.stripMargin)
+
     futureBlogs.map {case (blogList) =>
         blogList match {
           case Nil => NotFound

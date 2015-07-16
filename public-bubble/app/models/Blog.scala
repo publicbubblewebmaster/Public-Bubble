@@ -41,6 +41,6 @@ object Blog {
 
   def getById(blogId: Long): Future[Option[Blog]] = dao.findById(blogId)
 
-  def create(blog: Blog): Option[Long] = dao.create(blog)
+  def create(blog: Blog) = dao.create(blog)
 
 }

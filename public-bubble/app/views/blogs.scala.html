@@ -1,52 +1,44 @@
-@(blogSequence: Seq[Blog])
+@(blogs: Seq[Blog])
 
-@main("Welcome to Play") {
+@main("Blogs") {
+
+
+<div class="row">
+<nav class="sidebar">
+    @for(blog <- blogs.tail) {
+
+    <h3>@blog.title</h3>
+    <br/>
+    <strong>@blog.intro</strong>
+    }
+</nav>
 
     <section>
         <!--<div style="background:blue">-->
             <div class="row">
                 <div class="small-10 small-centered column" >
-                <h3>@{blogSequence.head.title}</h3>
-                <h6>by @{blogSequence.head.author}</h6>
+                <h3>@{blogs.head.title}</h3>
+                <h6>by @{blogs.head.author}</h6>
                 </div>
             </div>
         <!--</div>-->
         <div class="row">
             <div class="small-10 small-centered column">
                 <i style="color:#1371b7">
-                    @{blogSequence.head.title}
+                    @{blogs.head.title}
                 </i>
             </div>
         </div>
         <div class="row">
             <div class="small-10 small-centered column">
-                <img src="@{blogSequence.head.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+                <img src="@{blogs.head.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
             </div>
         </div>
         <div class="row">
             <div class="small-10 small-centered columns">
-                @Html(blogSequence.head.content)
+                @Html(blogs.head.content)
             </div>
         </div>
     </section>
-
-<script>
-  document.write('<script src=js/vendor/' +
-  ('__proto__' in {} ? 'zepto' : 'jquery') +
-  '.js><\/script>')
-  </script>
-<script src="../../assets/js/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
-<script>
-    $(document).foundation();
-  </script>
-<script src="../assets/js/templates/jquery.js"></script>
-<script src="../assets/js/templates/foundation.js"></script>
-<script>
-      $(document).foundation();
-
-      var doc = document.documentElement;
-      doc.setAttribute('data-useragent', navigator.userAgent);
-    </script>
-
+</div>
 }

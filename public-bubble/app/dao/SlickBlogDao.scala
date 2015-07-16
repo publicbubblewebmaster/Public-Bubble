@@ -53,9 +53,18 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override def findById(blogId: Long): Future[Option[Blog]] = db.run(blogs.filter(_.id === blogId).result.headOption)
 
-  override def create(blog: Blog): Option[Long] = ???
+  override def create(blog: Blog) = {
+
+         dbConfig.db.run(blogs += blog)
+
+
+  }
 
   override def sortedById : Future[Seq[Blog]] = db.run(blogs.result)
-  override def sortedByDate : Future[Seq[Blog]] = db.run(blogs.result)
+  override def sortedByDate : Future[Seq[Blog]] = {
+    val query  =     blogs.sortBy(_.publishDate.desc);
+
+    dbConfig.db.run(query.result)
+  }
 
 }

@@ -16,5 +16,8 @@ libraryDependencies ++= Seq(
   "com.google.api-client" % "google-api-client" % "1.20.0",
   "org.apache.commons" % "commons-email" % "1.4",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0"
+  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0",
+
+  "org.scalatest" %% "scalatest" % "2.2.1" % "test",
+  "org.scalatestplus" %% "play" % "1.4.0-M3" % "test"
 )
