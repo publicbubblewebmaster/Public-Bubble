@@ -1,4 +1,4 @@
-@(eventForm: Form[Event])(implicit messages: Messages)
+@(eventForm: Form[EventFormData])(implicit messages: Messages)
 
 @main("Event Form") {
 
@@ -12,7 +12,7 @@
 
 <div id="eventsBox" class="small-2 columns"></div>
 
-<form class="row" id="eventForm" action="@routes.Events.save" method="post">
+<form class="row" id="eventForm" action="@routes.EventsController.save" method="post">
     <div class="small-8 columns small-centered" >
         @helper.inputText(eventForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(eventForm("title"), '_label -> "Title")
@@ -29,7 +29,7 @@
     </div>
 </form>
 
-<form id="pictureForm" action="@routes.Events.uploadImage" method="post" enctype="multipart/form-data">
+<form id="pictureForm" action="@routes.EventsController.uploadImage" method="post" enctype="multipart/form-data">
     <input id="image1of2" type="file" name="image">
     <button id="imageUploadButton" type="button" value="Upload"/>
 </form>
@@ -49,7 +49,7 @@
 
         x.append("id", eventId)
         var request = new XMLHttpRequest();
-        request.open("POST", "@routes.Events.uploadImage");
+        request.open("POST", "@routes.EventsController.uploadImage");
         request.send(x);
     });
  </script>

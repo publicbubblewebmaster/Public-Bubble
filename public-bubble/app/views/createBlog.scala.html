@@ -1,4 +1,4 @@
-@(blogForm: Form[Blog])(implicit messages: Messages)
+@(blogForm: Form[BlogFormData])(implicit messages: Messages)
 
 @main("Blog Form") {
 
@@ -44,7 +44,7 @@
 
         var blogId = document.getElementById("id").value
 
-        <x class="ap"></x>pend("id", blogId)
+        <x class="append("id", blogId)
         var request = new XMLHttpRequest();
         request.open("POST", "@routes.BlogsController.uploadImage");
         request.send(x);

@@ -1,21 +1,13 @@
 package models
 
-import play.api.Play.current
-import collection.JavaConversions._
 import anorm._
 import com.google.api.client.googleapis.auth.oauth2.{GoogleIdToken, GoogleIdTokenVerifier}
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import play.api.Play
-import play.api.db.DB
 
-import scala.collection.JavaConversions
-;
+import scala.collection.JavaConversions;
 
-/**
- * Created by Ian on 29/05/2015.
- */
 case class User(email: String, role : String) {
 
 }
@@ -43,7 +35,7 @@ object User {
       if (true) {
 
         val email = payload.getEmail();
-        val roleOption: Option[String] = findRoleByEmail(payload.getEmail);
+        val roleOption: Option[String] = Some("Admin")// TODO decide on proper implementation findRoleByEmail(payload.getEmail);
 
         if (!roleOption.isEmpty) {
           roleOption.get.equalsIgnoreCase("ADMIN")
@@ -61,11 +53,11 @@ object User {
     }
   }
 
-  def findRoleByEmail(email : String) : Option[String] = {
-    DB.withConnection {
-      implicit connection =>
-        val role: Option[String] = FIND_ROLE_BY_EMAIL.on("email" -> email).as(SqlParser.scalar[String].singleOpt)
-        role
-    }
-  }
+//  def findRoleByEmail(email : String) : Option[String] = {
+//    DB.withConnection {
+//      implicit connection =>
+//        val role: Option[String] = FIND_ROLE_BY_EMAIL.on("email" -> email).as(SqlParser.scalar[String].singleOpt)
+//        role
+//    }
+//  }
 }

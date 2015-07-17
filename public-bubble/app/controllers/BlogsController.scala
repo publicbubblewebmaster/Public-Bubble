@@ -2,52 +2,84 @@ package controllers
 
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
-import models.Blog
-import play.api.Play
+import dao.{SlickBlogDao}
+import models.{BlogFormData, Blog}
+import play.api.{Play, Logger}
 import play.api.data.{Form, Forms}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
-
+import play.api.cache.{Cached, Cache}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Promise, Future}
 
 object BlogsController extends Controller {
 
+  lazy val blogDao = new SlickBlogDao
+
+  val BLOGS_CACHE = "blogs"
+  val BLOGS_JSON_CACHE = "blogsJson"
   lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def blogs = Action {
-    val blogOption = Blog.getLatest
+  def blogs = Action.async { implicit request =>
 
-    blogOption match {
-      case _ : Some[Blog] => Ok(views.html.blogs(blogOption.get))
-      case _ => Ok(views.html.noContent("blogs"))
+    Logger.info(
+      s"""
+        |{"message" : "blogs retrieved"}
+      """.stripMargin)
+
+    blogDao.sortedByDate.map {case (blogList) =>
+        blogList match {
+          case Nil => NotFound
+          case _ => Ok(views.html.blogs(blogList.head, blogList.tail))
+        }
     }
   }
 
+  def getBlog(id : Long) = Action.async {implicit request =>
+      blogDao.sortedByDate.map {
+        blogList =>
+          val (foundBlog, remainingBlogs) = blogList partition(_.id.get == id)
+          Logger.info(s"foundBlogs = $foundBlog remaining=$remainingBlogs")
+          Ok(views.html.blogs(foundBlog.head, remainingBlogs))
+      }
+  }
+
   def createBlog = Authenticated {
+//    clearCache
     Ok(views.html.createBlog(blogForm))
   }
 
-  def updateBlog(id : Int) = Action {
-    val blog = Blog.getById(id);
-    print("blog.id: " + blog.id);
-    Ok(views.html.createBlog(blogForm.fill(blog)))
+  def updateBlog(id : Long) = Action.async {
+//    clearCache
+    val futureBlogOption = Blog.getById(id)
+
+    val result : Future[Result] = futureBlogOption.map(
+      _ match {
+          case blogOption : Some[Blog] => {val blogFormData = BlogFormData(blogOption.get.id, blogOption.get.title, blogOption.get.author, blogOption.get.intro, blogOption.get.content, blogOption.get.publishDate); Ok(views.html.createBlog(blogForm.fill(blogFormData)))}
+          case _ => NotFound
+        })
+
+    result
   }
 
   def save = Action { implicit request =>
     blogForm.bindFromRequest.fold(
       formWithErrors =>     {
-        print(formWithErrors.errors)
+
+        Logger.warn("formErrors=" + formWithErrors.errorsAsJson);
+
         Ok(views.html.createBlog(formWithErrors))},
 
-      createdBlog => {
+        createdBlog => {
         if (createdBlog.id.isEmpty) {
-          Blog.create(createdBlog)
+          Blog.create(Blog.createFrom(createdBlog))
         }
         else {
-          Blog.update(createdBlog)
+          Blog.update(Blog.createFrom(createdBlog))
         }
         Ok(views.html.createBlog(blogForm.fill(createdBlog)))
       }
@@ -55,20 +87,17 @@ object BlogsController extends Controller {
   }
 
   def deleteBlog(id : Int)= Action { implicit request =>
-    Blog.delete(id)
+//    clearCache
+    blogDao delete(id)
     Ok(views.html.createBlog(blogForm))
   }
 
-  def blogsJson = Action {
-    val jsonBlogs : List[JsValue] =
-      Blog.getAll.map(
-        blog =>
-          Json.obj(
-            "id" -> blog.id,
-            "title" -> blog.title
-          )
-      )
-    Ok(JsArray(jsonBlogs))
+  def blogsJson = Action.async { implicit request =>
+
+    val futureBlogs : Future[Seq[Blog]] = blogDao.sortedById
+    val futureJson : Future[Seq[JsValue]] = futureBlogs.map(_.map(blog => Json.obj("id" -> blog.id, "title" -> blog.title)))
+
+    futureJson.map(jsList => Ok(JsArray(jsList)))
   }
 
   val blogForm = Form(
@@ -78,8 +107,8 @@ object BlogsController extends Controller {
       "author" -> Forms.text,
       "intro" -> Forms.text,
       "content" -> Forms.text,
-      "publishDate" -> Forms.date("yyyy-MM-dd")
-    )(Blog.apply)(Blog.extract)
+      "publishDate" -> Forms.sqlDate("yyyy-MM-dd")
+    )(BlogFormData.apply)(BlogFormData.unapply)
   )
 
   // here we are calling the ActionBuilder apply method
@@ -107,9 +136,15 @@ object BlogsController extends Controller {
 
       val imageUrl = uploadResult.get("url").asInstanceOf[String]
 
-      val blogWithImage = models.Blog.addImage(id.toLong, imageUrl);
+      val blogWithImage = blogDao.addImage(id.toLong, imageUrl);
 
       Ok("Retrieved file %s" format blogWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))
   }
+
+  private def clearCache = {
+    Cache.remove(BLOGS_CACHE)
+    Cache.remove(BLOGS_JSON_CACHE)
+  }
 }
+

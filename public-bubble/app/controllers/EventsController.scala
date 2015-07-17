@@ -3,35 +3,43 @@ package controllers
 import com.cloudinary._
 import com.cloudinary.utils.ObjectUtils
 import controllers.Application._
-import models.Event
+import models.{BlogFormData, EventFormData, Event}
 import play.api.Play.current
 import play.api.data.{Form, Forms}
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
+import play.api.cache.{Cache, Cached}
 
-object Events extends Controller {
+object EventsController extends Controller {
 
-  def events = Action {
+  val EVENTS_CACHE = "events"
 
-    val eventOption = Event.getLatest
+  def events = Cached(EVENTS_CACHE) {
+    Action {
 
-    eventOption match {
-      case _ : Some[Event] => Ok(views.html.events(eventOption.get))
-      case _ => Ok(views.html.noContent("events"))
+      val eventOption = Event.getLatest
+
+      eventOption match {
+        case _: Some[Event] => Ok(views.html.events(eventOption.get))
+        case _ => Ok(views.html.noContent("events"))
+      }
     }
   }
-
 
   def createEvent = Authenticated {
     Ok(views.html.createEvent(eventForm))
   }
 
+  def updateEvent(eventId : Long) = Action {
+    clearCache
+    val event : Event = Event.getById(eventId);
 
-  def updateEvent(id : Int) = Action {
+    val (id, title, location, description, displayFrom, displayUntil, image1Url) = Event.unapply(event).get
 
-    val event = Event.getById(id);
-    Ok(views.html.createEvent(eventForm.fill(event)))
+    val eventFormData = EventFormData(id, title, location, description, displayFrom, displayUntil)
+
+    Ok(views.html.createEvent(eventForm.fill(eventFormData)))
   }
 
   def save = Action { implicit request =>
@@ -41,10 +49,10 @@ object Events extends Controller {
 
       createdEvent => {
         if (createdEvent.id.isEmpty) {
-          Event.create(createdEvent)
+          Event.create(Event.createFrom(createdEvent))
         }
         else {
-          Event.update(createdEvent)
+          Event.update(Event.createFrom(createdEvent))
         }
         Ok(views.html.createEvent(eventForm.fill(createdEvent)))
       }
@@ -52,6 +60,7 @@ object Events extends Controller {
   }
 
   def deleteEvent(id : Int)= Action { implicit request =>
+    clearCache
     Event.delete(id)
     Ok(views.html.createEvent(eventForm))
   }
@@ -74,9 +83,9 @@ object Events extends Controller {
       "title" -> Forms.text,
       "location" -> Forms.text,
       "description" -> Forms.text,
-      "displayFrom" -> Forms.date("yyyy-MM-dd"),
-      "displayUntil" -> Forms.date("yyyy-MM-dd")
-    )(Event.apply)(Event.extract)
+      "displayFrom" -> Forms.sqlDate("yyyy-MM-dd"),
+      "displayUntil" -> Forms.sqlDate("yyyy-MM-dd")
+    )(EventFormData.apply)(EventFormData.unapply)
   )
 
   // here we are calling the ActionBuilder apply method
@@ -110,6 +119,8 @@ object Events extends Controller {
       Ok("Retrieved file %s" format eventWithImage.image1Url)
     }.getOrElse(BadRequest("File missing!"))
   }
+
+  private def clearCache = Cache.remove(EVENTS_CACHE)
 
 
 }

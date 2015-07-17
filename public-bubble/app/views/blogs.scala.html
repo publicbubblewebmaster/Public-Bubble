@@ -1,58 +1,36 @@
-@(blog: Blog)
+@(mainBlog : Blog, remainingBlogs: Seq[Blog])
 
-@main("Welcome to Play") {
+@main("Blogs") {
 
-    if (blog.isEmpty) {
 
-<h1>Come back later for more blogs!!!</h1>
+<div id="blogPage" class="row">
+    <div class="large-3 columns">
+    <div class="sidebar">
+    <div class="hide-for-small">
 
-    <section>
-        <!--<div style="background:blue">-->
-            <div class="row">
-                <div class="small-10 small-centered column" >
-                <h3>@{blog.title}</h3>
-                <h6>by @{blog.author}</h6>
-                </div>
-            </div>
-        <!--</div>-->
-        <div class="row">
-            <div class="small-10 small-centered column">
+        <nav class="side-nav ">
+        @for(blog <- remainingBlogs) {
+
+        <h3><a href="/blog/@blog.id">@blog.title</a></h3>
+        <p>@blog.intro</p>
+        }
+        </nav>
+    </div>
+    </div>
+    </div>
+<section>
+
+    <div class="large-9 columns" >
+                <h3>@{mainBlog.title}</h3>
+                <h6>by @{mainBlog.author}</h6>
                 <i style="color:#1371b7">
-                Child Sexual Exploitation is an important issue in today’s society. The media are constantly reporting
-                the latest case of CSE and the public sector is eager to find solutions.
-                </i>
+                    @{mainBlog.title}
+            <div>
+                <img src="@{mainBlog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
             </div>
-        </div>
-        <div class="row">
-            <div class="small-10 small-centered column">
-                <img src="@{blog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+            <div>
+                <p>@Html(mainBlog.content)</p>
             </div>
-        </div>
-        <div class="row">
-            <div class="small-10 small-centered columns">
-                @Html(blog.content)
-            </div>
-        </div>
     </section>
-
-<script>
-  document.write('<script src=js/vendor/' +
-  ('__proto__' in {} ? 'zepto' : 'jquery') +
-  '.js><\/script>')
-  </script>
-<script src="../../assets/js/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
-<script>
-    $(document).foundation();
-  </script>
-<script src="../assets/js/templates/jquery.js"></script>
-<script src="../assets/js/templates/foundation.js"></script>
-<script>
-      $(document).foundation();
-
-      var doc = document.documentElement;
-      doc.setAttribute('data-useragent', navigator.userAgent);
-    </script>
-
-}
+</div>
 }
