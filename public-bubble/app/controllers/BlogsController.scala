@@ -25,19 +25,27 @@ object BlogsController extends Controller {
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
   def blogs = Action.async { implicit request =>
-    val futureBlogs : Future[Seq[Blog]] = blogDao.sortedByDate
 
     Logger.info(
       s"""
         |{"message" : "blogs retrieved"}
       """.stripMargin)
 
-    futureBlogs.map {case (blogList) =>
+    blogDao.sortedByDate.map {case (blogList) =>
         blogList match {
           case Nil => NotFound
-          case _ => Ok(views.html.blogs(blogList))
+          case _ => Ok(views.html.blogs(blogList.head, blogList.tail))
         }
     }
+  }
+
+  def getBlog(id : Long) = Action.async {implicit request =>
+      blogDao.sortedByDate.map {
+        blogList =>
+          val (foundBlog, remainingBlogs) = blogList partition(_.id.get == id)
+          Logger.info(s"foundBlogs = $foundBlog remaining=$remainingBlogs")
+          Ok(views.html.blogs(foundBlog.head, remainingBlogs))
+      }
   }
 
   def createBlog = Authenticated {

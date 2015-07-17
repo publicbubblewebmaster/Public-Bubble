@@ -19,6 +19,7 @@ POST    /upload/event/picture              controllers.EventsController.uploadIm
 # Blogs
 GET     /blogs/all                  controllers.BlogsController.blogsJson
 GET     /blogs                      controllers.BlogsController.blogs
+GET     /blog/:id                   controllers.BlogsController.getBlog(id : Long)
 POST    /create/blog                controllers.BlogsController.save
 GET     /create/blog                controllers.BlogsController.authenticatedBlogForm
 GET     /update/blog/:id            controllers.BlogsController.updateBlog(id : Int)

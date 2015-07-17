@@ -1,44 +1,36 @@
-@(blogs: Seq[Blog])
+@(mainBlog : Blog, remainingBlogs: Seq[Blog])
 
 @main("Blogs") {
 
 
-<div class="row">
-<nav class="sidebar">
-    @for(blog <- blogs.tail) {
+<div id="blogPage" class="row">
+    <div class="large-3 columns">
+    <div class="sidebar">
+    <div class="hide-for-small">
 
-    <h3>@blog.title</h3>
-    <br/>
-    <strong>@blog.intro</strong>
-    }
-</nav>
+        <nav class="side-nav ">
+        @for(blog <- remainingBlogs) {
 
-    <section>
-        <!--<div style="background:blue">-->
-            <div class="row">
-                <div class="small-10 small-centered column" >
-                <h3>@{blogs.head.title}</h3>
-                <h6>by @{blogs.head.author}</h6>
-                </div>
-            </div>
-        <!--</div>-->
-        <div class="row">
-            <div class="small-10 small-centered column">
+        <h3><a href="/blog/@blog.id">@blog.title</a></h3>
+        <p>@blog.intro</p>
+        }
+        </nav>
+    </div>
+    </div>
+    </div>
+<section>
+
+    <div class="large-9 columns" >
+                <h3>@{mainBlog.title}</h3>
+                <h6>by @{mainBlog.author}</h6>
                 <i style="color:#1371b7">
-                    @{blogs.head.title}
-                </i>
+                    @{mainBlog.title}
+            <div>
+                <img src="@{mainBlog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
             </div>
-        </div>
-        <div class="row">
-            <div class="small-10 small-centered column">
-                <img src="@{blogs.head.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+            <div>
+                @Html(mainBlog.content)
             </div>
-        </div>
-        <div class="row">
-            <div class="small-10 small-centered columns">
-                @Html(blogs.head.content)
-            </div>
-        </div>
     </section>
 </div>
 }
