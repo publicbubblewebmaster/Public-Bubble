@@ -2,11 +2,9 @@
 
 @main("Blog Form") {
 
-
 @wysiwyg()
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
 <div id="blogsBox" class="small-2 columns"></div>
 
 <form class="row" id="blogForm" action="@routes.BlogsController.save" method="post">
@@ -17,46 +15,26 @@
         @helper.inputText(blogForm("intro"), '_label -> "Intro")
         @helper.inputText(blogForm("content"), '_label -> "Content", 'id -> "wysiwyg-editor")
         @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
-            @helper.inputDate(blogForm("publishDate"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Publish Date")
+            @helper.inputDate(blogForm("publishDate"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Publish Date")
         }
+    </div>
     <div class="row">
         <button id="saveButton" class="small-12 centered" type="submit">Save</button>
     </div>
 </form>
 
-<!--<form id="pictureForm" action="@routes.BlogsController.uploadImage" method="post" enctype="multipart/form-data">-->
-    <!--<input id="image1of2" type="file" name="image">-->
-    <!--<button id="imageUploadButton" type="button" value="Upload"/>-->
-<!--</form>-->
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/blog-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-components.js")" ></script>
-
 @if(!blogForm.value.isEmpty) {
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
 
-<div id="imageUpload></div>
+<div id="imageUpload"></div>
 
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" ></script>
-<script>
-
+<script type="text/jsx">
     React.render(
-        <ImageUploadButton imageUploadUrl="@routes.BlogsController.uploadImage" />,
-        document.getElementById("imageUpload");
+        <ImageUploadButton imageUploadUrl="@routes.BlogsController.uploadImage"/>,
+        document.getElementById('imageUpload')
     );
     </script>
-
-    <!--document.getElementById("imageUploadButton").addEventListener('click', function() {-->
-
-
-        <!--var x = new FormData()-->
-        <!--x.append("image1", document.getElementById("image1of2").files[0]);-->
-        <!--x.append("domainObject", "blog");-->
-
-        <!--var blogId = document.getElementById("id").value-->
-
-        <!--<x class="append("id", blogId)-->
-        <!--var request = new XMLHttpRequest();-->
-        <!--request.open("POST", "@routes.BlogsController.uploadImage");-->
-        <!--request.send(x);-->
-    <!--});-->
-}
+    }
 }

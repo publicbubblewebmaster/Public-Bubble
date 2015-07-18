@@ -7,7 +7,7 @@ trait BlogDao {
 
   def update(blog : Blog)
 
-  def addImage(id : Long, url : String) : Blog
+  def addImage(id : Long, url : String) : Future[Boolean]
 
   def findById(blogId : Long) : Future[Option[Blog]]
 

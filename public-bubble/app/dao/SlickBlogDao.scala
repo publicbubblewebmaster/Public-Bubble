@@ -47,7 +47,11 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override def update(blog: Blog): Unit = ???
 
-  override def addImage(id: Long, url: String): Blog = ???
+  override def addImage(id: Long, url: String): Future[Boolean] = {
+    val q = for { b <- blogs if b.id === id } yield b.image1Url
+    val updateImage = q.update(Some(url))
+    db.run(updateImage).map(_ == 1)
+  }
 
   override def delete(id: Int): Unit = ???
 

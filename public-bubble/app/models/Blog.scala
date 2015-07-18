@@ -35,7 +35,7 @@ object Blog {
 
   def update(blog: Blog): Unit = dao.update(blog)
 
-  def addImage(id: Long, url: String): Blog = dao.addImage(id, url)
+  def addImage(id: Long, url: String): Future[Boolean] = dao.addImage(id, url)
 
   def delete(id: Int): Unit = dao.delete(id)
 

@@ -118,14 +118,15 @@ object BlogsController extends Controller {
   }
 
   import java.nio.file.{Path, Paths, Files}
-  def uploadImage = Action(parse.multipartFormData) { request =>
+  def uploadImage = Action.async(parse.multipartFormData) { request =>
 
-    val id : String = request.body.dataParts.get("id").get.head
-    val domainObject : String = request.body.dataParts.get("domainObject").get.head
+
+    val id: String = request.body.dataParts.get("id").get.head
+    val domainObject: String = request.body.dataParts.get("domainObject").get.head
 
     request.body.file("image1").map { file =>
 
-      val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
+      val cloudinary: Cloudinary = new Cloudinary(ObjectUtils.asMap(
         "cloud_name", CLOUD_NAME,
         "api_key", CLOUD_KEY,
         "api_secret", CLOUD_SECRET));
@@ -138,8 +139,14 @@ object BlogsController extends Controller {
 
       val blogWithImage = blogDao.addImage(id.toLong, imageUrl);
 
-      Ok("Retrieved file %s" format blogWithImage.image1Url)
-    }.getOrElse(BadRequest("File missing!"))
+      blogWithImage.map(
+        b => if (b) {
+          Ok("image uploaded")
+        } else {
+          InternalServerError("upload failed")
+        }
+      )
+    }.getOrElse(Future(BadRequest("image upload")))
   }
 
   private def clearCache = {
