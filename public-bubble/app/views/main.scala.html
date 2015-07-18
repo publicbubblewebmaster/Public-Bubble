@@ -16,6 +16,10 @@
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/vendor/modernizr.js")"></script>
         <script src="@routes.Assets.at("javascripts/vendor/jquery.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/react/react.js")"></script>
+        <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
+        <script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
+
 
     </head>
     <div style="background-color: #2D2D87">
@@ -60,21 +64,15 @@
                     <p>&copy; Copyright no one at all. Go to town.</p>
                 </div>
     </footer>
-    </div>
+    </div>t
+
 
     <!-- foundation dependencies -->
-    <script>
-  document.write('<script src=js/vendor/' +
-  ('__proto__' in {} ? 'zepto' : 'jquery') +
-  '.js><\/script>')
-  </script>
-    <script src="../../assets/js/jquery.js"></script>
-    <script src="js/foundation.min.js"></script>
-    <script>
+    <script src="@routes.Assets.at("javascripts/foundation/foundation.js")"></script>
+    <!--<script src="@routes.Assets.at("javascripts/react/react.js")"></script>-->
+        <script>
     $(document).foundation();
   </script>
-    git<script src="../assets/js/templates/jquery.js"></script>
-    <script src="../assets/js/templates/foundation.js"></script>
     <script>
       $(document).foundation();
 

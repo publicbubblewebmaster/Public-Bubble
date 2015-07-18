@@ -2,9 +2,6 @@
 
 @main("Blog Form") {
 
-<script src="@routes.Assets.at("javascripts/react/react.js")"></script>
-<script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
-<script src="@routes.Assets.at("javascripts/jquery-ui/jquery-ui.min.js")"></script>
 
 @wysiwyg()
 
@@ -27,27 +24,39 @@
     </div>
 </form>
 
-<form id="pictureForm" action="@routes.BlogsController.uploadImage" method="post" enctype="multipart/form-data">
-    <input id="image1of2" type="file" name="image">
-    <button id="imageUploadButton" type="button" value="Upload"/>
-</form>
+<!--<form id="pictureForm" action="@routes.BlogsController.uploadImage" method="post" enctype="multipart/form-data">-->
+    <!--<input id="image1of2" type="file" name="image">-->
+    <!--<button id="imageUploadButton" type="button" value="Upload"/>-->
+<!--</form>-->
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/blog-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-components.js")" ></script>
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-calendar.js")" ></script>
+
+@if(!blogForm.value.isEmpty) {
+
+<div id="imageUpload></div>
+
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" ></script>
 <script>
-    document.getElementById("imageUploadButton").addEventListener('click', function() {
-        console.log("click listener registered");
 
-        var x = new FormData()
-        x.append("image1", document.getElementById("image1of2").files[0]);
-        x.append("domainObject", "blog");
+    React.render(
+        <ImageUploadButton imageUploadUrl="@routes.BlogsController.uploadImage" />,
+        document.getElementById("imageUpload");
+    );
+    </script>
 
-        var blogId = document.getElementById("id").value
+    <!--document.getElementById("imageUploadButton").addEventListener('click', function() {-->
 
-        <x class="append("id", blogId)
-        var request = new XMLHttpRequest();
-        request.open("POST", "@routes.BlogsController.uploadImage");
-        request.send(x);
-    });
-</script>
+
+        <!--var x = new FormData()-->
+        <!--x.append("image1", document.getElementById("image1of2").files[0]);-->
+        <!--x.append("domainObject", "blog");-->
+
+        <!--var blogId = document.getElementById("id").value-->
+
+        <!--<x class="append("id", blogId)-->
+        <!--var request = new XMLHttpRequest();-->
+        <!--request.open("POST", "@routes.BlogsController.uploadImage");-->
+        <!--request.send(x);-->
+    <!--});-->
+}
 }
