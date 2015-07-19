@@ -1,49 +1,74 @@
 package controllers
 
-import com.cloudinary._
+import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
+import dao.{SlickEventDao}
 import models.{EventFormData, Event}
-import play.api.Play.current
+import play.api.{Play, Logger}
 import play.api.data.{Form, Forms}
+import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.cache.{Cache, Cached}
+import play.api.cache.{Cached, Cache}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Promise, Future}
 
 object EventsController extends Controller {
 
-  val EVENTS_CACHE = "events"
+  lazy val eventDao = new SlickEventDao
 
-  def events = Cached(EVENTS_CACHE) {
-    Action {
+  val BLOGS_CACHE = "events"
+  val BLOGS_JSON_CACHE = "eventsJson"
+  lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
+  lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
+  lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-      val eventOption = Event.getLatest
+  def events = Action.async { implicit request =>
 
-      eventOption match {
-        case _: Some[Event] => Ok(views.html.events(eventOption.get))
-        case _ => Ok(views.html.noContent("events"))
+    Logger.info(JsObject(Map("message" -> JsString("events retrieved"))).toString)
+
+    eventDao.sortedByDate.map {case (eventList) =>
+      eventList match {
+        case Nil => NotFound
+        case _ => Ok(views.html.events(eventList.head, eventList.tail))
       }
     }
   }
 
+  def getEvent(id : Long) = Action.async {implicit request =>
+    eventDao.sortedByDate.map {
+      eventList =>
+        val (foundEvent, remainingEvents) = eventList partition(_.id.get == id)
+        Logger.info(s"foundEvents = $foundEvent remaining=$remainingEvents")
+        Ok(views.html.events(foundEvent.head, remainingEvents))
+    }
+  }
+
   def createEvent = Authenticated {
+    //    clearCache
     Ok(views.html.createEvent(eventForm))
   }
 
-  def updateEvent(eventId : Long) = Action {
-    clearCache
-    val event : Event = Event.getById(eventId);
+  def updateEvent(id : Long) = Action.async {
+    //    clearCache
+    val futureEventOption = Event.getById(id)
 
-    val (id, title, location, description, displayFrom, displayUntil, image1Url) = Event.unapply(event).get
+    val result : Future[Result] = futureEventOption.map(
+      _ match {
+        case eventOption : Some[Event] => {val eventFormData = EventFormData(eventOption.get.id, eventOption.get.title, eventOption.get.author, eventOption.get.intro, eventOption.get.content, eventOption.get.publishDate); Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
+        case _ => NotFound
+      })
 
-    val eventFormData = EventFormData(id, title, location, description, displayFrom, displayUntil)
-
-    Ok(views.html.createEvent(eventForm.fill(eventFormData)))
+    result
   }
 
   def save = Action { implicit request =>
     eventForm.bindFromRequest.fold(
       formWithErrors =>     {
+
+        Logger.warn("formErrors=" + formWithErrors.errorsAsJson);
+
         Ok(views.html.createEvent(formWithErrors))},
 
       createdEvent => {
@@ -59,21 +84,17 @@ object EventsController extends Controller {
   }
 
   def deleteEvent(id : Int)= Action { implicit request =>
-    clearCache
-    Event.delete(id)
+    //    clearCache
+    eventDao delete(id)
     Ok(views.html.createEvent(eventForm))
   }
 
-  def eventsJson = Action {
-    val jsonEvents : List[JsValue] =
-      Event.getAll.map(
-        event =>
-          Json.obj(
-            "id" -> event.id,
-            "title" -> event.title
-          )
-      )
-    Ok(JsArray(jsonEvents))
+  def eventsJson = Action.async { implicit request =>
+
+    val futureEvents : Future[Seq[Event]] = eventDao.sortedById
+    val futureJson : Future[Seq[JsValue]] = futureEvents.map(_.map(event => Json.obj("id" -> event.id, "title" -> event.title)))
+
+    futureJson.map(jsList => Ok(JsArray(jsList)))
   }
 
   val eventForm = Form(
@@ -81,9 +102,9 @@ object EventsController extends Controller {
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
       "location" -> Forms.text,
-      "description" -> Forms.text,
-      "displayFrom" -> Forms.sqlDate("yyyy-MM-dd"),
-      "displayUntil" -> Forms.sqlDate("yyyy-MM-dd")
+      "startTime" -> Forms.text,
+      "endTime" -> Forms.text,
+      "publishDate" -> Forms.sqlDate("yyyy-MM-dd hh:mm")
     )(EventFormData.apply)(EventFormData.unapply)
   )
 
@@ -94,32 +115,40 @@ object EventsController extends Controller {
   }
 
   import java.nio.file.{Path, Paths, Files}
-  def uploadImage = Action(parse.multipartFormData) { request =>
+  def uploadImage = Action.async(parse.multipartFormData) { request =>
 
-    val id : String = request.body.dataParts.get("id").get.head
-    val domainObject : String = request.body.dataParts.get("domainObject").get.head
 
+    val id: String = request.body.dataParts.get("id").get.head
+    val domainObject: String = request.body.dataParts.get("domainObject").get.head
 
     request.body.file("image1").map { file =>
 
-      val cloudinary : Cloudinary = new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", "hhih43y5p",
-        "api_key", "135878543169511",
-        "api_secret", "aLT-f0E8uZ4WdPT20gY9eKoGeYc"));
+      val cloudinary: Cloudinary = new Cloudinary(ObjectUtils.asMap(
+        "cloud_name", CLOUD_NAME,
+        "api_key", CLOUD_KEY,
+        "api_secret", CLOUD_SECRET));
 
       val uploadResult = cloudinary.uploader().upload(file.ref.file,
-        ObjectUtils.asMap("transformation", new Transformation().width(400))
+        ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))
       );
 
       val imageUrl = uploadResult.get("url").asInstanceOf[String]
 
-      val eventWithImage = models.Event.addImage(id.toLong, imageUrl);
+      val eventWithImage = eventDao.addImage(id.toLong, imageUrl);
 
-      Ok("Retrieved file %s" format eventWithImage.image1Url)
-    }.getOrElse(BadRequest("File missing!"))
+      eventWithImage.map(
+        b => if (b) {
+          Ok("image uploaded")
+        } else {
+          InternalServerError("upload failed")
+        }
+      )
+    }.getOrElse(Future(BadRequest("image upload")))
   }
 
-  private def clearCache = Cache.remove(EVENTS_CACHE)
-
-
+  private def clearCache = {
+    Cache.remove(BLOGS_CACHE)
+    Cache.remove(BLOGS_JSON_CACHE)
+  }
 }
+

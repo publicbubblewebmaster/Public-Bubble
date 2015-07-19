@@ -52,12 +52,11 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
 
     dbConfig.db.run(events += event)
 
-
   }
 
   override def sortedById : Future[Seq[Event]] = db.run(events.result)
-  override def sortedByDate : Future[Seq[Event]] = {
-    val query  =     events.sortBy(_.publishDate.desc);
+  override def sortedByEndTime : Future[Seq[Event]] = {
+    val query  =     events.sortBy(_.endTime.desc);
 
     dbConfig.db.run(query.result)
   }

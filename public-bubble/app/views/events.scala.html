@@ -1,20 +1,35 @@
-@(event: Event)
+@(mainEvent : Event, remainingEvents: Seq[Event])
 
-@main("Welcome to Play") {
+@main("Events") {
 
-<section>
-    
-    <div class="small-8 column small-centered">
-    <h1>@{event.title}</h1>
-    <div class="vcard address">@{event.location}</div>
+<div id="eventPage" class="row">
+    <div class="large-3 columns">
+        <div class="sidebar">
+            <div class="hide-for-small">
 
-        <div class="row">
-        <img src="http://placehold.it/400x240&text=[img]"/>
+                <nav class="side-nav ">
+                    @for(event <- remainingEvents) {
+
+                    <h3><a href="/event/@event.id">@event.title</a></h3>
+                    }
+                </nav>
+            </div>
         </div>
-    <!--<img src="@{event.image1Url}" />-->
-        <p id="eventDescription">
-        @Html(event.description)
-    </p>
     </div>
-</section>
+    <section>
+
+        <div class="large-9 columns" >
+            <h3>@{mainEvent.title}</h3>
+            <h6>@{mainEvent.startTime}</h6>
+            <h6>@{mainEvent.endTime}</h6>
+            <i style="color:#1371b7">
+                @{mainEvent.description}
+                <div>
+                    <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+                </div>
+                <div>
+                    <p>@Html(mainEvent.content)</p>
+                </div>
+    </section>
+</div>
 }
