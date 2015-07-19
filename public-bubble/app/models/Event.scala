@@ -1,6 +1,7 @@
 package models
 
-import java.sql.{Timestamp, Date}
+import java.sql.{Timestamp}
+import java.util.Date
 
 import dao.SlickEventDao
 
@@ -20,8 +21,8 @@ case class EventFormData (
                    id : Option[Long],
                    title: String,
                    location: String,
-                   startTime: Timestamp,
-                   endTime: Timestamp,
+                   startTime: Date,
+                   endTime: Date,
                    description: String)
 
 object Event {
@@ -31,8 +32,8 @@ object Event {
       eventFormData.id,
       eventFormData.title,
       eventFormData.location,
-      eventFormData.startTime,
-      eventFormData.endTime,
+      new Timestamp(eventFormData.startTime.toInstant.toEpochMilli),
+      new Timestamp(eventFormData.endTime.toInstant.toEpochMilli),
       eventFormData.description,
       None)
 

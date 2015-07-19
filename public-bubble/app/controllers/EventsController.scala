@@ -1,5 +1,7 @@
 package controllers
 
+import java.sql.Timestamp
+
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import dao.{SlickEventDao}
@@ -102,9 +104,9 @@ object EventsController extends Controller {
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
       "location" -> Forms.text,
-      "startTime" -> Forms.text,
-      "endTime" -> Forms.text,
-      "publishDate" -> Forms.sqlDate("yyyy-MM-dd hh:mm")
+      "startTime" -> Forms.date("yyyy-mm-dd hh:mm:ss"),
+      "endTime" -> Forms.date("yyyy-mm-dd hh:mm:ss"),
+      "content" -> Forms.text
     )(EventFormData.apply)(EventFormData.unapply)
   )
 
