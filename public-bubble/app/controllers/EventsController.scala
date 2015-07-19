@@ -112,10 +112,9 @@ object EventsController extends Controller {
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
       "location" -> Forms.text,
-
       "startTime" -> Forms.date("yyyy-MM-dd'T'HH:mm"),
       "endTime" -> Forms.date("yyyy-MM-dd'T'HH:mm"),
-      "content" -> Forms.text
+      "description" -> Forms.nonEmptyText verifying ("enter something", !_.isEmpty)
     )(EventFormData.apply)(EventFormData.unapply)
   )
 

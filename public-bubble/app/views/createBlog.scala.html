@@ -13,7 +13,7 @@
         @helper.inputText(blogForm("title"), '_label -> "Title")
         @helper.inputText(blogForm("author"), '_label -> "Author")
         @helper.inputText(blogForm("intro"), '_label -> "Intro")
-        @helper.inputText(blogForm("content"), '_label -> "Content", 'id -> "wysiwyg-editor")
+        @helper.inputText(blogForm("content"), '_label -> "Description", 'id -> "wysiwyg-editor")
         @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
             @helper.inputDate(blogForm("publishDate"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Publish Date")
         }
