@@ -7,8 +7,11 @@ var ImageUploadButton = React.createClass({
     imageAttached : function(event) {
                         this.setState({imageAttached : true})
                     },
-    uploadSuccess : function() {
+    uploadStatus : function() {
 
+                        return <<div data-alert="" class="alert-box alert round">
+                                Upload failed :(
+                               </div>;
                     },
 
     uploadImage : function() {
@@ -23,8 +26,15 @@ var ImageUploadButton = React.createClass({
                         x.append("id", blogId)
                         var request = new XMLHttpRequest();
                         request.open("POST", this.props.imageUploadUrl, method="post" );
+
+                       request.onreadystatechange=function()
+                       {
+                         if(request.readyState==4)
+                           this.uploadStatus()
+                       }
+
                         request.send(x);
-                        console.log("response status = " + request.status)
+                        console.log("response status = " + request.status);
                     },
 
     render: function() {

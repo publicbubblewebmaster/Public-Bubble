@@ -26,10 +26,7 @@ object BlogsController extends Controller {
 
   def blogs = Action.async { implicit request =>
 
-    Logger.info(
-      s"""
-        |{"message" : "blogs retrieved"}
-      """.stripMargin)
+    Logger.info(JsObject(Map("message" -> JsString("blogs retrieved"))).toString)
 
     blogDao.sortedByDate.map {case (blogList) =>
         blogList match {
