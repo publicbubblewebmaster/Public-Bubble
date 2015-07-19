@@ -8,20 +8,15 @@ var ImageUploadButton = React.createClass({
                         this.setState({imageAttached : true})
                     },
     uploadStatusChange : function() {
+
                         if (this.state.uploadStatus === 500) {
 
-                        return <div data-alert="" className="alert-box alert round">
+                        return <div className="large-3 columns alert-box alert round " data-alert >
                                 Upload failed :(
+                                  <button href="#" className="close">&times;</button>
                                </div>;
-                               } else if (this.state.uploadStatus === 0) {
-                        return <div data-alert="" className="alert-box info radius">
-                                                        Please select an image.
-                                                       </div>;
-
-
                                }
-                    },
-
+                               },
     uploadImage : function() {
 
                         var x = new FormData()
@@ -48,11 +43,13 @@ var ImageUploadButton = React.createClass({
     render: function() {
         return (
         <div className="row">
-            {this.uploadStatusChange()}
-            <input id="image1" type="file" name="image" onChange={this.imageAttached}></input>
-            <button onClick={this.uploadImage} disabled={!this.state.imageAttached}>
+            <br/>
+            <button onClick={this.uploadImage} disabled={!this.state.imageAttached} className="large-3 columns">
             Upload image
             </button>
+            {this.uploadStatusChange()}
+            <input className="large-3 columns" id="image1" type="file" name="image" onChange={this.imageAttached} ></input>
+
         </div>
         );
         }
