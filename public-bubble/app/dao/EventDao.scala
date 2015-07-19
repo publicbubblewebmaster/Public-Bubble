@@ -1,29 +1,22 @@
 package dao
 
-import java.sql.Date
-
 import models.Event
+import scala.concurrent.Future
 
 trait EventDao {
 
-  def getAll : List[Event]
-
-  def getLatest : Option[Event]
-
-  def create(event : Event) : Option[Long]
-
   def update(event : Event)
 
-  def addImage(id : Long, url : String) : Event
+  def addImage(id : Long, url : String) : Future[Boolean]
 
-  def getById(eventId : Long) : Event
+  def findById(eventId : Long) : Future[Option[Event]]
 
-  def delete(id : Int) :Unit
+  def delete(id : Int)
 
-  def apply(id : Option[Long], title: String, location: String, description: String, displayFrom: Date, displayUntil: Date) = {
-    new Event(id, title, location, description, displayFrom, displayUntil)
-  }
+  def sortedByDate : Future[Seq[Event]]
 
-  def extract(event: Event)
+  def sortedById : Future[Seq[Event]]
+
+  def create(event : Event)
 
 }

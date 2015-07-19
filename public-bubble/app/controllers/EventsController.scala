@@ -2,8 +2,7 @@ package controllers
 
 import com.cloudinary._
 import com.cloudinary.utils.ObjectUtils
-import controllers.Application._
-import models.{BlogFormData, EventFormData, Event}
+import models.{EventFormData, Event}
 import play.api.Play.current
 import play.api.data.{Form, Forms}
 import play.api.i18n.Messages.Implicits._
