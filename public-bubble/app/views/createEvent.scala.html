@@ -17,40 +17,34 @@
         @helper.inputText(eventForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(eventForm("title"), '_label -> "Title")
         @helper.inputText(eventForm("location"), '_label -> "Location")
+
+
+        @helper.input(eventForm("startTime"), '_label -> "Start Time") { (id, name, value, args) =>
+                <input type="datetime-local" name="@name" id="@id" @toHtmlArgs(args)>
+            }
+        @helper.input(eventForm("endTime"), '_label -> "End Time", '_value -> "boogaloo") { (id, name, value, args) =>
+                <input type="datetime-local" name="@name" id="@id" @toHtmlArgs(args)>
+            }
+
         @helper.inputText(eventForm("description"), '_label -> "Description", 'id -> "wysiwyg-editor")
 
-        @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
-
-        @helper.inputDate(eventForm("displayFrom"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Display on site from...")
-        @helper.inputDate(eventForm("displayUntil"), 'min -> today, '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "...until...")
         }
     <div class="row">
         <button id="saveButton" class="small-12 centered" type="submit">Save</button>
     </div>
 </form>
 
-<form id="pictureForm" action="@routes.EventsController.uploadImage" method="post" enctype="multipart/form-data">
-    <input id="image1of2" type="file" name="image">
-    <button id="imageUploadButton" type="button" value="Upload"/>
-</form>
-
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/event-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-components.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-calendar.js")" ></script>
-<script>
-    document.getElementById("imageUploadButton").addEventListener('click', function() {
-        console.log("click listener registered");
-
-        var x = new FormData()
-        x.append("image1", document.getElementById("image1of2").files[0]);
-        x.append("domainObject", "event");
-
-        var eventId = document.getElementById("id").value
-
-        x.append("id", eventId)
-        var request = new XMLHttpRequest();
-        request.open("POST", "@routes.EventsController.uploadImage");
-        request.send(x);
-    });
- </script>
+@if(!eventForm.value.isEmpty) {
+<script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
+<div id="imageUpload"></div>
+<script type="text/jsx">
+    React.render(
+        <ImageUploadButton imageUploadUrl="@routes.EventsController.uploadImage"/>,
+        document.getElementById('imageUpload')
+    );
+    </script>
 }

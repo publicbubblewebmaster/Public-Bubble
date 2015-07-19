@@ -30,16 +30,16 @@ object EventsController extends Controller {
 
     Logger.info(JsObject(Map("message" -> JsString("events retrieved"))).toString)
 
-    eventDao.sortedByDate.map {case (eventList) =>
+    eventDao.sortedByEndTime.map {case (eventList) =>
       eventList match {
-        case Nil => NotFound
+        case IndexedSeq() => print(eventList); NotFound
         case _ => Ok(views.html.events(eventList.head, eventList.tail))
       }
     }
   }
 
   def getEvent(id : Long) = Action.async {implicit request =>
-    eventDao.sortedByDate.map {
+    eventDao.sortedByEndTime.map {
       eventList =>
         val (foundEvent, remainingEvents) = eventList partition(_.id.get == id)
         Logger.info(s"foundEvents = $foundEvent remaining=$remainingEvents")
@@ -58,7 +58,15 @@ object EventsController extends Controller {
 
     val result : Future[Result] = futureEventOption.map(
       _ match {
-        case eventOption : Some[Event] => {val eventFormData = EventFormData(eventOption.get.id, eventOption.get.title, eventOption.get.author, eventOption.get.intro, eventOption.get.content, eventOption.get.publishDate); Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
+        case eventOption : Some[Event] => {
+            val eventFormData = EventFormData(
+                  eventOption.get.id,
+                  eventOption.get.title,
+                  eventOption.get.location,
+                  eventOption.get.startTime,
+                  eventOption.get.endTime,
+                  eventOption.get.description);
+            Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
         case _ => NotFound
       })
 
@@ -104,8 +112,9 @@ object EventsController extends Controller {
       "id" -> Forms.optional(Forms.longNumber()),
       "title" -> Forms.text,
       "location" -> Forms.text,
-      "startTime" -> Forms.date("yyyy-mm-dd hh:mm:ss"),
-      "endTime" -> Forms.date("yyyy-mm-dd hh:mm:ss"),
+
+      "startTime" -> Forms.date("yyyy-MM-dd'T'HH:mm"),
+      "endTime" -> Forms.date("yyyy-MM-dd'T'HH:mm"),
       "content" -> Forms.text
     )(EventFormData.apply)(EventFormData.unapply)
   )

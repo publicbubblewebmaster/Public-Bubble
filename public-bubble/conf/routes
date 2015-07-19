@@ -10,11 +10,11 @@ POST    /login                      controllers.Security.handleLogin
 #Events
 GET     /events/all                 controllers.EventsController.eventsJson
 GET     /events                     controllers.EventsController.events
-POST    /create/event                controllers.EventsController.save
-GET     /create/event                controllers.EventsController.authenticatedEventForm
-GET     /update/event/:id            controllers.EventsController.updateEvent(id : Int)
-GET     /delete/event/:id            controllers.EventsController.deleteEvent(id : Int)
-POST    /upload/event/picture              controllers.EventsController.uploadImage
+POST    /create/event               controllers.EventsController.save
+GET     /create/event               controllers.EventsController.authenticatedEventForm
+GET     /update/event/:id           controllers.EventsController.updateEvent(id : Int)
+GET     /delete/event/:id           controllers.EventsController.deleteEvent(id : Int)
+POST    /upload/event/picture       controllers.EventsController.uploadImage
 
 # Blogs
 GET     /blogs/all                  controllers.BlogsController.blogsJson

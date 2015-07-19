@@ -28,9 +28,7 @@
 @if(!blogForm.value.isEmpty) {
 <script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
-
 <div id="imageUpload"></div>
-
 <script type="text/jsx">
     React.render(
         <ImageUploadButton imageUploadUrl="@routes.BlogsController.uploadImage"/>,

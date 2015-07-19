@@ -1,6 +1,7 @@
 package dao
 
 import java.sql.{Timestamp, Date}
+import java.util.Calendar
 
 import models.Event
 import play.api.Play
@@ -10,6 +11,7 @@ import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
 import scala.concurrent.Future
+import java.sql.Timestamp
 
 trait EventsComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
@@ -31,6 +33,8 @@ trait EventsComponent {
 }
 
 class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with EventsComponent  {
+
+  val currentTimestamp = new Timestamp(Calendar.getInstance.getTime.getTime)
 
   private val events = TableQuery[Events]
 
@@ -56,7 +60,7 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
 
   override def sortedById : Future[Seq[Event]] = db.run(events.result)
   override def sortedByEndTime : Future[Seq[Event]] = {
-    val query  =     events.sortBy(_.endTime.desc);
+    val query  =     events.filter(_.startTime <= currentTimestamp)sortBy(_.endTime.desc);
 
     dbConfig.db.run(query.result)
   }

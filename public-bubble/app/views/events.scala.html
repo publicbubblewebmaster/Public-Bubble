@@ -1,7 +1,7 @@
 @(mainEvent : Event, remainingEvents: Seq[Event])
 
 @main("Events") {
-
+Ooga booga booga
 <div id="eventPage" class="row">
     <div class="large-3 columns">
         <div class="sidebar">
@@ -20,15 +20,14 @@
 
         <div class="large-9 columns" >
             <h3>@{mainEvent.title}</h3>
+            <h3>@{mainEvent.location}</h3>
             <h6>@{mainEvent.startTime}</h6>
             <h6>@{mainEvent.endTime}</h6>
-            <i style="color:#1371b7">
-                @{mainEvent.description}
                 <div>
                     <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
                 </div>
                 <div>
-                    <p>@Html(mainEvent.content)</p>
+                    <p>@Html(mainEvent.description)</p>
                 </div>
     </section>
 </div>
