@@ -114,7 +114,7 @@ object EventsController extends Controller {
       "location" -> Forms.text,
       "startTime" -> Forms.date("yyyy-MM-dd'T'HH:mm"),
       "endTime" -> Forms.date("yyyy-MM-dd'T'HH:mm"),
-      "description" -> Forms.nonEmptyText verifying ("enter something", !_.isEmpty)
+      "description" -> Forms.nonEmptyText.verifying("Description must not be empty", !_.isEmpty)
     )(EventFormData.apply)(EventFormData.unapply)
   )
 

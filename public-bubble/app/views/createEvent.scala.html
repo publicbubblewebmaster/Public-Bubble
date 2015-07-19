@@ -12,13 +12,13 @@
         @helper.inputText(eventForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(eventForm("title"), '_label -> "Title")
         @helper.inputText(eventForm("location"), '_label -> "Location")
-        @helper.input(eventForm("startTime"), '_label -> "Start Time") { (id, name, value, args) =>
+        @helper.input(eventForm("startTime"), '_label -> "Start Time", '_help -> "" ) { (id, name, value, args) =>
                 <input type="datetime-local" name="@name" id="@id" @toHtmlArgs(args)>
             }
-        @helper.input(eventForm("endTime"), '_label -> "End Time", '_value -> "boogaloo") { (id, name, value, args) =>
+        @helper.input(eventForm("endTime"), '_label -> "End Time", '_help -> "") { (id, name, value, args) =>
                 <input type="datetime-local" name="@name" id="@id" @toHtmlArgs(args)>
             }
-        @helper.inputText(eventForm("description"), '_label -> "Description", 'id -> "wysiwyg-editor")
+        @helper.inputText(eventForm("description"), '_label -> "Description", '_help -> "", 'id -> "wysiwyg-editor")
     </div>
     <div class="row">
         <button id="saveButton" class="small-12 centered" type="submit">Save</button>
