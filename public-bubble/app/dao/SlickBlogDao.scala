@@ -53,7 +53,10 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
     db.run(updateImage).map(_ == 1)
   }
 
-  override def delete(id: Int): Unit = ???
+  override def delete(id: Long):  Future[Int] = {
+      val findById = blogs.filter(_.id === id)
+      dbConfig.db.run(findById.delete)
+  }
 
   override def findById(blogId: Long): Future[Option[Blog]] = db.run(blogs.filter(_.id === blogId).result.headOption)
 

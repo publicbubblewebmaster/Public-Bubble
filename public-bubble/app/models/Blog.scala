@@ -37,7 +37,7 @@ object Blog {
 
   def addImage(id: Long, url: String): Future[Boolean] = dao.addImage(id, url)
 
-  def delete(id: Int): Unit = dao.delete(id)
+  def delete(id: Int):  Future[Int] = dao.delete(id)
 
   def getById(blogId: Long): Future[Option[Blog]] = dao.findById(blogId)
 

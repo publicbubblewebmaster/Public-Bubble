@@ -48,7 +48,10 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
     db.run(updateImage).map(_ == 1)
   }
 
-  override def delete(id: Int): Unit = ???
+  override def delete(id: Long):  Future[Int] = {
+    val findById = events.filter(_.id === id)
+    dbConfig.db.run(findById.delete)
+  }
 
   override def findById(eventId: Long): Future[Option[Event]] = db.run(events.filter(_.id === eventId).result.headOption)
 

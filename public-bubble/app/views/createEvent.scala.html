@@ -38,6 +38,11 @@
         <ImageUploadButton imageUploadUrl="@routes.EventsController.uploadImage"/>,
         document.getElementById('imageUpload')
     );
+
+    React.render(
+            <EntityList dataSourceUrl="/events/all" entityName="event"/>,
+            document.getElementById('eventsBox')
+        );
     </script>
 }
 }
