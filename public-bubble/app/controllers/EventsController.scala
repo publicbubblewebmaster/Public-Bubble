@@ -66,7 +66,11 @@ object EventsController extends Controller {
                   eventOption.get.startTime,
                   eventOption.get.endTime,
                   eventOption.get.description);
-            Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
+          val filledForm : Form[EventFormData] = eventForm.fill(eventFormData)
+          println("filled form:")
+          println(filledForm.data)
+
+          Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
         case _ => NotFound
       })
 
@@ -83,12 +87,18 @@ object EventsController extends Controller {
 
       createdEvent => {
         if (createdEvent.id.isEmpty) {
+
+
           Event.create(Event.createFrom(createdEvent))
         }
         else {
           Event.update(Event.createFrom(createdEvent))
         }
-        Ok(views.html.createEvent(eventForm.fill(createdEvent)))
+        val filledForm : Form[EventFormData] = eventForm.fill(createdEvent)
+        println("filled form:")
+        println(filledForm.data)
+
+        Ok(views.html.createEvent(filledForm))
       }
     )
   }

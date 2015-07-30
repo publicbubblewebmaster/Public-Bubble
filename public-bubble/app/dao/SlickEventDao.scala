@@ -40,7 +40,12 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-  override def update(event: Event): Unit = ???
+  override def update(event: Event): Unit = {
+    val query = for {e <- events if e.id === event.id} yield
+    (e.title, e.location, e.description, e.startTime, e.endTime)
+
+    db.run(query.update(event.title, event.location, event.description, event.startTime, event.endTime))
+  }
 
   override def addImage(id: Long, url: String): Future[Boolean] = {
     val q = for { b <- events if b.id === id } yield b.image1Url
