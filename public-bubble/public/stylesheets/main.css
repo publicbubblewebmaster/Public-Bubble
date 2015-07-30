@@ -38,3 +38,12 @@ html, body, #container { height: 70%; }
 .error {
     color : red
 }
+
+.nav-label {
+    display: none
+}
+
+.nav-button:hover label {
+    display: block;
+    color: white;
+}
