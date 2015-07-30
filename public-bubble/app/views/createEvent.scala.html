@@ -15,9 +15,9 @@
         @helper.input(eventForm("startTime"), '_label -> "Start Time", '_help -> "" ) { (id, name, value, args) =>
                 <input type="datetime-local" name="@name" id="@id" value="@value" @toHtmlArgs(args)>
             }
-        @helper.input(eventForm("endTime"), '_label -> "End Time", '_help -> "") { (id, name, value, args) =>
+        @helper.input(eventForm("endTime"), '_label -> "Start Time", '_help -> "" ) { (id, name, value, args) =>
                 <input type="datetime-local" name="@name" id="@id" value="@value" @toHtmlArgs(args)>
-            }
+        }
         @helper.inputText(eventForm("description"), '_label -> "Description", '_help -> "", 'id -> "wysiwyg-editor")
     </div>
     <div class="row">
