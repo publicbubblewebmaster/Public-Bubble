@@ -21,8 +21,11 @@ Ooga booga booga
         <div class="large-9 columns" >
             <h3>@{mainEvent.title}</h3>
             <h3>@{mainEvent.location}</h3>
-            <h6>Start Time: @{mainEvent.startTime}</h6>
-            <h6>End Time: @{mainEvent.endTime}</h6>
+            <h6>From: @{
+                mainEvent.startTime.toLocalDateTime.get
+
+                }</h6>
+            <h6>Until: @{mainEvent.endTime}</h6>
                 <div>
                     <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
                 </div>
