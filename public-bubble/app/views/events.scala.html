@@ -22,12 +22,15 @@ Ooga booga booga
             <h3>@{mainEvent.title}</h3>
             <h3>@{mainEvent.location}</h3>
             <h6>@{
-                val startTime = mainEvent.startTime;
-                val endTime = mainEvent.endTime;
 
-                if(startTime.getDay == endTime.getDay) {
-                mainEvent.startTime.format("EEEE dd MMMM YYYY hh:mm")
-                } + "-" + mainEvent.endTime.format("hh:mm")
+                val startTime = mainEvent.startTime.toLocalDateTime;
+                val endTime = mainEvent.endTime.toLocalDateTime;
+
+                if(startTime.getDayOfYear == endTime.getDayOfYear {
+                    s"""$startTime.format("EEEE dd MMMM YYYY")
+                    $mainEvent.startTime.format("hh:mm") until $endTime.format("hh:mm")
+                    """
+                }
                 }
 
                 </h6>
