@@ -5,7 +5,7 @@ import play.api.mvc._
 object Application extends Controller {
 
   def aboutUs = Action {
-    Ok(views.html.aboutUs("Welcome to the Public Bubble"))
+    Ok(views.html.googleMapTag())
   }
 
   def twitter = Action {

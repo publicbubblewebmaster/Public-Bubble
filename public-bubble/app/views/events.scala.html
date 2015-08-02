@@ -1,7 +1,6 @@
 @(mainEvent : Event, remainingEvents: Seq[Event])
 
 @main("Events") {
-Ooga booga booga
 <div id="eventPage" class="row">
     <div class="large-3 columns">
         <div class="sidebar">
@@ -21,18 +20,15 @@ Ooga booga booga
         <div class="large-9 columns" >
             <h3>@{mainEvent.title}</h3>
             <h3>@{mainEvent.location}</h3>
-            <h6>@{
-
-                val startTime = mainEvent.startTime.toLocalDateTime;
-                val endTime = mainEvent.endTime.toLocalDateTime;
-
-                if(startTime.getDayOfYear == endTime.getDayOfYear {
-                    s"""$startTime.format("EEEE dd MMMM YYYY")
-                    $mainEvent.startTime.format("hh:mm") until $endTime.format("hh:mm")
-                    """
+            <>@if(mainEvent.startTime.toLocalDateTime.getDayOfYear == mainEvent.endTime.toLocalDateTime.getDayOfYear) {
+                @{mainEvent.startTime.format("EEEE dd MMMM yyyy")}<br/>
+                    @{s"""
+                        ${mainEvent.startTime.format("h:mm aa")} until ${mainEvent.endTime.format("h:mm aa")}"""}
+                } else {
+                @{mainEvent.startTime.format("EEEE dd MMMM yyyy h:mm aa")}<br/>
+                until <br/>
+                @{mainEvent.endTime.format("EEEE dd MMMM yyyy h:mm aa")}
                 }
-                }
-
                 </h6>
                 <div>
                     <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
