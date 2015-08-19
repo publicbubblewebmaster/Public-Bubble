@@ -9,8 +9,10 @@ GET     /logout                     controllers.Security.logout
 POST    /login                      controllers.Security.handleLogin
 
 #Events
+
+GET     /events/rewrite             controllers.EventsControllerRewrite.events
+
 GET     /events/all                 controllers.EventsController.eventsJson
-GET     /events                     controllers.EventsController.events
 POST    /create/event               controllers.EventsController.save
 GET     /create/event               controllers.EventsController.authenticatedEventForm
 GET     /update/event/:id           controllers.EventsController.updateEvent(id : Int)

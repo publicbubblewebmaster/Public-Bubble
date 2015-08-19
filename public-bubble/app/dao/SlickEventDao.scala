@@ -71,6 +71,7 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
     val query  =     events.filter(_.startTime <= currentTimestamp)sortBy(_.endTime.desc);
 
     dbConfig.db.run(query.result)
+
   }
 
 }

@@ -2,6 +2,7 @@ package controllers
 
 import java.sql.Timestamp
 
+import _root_.util.{GooglePlace, GooglePlaceFinder}
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import dao.{SlickEventDao}
@@ -13,12 +14,14 @@ import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cached, Cache}
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Promise, Future}
+import scala.util.Success
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object EventsController extends Controller {
 
   lazy val eventDao = new SlickEventDao
+  lazy val placeFinder = new GooglePlaceFinder
 
   val BLOGS_CACHE = "events"
   val BLOGS_JSON_CACHE = "eventsJson"
@@ -26,27 +29,34 @@ object EventsController extends Controller {
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def events = Action.async { implicit request =>
+/*  def events = Action.async { implicit request =>
 
     Logger.info(JsObject(Map("message" -> JsString("events retrieved"))).toString)
 
     eventDao.sortedByEndTime.map {case (eventList) =>
       eventList match {
         case IndexedSeq() => print(eventList); NotFound
-        case _ => Ok(views.html.events(eventList.head, eventList.tail))
+        case _ => Ok(views.html.events(eventList.head, eventList.tail, ))
       }
+      Ok(views.html.events(eventList.head, eventList.tail)
     }
-  }
+  }*/
 
-  def getEvent(id : Long) = Action.async {implicit request =>
-    eventDao.sortedByEndTime.map {
+  /*def getEvent(id : Long) = Action.async { implicit request =>
+    val dbResult: Future[(Seq[Event], Seq[Event])] = eventDao.sortedByEndTime.map {
       eventList =>
-        val (foundEvent, remainingEvents) = eventList partition(_.id.get == id)
+        val (foundEvent, remainingEvents) = eventList partition (_.id.get == id)
         Logger.info(s"foundEvents = $foundEvent remaining=$remainingEvents")
-        Ok(views.html.events(foundEvent.head, remainingEvents))
-    }
-  }
 
+        (foundEvent, remainingEvents)
+
+//        remainingEvents ++ remainingEvents
+    }
+
+    TODO()
+  }*/
+
+  //Authenticated extends ActionBuilder - here we're calling ACtionBuilder's apply method.
   def createEvent = Authenticated {
     //    clearCache
     Ok(views.html.createEvent(eventForm))

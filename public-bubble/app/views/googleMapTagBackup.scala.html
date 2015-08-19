@@ -67,10 +67,10 @@
         if (place.geometry.viewport) {
 
 
-        map.fitBounds(place.geometry.viewport);
+        this.map.fitBounds(place.geometry.viewport);
         } else {
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);  // Why 17? Because it looks good.
+        this.map.setCenter(place.geometry.location);
+        this.map.setZoom(17);  // Why 17? Because it looks good.
         }
         marker.setIcon(({
             url: place.icon,
