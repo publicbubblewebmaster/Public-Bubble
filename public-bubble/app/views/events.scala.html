@@ -23,7 +23,13 @@
             <h3>@if(eventLocation.isEmpty) {
                      @{mainEvent.location}
                 } else {
-                    @{eventLocation.get.coords}
+                <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.api.browserKey")}"></script>
+                <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-map.js")" defer></script>
+                <div id="map"></div>
+                <script type="text/jsx">
+                        React.render(<GoogleMap lat={@{eventLocation.get.coords._1}} lng={@{eventLocation.get.coords._2}}/>, document.getElementById("map"));
+                </script>
+
                 }</h3>
             <>@if(mainEvent.startTime.toLocalDateTime.getDayOfYear == mainEvent.endTime.toLocalDateTime.getDayOfYear) {
                 @{mainEvent.startTime.format("EEEE dd MMMM yyyy")}<br/>
@@ -45,11 +51,7 @@
                 <div id="map">
 
                 </div>
-                <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.api.browserKey")}"></script>
-                <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-map.js")" defer></script>
-                <script type="text/jsx">
-                        React.render(<GoogleMap/>, document.getElementById("map"));
-                </script>
+
                 <div>
                     <p>@Html(mainEvent.description)</p>
                 </div>

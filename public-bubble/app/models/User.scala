@@ -20,7 +20,7 @@ object User {
   val HTTP_TRANSPORT = new NetHttpTransport();
   val JSON_FACTORY = new JacksonFactory();
 
-  val CLIENT_ID = Play.current.configuration.getString("google.clientId").get
+  val CLIENT_ID = Play.current.configuration.getString("google.oauth.clientId").get
   val APPS_DOMAIN_NAME = "localhost";
 
   val verifier : GoogleIdTokenVerifier = new GoogleIdTokenVerifier.Builder(HTTP_TRANSPORT, JSON_FACTORY)

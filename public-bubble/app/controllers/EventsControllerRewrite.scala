@@ -9,7 +9,6 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Play.current
 
-
 import scala.concurrent.Future
 
 object EventsControllerRewrite extends Controller {
