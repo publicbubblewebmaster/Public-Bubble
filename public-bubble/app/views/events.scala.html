@@ -18,43 +18,25 @@
         </div>
     </div>
     <section>
-        <div class="large-9 columns" >
+        <div class="large-12 columns" >
             <h3>@{mainEvent.title}</h3>
-            <h3>@if(eventLocation.isEmpty) {
-                     @{mainEvent.location}
+        </div>
+        <div class="row">
+            @if(eventLocation.isEmpty) {
+                     <p>@{mainEvent.location}</p>
                 } else {
-                <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.api.browserKey")}"></script>
-                <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-map.js")" defer></script>
-                <div id="map"></div>
-                <script type="text/jsx">
-                        React.render(<GoogleMap lat={@{eventLocation.get.coords._1}} lng={@{eventLocation.get.coords._2}}/>, document.getElementById("map"));
-                </script>
-
-                }</h3>
-            <>@if(mainEvent.startTime.toLocalDateTime.getDayOfYear == mainEvent.endTime.toLocalDateTime.getDayOfYear) {
-                @{mainEvent.startTime.format("EEEE dd MMMM yyyy")}<br/>
-                    @{s"""
-                        ${mainEvent.startTime.format("h:mm aa")} until ${mainEvent.endTime.format("h:mm aa")}"""}
-                } else {
-                @{mainEvent.startTime.format("EEEE dd MMMM yyyy h:mm aa")}<br/>
-                until <br/>
-                @{mainEvent.endTime.format("EEEE dd MMMM yyyy h:mm aa")}
+            @googlePlaceTag(eventLocation.get)
                 }
-                </h6>
-                <div>
-                    <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
-                </div>
-                <style>
-                    .bigMap {height: 150px; width:150px;}
-                </style>
-
-                <div id="map">
-
-                </div>
-
-                <div>
-                    <p>@Html(mainEvent.description)</p>
-                </div>
+        </div>
+        <div class="row">
+        @startTimeEndTimeTag(mainEvent.startTime, mainEvent.endTime)
+        </div>
+        <div class="row">
+            <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+        </div>
+        <div class="row">
+            <p>@Html(mainEvent.description)</p>
+        </div>
     </section>
 </div>
 }

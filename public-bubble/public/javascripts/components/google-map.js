@@ -13,8 +13,7 @@ var GoogleMap = React.createClass({
 
         var marker = new google.maps.Marker({
             position: latLng,
-            map: map,
-            title: 'Hello World!'
+            map: map
         });
                 
     },  
@@ -26,19 +25,12 @@ var GoogleMap = React.createClass({
                             {
                              minZoom: 3,
                              zoom: 13,
-                             center: markerPosition
+                             center: markerPosition,
+                             mapTypeControl : false
                             });
 
-                            console.debug("props="+this.props)
-                            console.debug("state="+this.state)
-
-                
-
-                this.addMarker(markerPosition, map)
-                console.debug("map has mounted")
-        console.log(map)
+        this.addMarker(markerPosition, map)
         this.setState({mapKey : map}, function() {this.initDirections()});
-              
     },
 
     render: function() {

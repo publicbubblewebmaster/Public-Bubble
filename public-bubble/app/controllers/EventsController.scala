@@ -29,18 +29,18 @@ object EventsController extends Controller {
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-/*  def events = Action.async { implicit request =>
+  def events = Action.async { implicit request =>
 
-    Logger.info(JsObject(Map("message" -> JsString("events retrieved"))).toString)
+    val eventsList = eventDao.sortedByEndTime
 
-    eventDao.sortedByEndTime.map {case (eventList) =>
-      eventList match {
-        case IndexedSeq() => print(eventList); NotFound
-        case _ => Ok(views.html.events(eventList.head, eventList.tail, ))
+    val result : Future[Result] = for {
+      list     <- eventsList
+      maybePlace <- placeFinder.findPlace(list.head.location)
+    } yield {
+        Ok(views.html.events(list.head, list.tail, maybePlace))
       }
-      Ok(views.html.events(eventList.head, eventList.tail)
-    }
-  }*/
+    result
+  }
 
   /*def getEvent(id : Long) = Action.async { implicit request =>
     val dbResult: Future[(Seq[Event], Seq[Event])] = eventDao.sortedByEndTime.map {

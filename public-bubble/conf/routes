@@ -10,7 +10,7 @@ POST    /login                      controllers.Security.handleLogin
 
 #Events
 
-GET     /events/rewrite             controllers.EventsControllerRewrite.events
+GET     /events                     controllers.EventsController.events
 
 GET     /events/all                 controllers.EventsController.eventsJson
 POST    /create/event               controllers.EventsController.save

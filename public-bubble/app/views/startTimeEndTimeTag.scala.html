@@ -1,0 +1,11 @@
+@import java.sql.Timestamp
+
+@(startTime : Timestamp, endTime : Timestamp)
+
+@if(startTime.toLocalDateTime.getDayOfYear == endTime.toLocalDateTime.getDayOfYear) {
+@{startTime.format("EEEE dd MMMM yyyy")}<br/>
+@{s"""
+${startTime.format("h:mm aa")} until ${endTime.format("h:mm aa")}"""}
+} else {
+@{startTime.format("EEEE dd MMMM yyyy h:mm aa")} until @{endTime.format("EEEE dd MMMM yyyy h:mm aa")}
+}
