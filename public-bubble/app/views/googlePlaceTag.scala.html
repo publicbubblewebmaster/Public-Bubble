@@ -9,7 +9,3 @@
     <script type="text/jsx">
                         React.render(<GoogleMap lat={@{googlePlace.coords._1}} lng={@{googlePlace.coords._2}}/>, document.getElementById("map"));
                 </script>
-    <div id="addressText" class="large-9 columns">
-        <h3>@{googlePlace.name}</h3>
-        @{googlePlace.formattedAddress}
-    </div>

@@ -18,21 +18,28 @@
         </div>
     </div>
     <section>
+        <div class="row">
         <div class="large-12 columns" >
-            <h3>@{mainEvent.title}</h3>
+            <h3><i>@{mainEvent.title}</i></h3>
         </div>
-        <div class="row">
-            @if(eventLocation.isEmpty) {
-                     <p>@{mainEvent.location}</p>
-                } else {
-            @googlePlaceTag(eventLocation.get)
-                }
-        </div>
-        <div class="row">
-        @startTimeEndTimeTag(mainEvent.startTime, mainEvent.endTime)
         </div>
         <div class="row">
             <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+        </div>
+        <div class="row">
+            @if(eventLocation.isEmpty) {
+                <p>@{mainEvent.location}</p>
+                } else {
+            @googlePlaceTag(eventLocation.get)
+            <div class="panel" id="addressText">
+            <h4><b>@{eventLocation.get.name}</b></h4>
+            @{eventLocation.get.formattedAddress}
+            <br/>
+            <br/>
+
+        @startTimeEndTimeTag(mainEvent.startTime, mainEvent.endTime)
+        </div>
+        }
         </div>
         <div class="row">
             <p>@Html(mainEvent.description)</p>

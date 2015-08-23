@@ -3,7 +3,7 @@
 @(startTime : Timestamp, endTime : Timestamp)
 
 @if(startTime.toLocalDateTime.getDayOfYear == endTime.toLocalDateTime.getDayOfYear) {
-@{startTime.format("EEEE dd MMMM yyyy")}<br/>
+@{startTime.format("EEEE dd MMMM yyyy")}
 @{s"""
 ${startTime.format("h:mm aa")} until ${endTime.format("h:mm aa")}"""}
 } else {
