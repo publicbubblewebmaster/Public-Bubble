@@ -33,7 +33,7 @@ object EventsController extends Controller {
   def events = Action.async {
     implicit request => {
       val allEvents : Future[Seq[Event]]= eventDao.allEvents
-      val partitionedEvents : Future[(Seq[Event], Seq[Event])] = allEvents.map{_.partition(_.endTime.before(new Date))}
+      val partitionedEvents : Future[(Seq[Event], Seq[Event])] = allEvents.map{_.reverse.partition(_.endTime.before(new Date))}
 
       val result : Future[Result] = for {
         (pastEvents, futureEvents) <- partitionedEvents
