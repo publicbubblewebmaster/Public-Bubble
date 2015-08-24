@@ -1,6 +1,7 @@
 package controllers
 
 import java.sql.Timestamp
+import java.util.Date
 
 import _root_.util.{GooglePlace, GooglePlaceFinder}
 import com.cloudinary.{Transformation, Cloudinary}
@@ -29,17 +30,37 @@ object EventsController extends Controller {
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def events = Action.async { implicit request =>
+  def events = Action.async {
+    implicit request => {
+      val allEvents : Future[Seq[Event]]= eventDao.allEvents
+      val partitionedEvents : Future[(Seq[Event], Seq[Event])] = allEvents.map{_.partition(_.endTime.before(new Date))}
 
-    val eventsList = eventDao.sortedByEndTime
-
-    val result : Future[Result] = for {
-      list     <- eventsList
-      maybePlace <- placeFinder.findPlace(list.head.location)
-    } yield {
-        Ok(views.html.events(list.head, list.tail, maybePlace))
+      val result : Future[Result] = for {
+        (pastEvents, futureEvents) <- partitionedEvents
+        maybePlace <- placeFinder.findPlace(futureEvents.head.location)
+      } yield {
+         Ok(views.html.events(futureEvents.head, maybePlace, futureEvents.tail, pastEvents))
       }
+
     result
+    }}
+
+  def getEvent(id : Long) = Action.async{ implicit request => {
+
+    val allEvents = eventDao.allEvents
+
+    for {
+      requestedEvents <- allEvents.map(_.filter(_.id == id))
+      maybePlace <- placeFinder.findPlace(requestedEvents.head.location)
+      remainingEvents <- allEvents.map(_.filter(_.id != id))
+      (past, future) <- allEvents.map {
+        _.partition(_.endTime.before(new Date))
+      }
+      event <- allEvents
+    } yield {
+      Ok(views.html.events(requestedEvents.head, maybePlace, past, future))
+    }
+  }
   }
 
   /*def getEvent(id : Long) = Action.async { implicit request =>
@@ -50,7 +71,7 @@ object EventsController extends Controller {
 
         (foundEvent, remainingEvents)
 
-//        remainingEvents ++ remainingEvents
+        remainingEvents ++ remainingEvents
     }
 
     TODO()

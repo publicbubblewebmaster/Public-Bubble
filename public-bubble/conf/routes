@@ -11,6 +11,7 @@ POST    /login                      controllers.Security.handleLogin
 #Events
 
 GET     /events                     controllers.EventsController.events
+GET     /event/:id                  controllers.EventsController.getEvent(id : Long)
 
 GET     /events/all                 controllers.EventsController.eventsJson
 POST    /create/event               controllers.EventsController.save

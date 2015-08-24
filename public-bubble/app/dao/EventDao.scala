@@ -13,7 +13,9 @@ trait EventDao {
 
   def delete(id : Long) : Future[Int]
 
-  def sortedByEndTime : Future[Seq[Event]]
+  def allEvents : Future[Seq[Event]]
+
+  def futureEvents : Future[Seq[Event]]
 
   def sortedById : Future[Seq[Event]]
 
