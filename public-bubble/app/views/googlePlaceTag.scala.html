@@ -4,8 +4,8 @@
 @(googlePlace : GooglePlace)
 
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.api.browserKey")}"></script>
-                <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-map.js")" defer></script>
+    <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-map.js")" defer></script>
     <div id="map" class="large-3 columns"></div>
     <script type="text/jsx">
                         React.render(<GoogleMap lat={@{googlePlace.coords._1}} lng={@{googlePlace.coords._2}}/>, document.getElementById("map"));
-                </script>
+    </script>

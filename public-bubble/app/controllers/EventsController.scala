@@ -39,7 +39,7 @@ object EventsController extends Controller {
         (pastEvents, futureEvents) <- partitionedEvents
         maybePlace <- placeFinder.findPlace(futureEvents.head.location)
       } yield {
-         Ok(views.html.events(futureEvents.head, maybePlace, futureEvents.tail, pastEvents))
+         Ok(views.html.events(futureEvents.head, maybePlace, pastEvents, futureEvents.tail))
       }
 
     result
@@ -59,20 +59,6 @@ object EventsController extends Controller {
       }
     }
   }
-
-  /*def getEvent(id : Long) = Action.async { implicit request =>
-    val dbResult: Future[(Seq[Event], Seq[Event])] = eventDao.sortedByEndTime.map {
-      eventList =>
-        val (foundEvent, remainingEvents) = eventList partition (_.id.get == id)
-        Logger.info(s"foundEvents = $foundEvent remaining=$remainingEvents")
-
-        (foundEvent, remainingEvents)
-
-        remainingEvents ++ remainingEvents
-    }
-
-    TODO()
-  }*/
 
   //Authenticated extends ActionBuilder - here we're calling ACtionBuilder's apply method.
   def createEvent = Authenticated {
