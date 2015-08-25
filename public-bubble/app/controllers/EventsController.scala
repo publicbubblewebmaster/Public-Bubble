@@ -50,17 +50,14 @@ object EventsController extends Controller {
     val allEvents = eventDao.allEvents
 
     for {
-      requestedEvents <- allEvents.map(_.filter(_.id == id))
+      requestedEvents <- allEvents.map(_.filter(_.id.get == id))
       maybePlace <- placeFinder.findPlace(requestedEvents.head.location)
-      remainingEvents <- allEvents.map(_.filter(_.id != id))
-      (past, future) <- allEvents.map {
-        _.partition(_.endTime.before(new Date))
-      }
-      event <- allEvents
+      remainingEvents <- allEvents.map(_.filter(_.id.get != id))
     } yield {
+      val (past, future) = remainingEvents.partition(_.endTime.before(new Date))
       Ok(views.html.events(requestedEvents.head, maybePlace, past, future))
+      }
     }
-  }
   }
 
   /*def getEvent(id : Long) = Action.async { implicit request =>
