@@ -1,28 +1,25 @@
 @(eventForm: Form[EventFormData])(implicit messages: Messages)
 
-@main("Event Form") {
+@contentCreator("Event Form") {
 
 @wysiwyg()
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
-
 @if(!eventForm.value.isEmpty){
-<button id="    newEvent" onclick="window.location = '/create/event';">
+<button id="newEvent" onclick="window.location = '/create/event';">
     Create new event
 </div>
 }
-<div id="eventsBox" class=".col-sm-2 columns"></div>
+<div id="eventsBox" class="columns small-2 columns"></div>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
 <form class="row" id="eventForm" action="@routes.EventsController.save" method="post">
-        <div class=".col-sm-8" >
+        <div class="columns small-8" >
 
         @helper.inputText(eventForm("id"), 'class -> "form-control", '_label -> "ID", 'readonly -> "readonly", '_help -> "")
         @helper.inputText(eventForm("title"), 'class -> "form-control", '_label -> "Title")
-
-
         @helper.inputText(eventForm("location"), 'class -> "form-control", '_label -> "Location")
         <script>
             var autoCompleteAddressBox = new google.maps.places.Autocomplete(document.getElementById("location"), null);
@@ -42,7 +39,7 @@
         @helper.inputText(eventForm("description"), 'class -> "form-control", '_label -> "Description", '_help -> "", 'id -> "wysiwyg-editor")
     </div>
     <div class="row">
-        <button id="saveButton" class=".col-sm-12" type="submit">Save</button>
+        <button id="saveButton" class="columns small-12" type="submit">Save</button>
     </div>
 </form>
 

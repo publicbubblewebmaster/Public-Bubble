@@ -4,6 +4,7 @@
 
 .navbar {
     background-color:#2D2D87;
+    color : white;
 }
 
 .footer {
@@ -12,4 +13,19 @@
 
 .nav-icon {
     height:50px;
+}
+
+.icon-autosize {
+  height: 30px;
+}
+
+@media screen and (min-width: 768px) {
+  .icon-autosize {
+    height: 40px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .icon-autosize {
+   height: 50px;
+  }
 }
