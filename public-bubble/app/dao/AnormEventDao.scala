@@ -66,7 +66,7 @@ class AnormEventDao extends EventDao {
       Event.createFrom(row)
   }
 
-  def delete(id: Int): Unit = DB.withConnection {
+  def delete(id: Int):  Future[Int] = DB.withConnection {
     implicit connection =>
       val result: Boolean = DELETE_EVENT_SQL.on("id" -> id).execute()
   }

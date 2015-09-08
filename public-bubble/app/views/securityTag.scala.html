@@ -1,28 +1,25 @@
 @import play.api.Play
 
 <meta name="google-signin-client_id"
-      content="@{Play.current.configuration.getString("google.clientId")}">
+      content="@{Play.current.configuration.getString("google.oauth.clientId")}">
 <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 <script>
 function onSignIn(googleUser) {
-console.log("id value before change: " + document.getElementById("id").value)
 
-document.getElementById("id").value = googleUser.getBasicProfile().getId();
-console.log("posting " + googleUser.getBasicProfile().getId() + "to server");
-console.log("id value after change: " + document.getElementById("id").value);
+    document.getElementById("id").value = googleUser.getBasicProfile().getId();
 
-// defer form submit using-->
-setTimeout(function() {document.getElementById("loginForm").submit();}, 1000);
-document.getElementById("loginForm").submit();
+    // defer form submit using-->
+    setTimeout(function() {document.getElementById("loginForm").submit();}, 1000);
+    document.getElementById("loginForm").submit();
 }
 </script>
 
 <script>
 function signOut() {
-var auth2 = gapi.auth2.getAuthInstance();
-auth2.signOut().then(function () {
-console.log('User signed out.');
-});
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    console.log('User signed out.');
+    });
 }
 </script>
 

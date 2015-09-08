@@ -12,6 +12,8 @@ import scala.concurrent.Future
 class AuthenticatedRequest[A](val username: String, request: Request[A]) extends WrappedRequest[A](request)
 
 object Authenticated extends ActionBuilder[AuthenticatedRequest] {
+
+  // invokeBlock gets called by the framework.
   def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]) = {
     request.session.get("email").map { email =>
       block(new AuthenticatedRequest(email, request))

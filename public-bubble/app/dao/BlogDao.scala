@@ -11,7 +11,7 @@ trait BlogDao {
 
   def findById(blogId : Long) : Future[Option[Blog]]
 
-  def delete(id : Int)
+  def delete(id : Long) : Future[Int]
 
   def sortedByDate : Future[Seq[Blog]]
 

@@ -18,7 +18,6 @@ var EventList = React.createClass({
   },
 
   componentDidMount: function() {
-      console.log("calling componentDidMount");
       $.ajax({
           url: this.props.url,
           dataType: 'json',

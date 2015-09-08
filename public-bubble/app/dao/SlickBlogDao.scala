@@ -30,7 +30,6 @@ trait BlogsComponent {
 
     The <> operator is optimized for case classes*/
 
-
     // the ? method lifts the column into an option
     def * = (id.?, title, author, intro, content, publishDate, image1Url) <> ((Blog.apply _).tupled, Blog.unapply)
     // the default projection is Blog
@@ -45,7 +44,12 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-  override def update(blog: Blog): Unit = ???
+  override def update(blog: Blog): Unit = {
+    val query = for {b <- blogs if b.id === blog.id} yield
+    (b.title, b.intro, b.author, b.content, b.publishDate)
+
+    db.run(query.update(blog.title, blog.intro, blog.author, blog.content, blog.publishDate))
+  }
 
   override def addImage(id: Long, url: String): Future[Boolean] = {
     val q = for { b <- blogs if b.id === id } yield b.image1Url
@@ -53,15 +57,15 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
     db.run(updateImage).map(_ == 1)
   }
 
-  override def delete(id: Int): Unit = ???
+  override def delete(id: Long):  Future[Int] = {
+      val findById = blogs.filter(_.id === id)
+      dbConfig.db.run(findById.delete)
+  }
 
   override def findById(blogId: Long): Future[Option[Blog]] = db.run(blogs.filter(_.id === blogId).result.headOption)
 
   override def create(blog: Blog) = {
-
          dbConfig.db.run(blogs += blog)
-
-
   }
 
   override def sortedById : Future[Seq[Blog]] = db.run(blogs.result)

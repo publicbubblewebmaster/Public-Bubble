@@ -1,0 +1,56 @@
+@import play.api.Play
+@import util.GooglePlace
+
+@(mainEvent : Event, eventLocation: Option[GooglePlace], futureEvents : Seq[Event], pastEvents: Seq[Event])
+
+@main("Events") {
+<div id="eventPage" class="row">
+    <div class="large-1 columns">
+        <div class="sidebar"> <!-- TODO move into tag -->
+            <div class="hide-for-small">
+
+                <nav class="side-nav ">
+                    @if(!pastEvents.isEmpty) {
+                        <h2>Past Events</h2>
+                    }
+                    @for(event <- pastEvents) {
+                         <h3><a href="/event/@event.id">@event.title</a></h3>
+                    }
+                    @if(!futureEvents.isEmpty) {
+                    <h2>Upcoming Events</h2>
+                    }
+                    @for(event <- futureEvents) {
+                    <h3><a href="/event/@event.id">@event.title</a></h3>
+                    }
+                </nav>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="large-9 columns" >
+            <h3><i>@{mainEvent.title}</i></h3>
+        </div>
+        <div class="row">
+            <img src="@{mainEvent.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+        </div>
+        <div class="row">
+            @if(eventLocation.isEmpty) {
+                <p>@{mainEvent.location}</p>
+                } else {
+            @googlePlaceTag(eventLocation.get)
+            <div class="panel" id="addressText">
+            <h4><b>@{eventLocation.get.name}</b></h4>
+            @{eventLocation.get.formattedAddress}
+            <br/>
+            <br/>
+
+        @startTimeEndTimeTag(mainEvent.startTime, mainEvent.endTime)
+        </div>
+        }
+        </div>
+        <div class="row">
+            <p>@Html(mainEvent.description)</p>
+        </div>
+    </section>
+</div>
+}

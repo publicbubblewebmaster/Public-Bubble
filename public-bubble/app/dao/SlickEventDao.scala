@@ -40,7 +40,12 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-  override def update(event: Event): Unit = ???
+  override def update(event: Event): Unit = {
+    val query = for {e <- events if e.id === event.id} yield
+    (e.title, e.location, e.description, e.startTime, e.endTime)
+
+    db.run(query.update(event.title, event.location, event.description, event.startTime, event.endTime))
+  }
 
   override def addImage(id: Long, url: String): Future[Boolean] = {
     val q = for { b <- events if b.id === id } yield b.image1Url
@@ -48,21 +53,26 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
     db.run(updateImage).map(_ == 1)
   }
 
-  override def delete(id: Int): Unit = ???
+  override def delete(id: Long):  Future[Int] = {
+    val findById = events.filter(_.id === id)
+    dbConfig.db.run(findById.delete)
+  }
 
   override def findById(eventId: Long): Future[Option[Event]] = db.run(events.filter(_.id === eventId).result.headOption)
 
   override def create(event: Event) = {
-
     dbConfig.db.run(events += event)
-
   }
 
   override def sortedById : Future[Seq[Event]] = db.run(events.result)
-  override def sortedByEndTime : Future[Seq[Event]] = {
-    val query  =     events.filter(_.startTime <= currentTimestamp)sortBy(_.endTime.desc);
 
+  override def futureEvents : Future[Seq[Event]] = {
+    val query  =     events.filter(_.endTime >= currentTimestamp)sortBy(_.endTime.desc);
     dbConfig.db.run(query.result)
   }
 
+  override def allEvents: Future[Seq[Event]] = {
+    val eventSortedByEndTime = events.sortBy(_.endTime.desc)
+    dbConfig.db.run(eventSortedByEndTime.result)
+  }
 }

@@ -1,4 +1,5 @@
 # --- !Ups
+create schema if not exists PUBLIC_BUBBLE;
 
 CREATE TABLE PUBLIC_BUBBLE.BLOG
 (
@@ -10,6 +11,7 @@ CREATE TABLE PUBLIC_BUBBLE.BLOG
     PUBLISH_DATE DATE,
     IMAGE_1_URL TEXT
 );
+Commit;
 
 create table PUBLIC_BUBBLE.EVENT (
    ID SERIAL PRIMARY KEY,
@@ -20,6 +22,8 @@ create table PUBLIC_BUBBLE.EVENT (
    DESCRIPTION TEXT,
    IMAGE_1_URL TEXT
 );
+Commit;
+
 
 create table PUBLIC_BUBBLE.USER (
    ID SERIAL PRIMARY KEY,

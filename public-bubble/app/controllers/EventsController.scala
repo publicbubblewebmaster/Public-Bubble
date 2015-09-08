@@ -1,7 +1,8 @@
 package controllers
 
-import java.sql.Timestamp
+import java.util.Date
 
+import _root_.util.{GooglePlace, GooglePlaceFinder}
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import dao.{SlickEventDao}
@@ -13,12 +14,14 @@ import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cached, Cache}
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Promise, Future}
+import scala.util.Success
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object EventsController extends Controller {
 
   lazy val eventDao = new SlickEventDao
+  lazy val placeFinder = new GooglePlaceFinder
 
   val BLOGS_CACHE = "events"
   val BLOGS_JSON_CACHE = "eventsJson"
@@ -26,27 +29,58 @@ object EventsController extends Controller {
   lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
   lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def events = Action.async { implicit request =>
-
-    Logger.info(JsObject(Map("message" -> JsString("events retrieved"))).toString)
-
-    eventDao.sortedByEndTime.map {case (eventList) =>
-      eventList match {
-        case IndexedSeq() => print(eventList); NotFound
-        case _ => Ok(views.html.events(eventList.head, eventList.tail))
+  def maybeMainEventPlace(futureMainEvent : Future[Option[Event]]) : Future[Option[GooglePlace]] = futureMainEvent.flatMap(
+    maybeEvent => {
+      if (maybeEvent.isEmpty) {
+        Future{None}
+      } else {
+        placeFinder.findPlace(maybeEvent.get.location)
       }
     }
-  }
+  )
 
-  def getEvent(id : Long) = Action.async {implicit request =>
-    eventDao.sortedByEndTime.map {
-      eventList =>
-        val (foundEvent, remainingEvents) = eventList partition(_.id.get == id)
-        Logger.info(s"foundEvents = $foundEvent remaining=$remainingEvents")
-        Ok(views.html.events(foundEvent.head, remainingEvents))
+  def getResult(futureMainEvent : Future[Option[Event]], futureAndPastEvents : Future[(Seq[Event], Seq[Event])]) : Future[Result] = for {
+    (upcomingEvents, pastEvents) <- futureAndPastEvents
+    maybeMainEvent <- futureMainEvent
+    maybePlace <- maybeMainEventPlace(futureMainEvent)
+  } yield {
+
+      (upcomingEvents.toList, pastEvents.toList) match {
+        case (a +: b, c +: d) => Ok(views.html.events(maybeMainEvent, maybePlace, Some(upcomingEvents), Some(pastEvents)))
+        case (a +: b, Nil) => Ok(views.html.events(maybeMainEvent, maybePlace, Some(upcomingEvents), None))
+        case (Nil, c +: d) => Ok(views.html.events(maybeMainEvent, maybePlace, None, Some(pastEvents)))
+        case (Nil, Nil) => Ok(views.html.events(maybeMainEvent, maybePlace, None, None))
+      }
     }
+
+  private def sortIntoFutureAndPast(input : Future[Seq[Event]]) : Future[(Seq[Event], Seq[Event])] = {
+    input.map{_.partition(_.endTime.after(new Date))}
   }
 
+  def events = Action.async {
+        implicit request => {
+          val partitionedEvents : Future[(Seq[Event], Seq[Event])] = sortIntoFutureAndPast(eventDao.allEvents)
+          val futureMainEvent : Future[Option[Event]] = partitionedEvents.map{case (future, past) => future.reverse.headOption}
+
+          getResult(futureMainEvent, partitionedEvents)
+        }
+}
+
+  def getEvent(id : Long) = Action.async{ implicit request => {
+
+    val allEvents = eventDao.allEvents
+    val foundEvents = allEvents.map(_.filter(_.id.get.equals(id)))
+    val maybeMainEvent = foundEvents.map(_.headOption)
+    val remainingEvents = allEvents.map(_.filter(_.id.get != id))
+
+    val partitionedEvents : Future[(Seq[Event], Seq[Event])] = sortIntoFutureAndPast(remainingEvents)
+
+    getResult(maybeMainEvent, partitionedEvents)
+  }
+
+  }
+
+  //Authenticated extends ActionBuilder - here we're calling ACtionBuilder's apply method.
   def createEvent = Authenticated {
     //    clearCache
     Ok(views.html.createEvent(eventForm))
@@ -66,7 +100,8 @@ object EventsController extends Controller {
                   eventOption.get.startTime,
                   eventOption.get.endTime,
                   eventOption.get.description);
-            Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
+          val filledForm : Form[EventFormData] = eventForm.fill(eventFormData)
+          Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
         case _ => NotFound
       })
 
@@ -83,12 +118,18 @@ object EventsController extends Controller {
 
       createdEvent => {
         if (createdEvent.id.isEmpty) {
+
+
           Event.create(Event.createFrom(createdEvent))
         }
         else {
           Event.update(Event.createFrom(createdEvent))
         }
-        Ok(views.html.createEvent(eventForm.fill(createdEvent)))
+        val filledForm : Form[EventFormData] = eventForm.fill(createdEvent)
+        println("filled form:")
+        println(filledForm.data)
+
+        Ok(views.html.createEvent(filledForm))
       }
     )
   }
@@ -101,8 +142,8 @@ object EventsController extends Controller {
 
   def eventsJson = Action.async { implicit request =>
 
-    val futureEvents : Future[Seq[Event]] = eventDao.sortedById
-    val futureJson : Future[Seq[JsValue]] = futureEvents.map(_.map(event => Json.obj("id" -> event.id, "title" -> event.title)))
+    val futureAllEvents : Future[Seq[Event]] = eventDao.sortedById
+    val futureJson : Future[Seq[JsValue]] = futureAllEvents.map(_.map(event => Json.obj("id" -> event.id, "title" -> event.title)))
 
     futureJson.map(jsList => Ok(JsArray(jsList)))
   }

@@ -1,7 +1,7 @@
 html, body, #container { height: 70%; }
 
 #bubble-banner {
-      /*background-image: url('../images/logo_rework.svg');*/
+      /*background-image: url('../images/logo_default.svg');*/
       background-size: 15%;
       /*background-color: #2D2D87;*/
       background-repeat: no-repeat;
@@ -26,7 +26,6 @@ html, body, #container { height: 70%; }
 
 .nav-icon {
     height:50px;
-
 }
 
 #page-footer {
@@ -38,3 +37,17 @@ html, body, #container { height: 70%; }
 .error {
     color : red
 }
+
+.nav-label {
+    display: none
+}
+
+.nav-button:hover label {
+    display: block;
+    color: white;
+}
+
+.bigMap {
+    height: 150px;
+    width:200px;
+    }

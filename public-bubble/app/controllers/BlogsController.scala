@@ -18,6 +18,10 @@ object BlogsController extends Controller {
 
   lazy val blogDao = new SlickBlogDao
 
+  val CONTENT = "Blogs"
+
+  lazy val BLOGS_404 = NotFound(views.html.noContent("Blogs"))
+
   val BLOGS_CACHE = "blogs"
   val BLOGS_JSON_CACHE = "blogsJson"
   lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
@@ -28,21 +32,19 @@ object BlogsController extends Controller {
 
     Logger.info(JsObject(Map("message" -> JsString("blogs retrieved"))).toString)
 
-    blogDao.sortedByDate.map {case (blogList) =>
-        blogList match {
-          case Nil => NotFound
-          case _ => Ok(views.html.blogs(blogList.head, blogList.tail))
-        }
+    blogDao.sortedByDate.map {blogList =>
+
+          Ok(views.html.blogs(blogList.head, blogList.tail))
+        }.fallbackTo(Future{BLOGS_404})
     }
-  }
 
   def getBlog(id : Long) = Action.async {implicit request =>
-      blogDao.sortedByDate.map {
+      blogDao.sortedByDate.map{
         blogList =>
           val (foundBlog, remainingBlogs) = blogList partition(_.id.get == id)
           Logger.info(s"foundBlogs = $foundBlog remaining=$remainingBlogs")
           Ok(views.html.blogs(foundBlog.head, remainingBlogs))
-      }
+      }.fallbackTo(Future{BLOGS_404})
   }
 
   def createBlog = Authenticated {
@@ -151,4 +153,3 @@ object BlogsController extends Controller {
     Cache.remove(BLOGS_JSON_CACHE)
   }
 }
-

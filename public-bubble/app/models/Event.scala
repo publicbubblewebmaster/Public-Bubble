@@ -1,6 +1,6 @@
 package models
 
-import java.sql.{Timestamp}
+import java.sql.Timestamp
 import java.util.Date
 
 import dao.SlickEventDao
@@ -47,7 +47,7 @@ object Event {
 
   def addImage(id: Long, url: String): Future[Boolean] = dao.addImage(id, url)
 
-  def delete(id: Int): Unit = dao.delete(id)
+  def delete(id: Int):  Future[Int] = dao.delete(id)
 
   def getById(eventId: Long): Future[Option[Event]] = dao.findById(eventId)
 

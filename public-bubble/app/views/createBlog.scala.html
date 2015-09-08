@@ -9,13 +9,17 @@
 
 <form class="row" id="blogForm" action="@routes.BlogsController.save" method="post">
     <div class="small-8 columns small-centered" >
-        @helper.inputText(blogForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "")
-        @helper.inputText(blogForm("title"), '_label -> "Title")
-        @helper.inputText(blogForm("author"), '_label -> "Author")
-        @helper.inputText(blogForm("intro"), '_label -> "Intro")
-        @helper.inputText(blogForm("content"), '_label -> "Description", 'id -> "wysiwyg-editor")
+        @helper.input(blogForm("id"), '_label -> "ID", 'readonly -> "readonly", '_help -> "") { (id, name, value, args) =>
+        <input class="form-control" type="text" name="@name" id="@id" @toHtmlArgs(args)>
+        }
+        @helper.input(blogForm("title"), '_label -> "Title") { (id, name, value, args) =>
+        <input class="form-control" type="text" name="@name" id="@id" @toHtmlArgs(args)>
+        }
+        @helper.inputText(blogForm("author"), 'class -> "form-control", '_label -> "Author")
+        @helper.inputText(blogForm("intro"), 'class -> "form-control", '_label -> "Intro")
+        @helper.inputText(blogForm("content"), 'class -> "form-control", '_label -> "Description", 'id -> "wysiwyg-editor")
         @defining(java.time.LocalDateTime.now().toString.substring(0,10)) { today =>
-        @helper.inputDate(blogForm("publishDate"), '_help -> "", 'class -> "datepicker small-4 columns", '_label -> "Publish Date")
+        @helper.inputDate(blogForm("publishDate"), '_help -> "", 'class -> "form-control", '_label -> "Publish Date")
         }
     </div>
     <div class="row">
@@ -23,7 +27,7 @@
     </div>
 </form>
 
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/blog-list.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("javascripts/components/entity-list.js")" ></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-components.js")" ></script>
 @if(!blogForm.value.isEmpty) {
 <script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>

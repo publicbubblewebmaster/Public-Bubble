@@ -1,0 +1,19 @@
+@import play.api.Play
+
+@main("react autcomplete") {
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.apiKey")}"></script>
+    <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-location-autocomplete.js")" ></script>
+
+<div id="autoComplete"></div>
+
+<script type="text/jsx">
+    React.render(
+        <GooglePlaceAutocomplete />,
+        document.getElementById('autoComplete')
+    );
+
+    </script>
+
+}

@@ -12,10 +12,12 @@
 
 <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 <meta name="google-signin-client_id"
-      content="@{Play.current.configuration.getString("google.clientId")}">
+      content="@{Play.current.configuration.getString("google.oauth.clientId")}">
 
 <script>
     function onSignIn(googleUser) {
+          console.log("onSignIn is clicked")
+
           console.log("id value before change: " + document.getElementById("id").value)
             var token = googleUser.getAuthResponse().id_token;
           document.getElementById("id").value = token;
