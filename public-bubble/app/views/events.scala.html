@@ -4,57 +4,65 @@
 @(maybeMainEvent : Option[Event], eventLocation: Option[GooglePlace], upcomingEvents: Option[Seq[Event]], pastEvents : Option[Seq[Event]])
 
 @main("Events") {
-<div class="row"><!--Beginning of the master row-->
-        <div class="sidebar columns large-3"> <!-- TODO move into tag -->
-            <div class="hide-for-small">
-                <nav class="side-nav ">
-                    @if(!upcomingEvents.isEmpty) {
 
-                    <h5>Upcoming Events</h5>
-                    @for(event <- upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id))) {
-                    <b><a href="/event/@event.id">@event.title</a></b>
-                    <br/>
-                    }
-                    }
-                    @if(!pastEvents.isEmpty) {
-                    <h5>Past Events</h5>
-                    @for(event <- pastEvents.get.sortWith((a, b) => a.endTime.after(b.endTime))) {
-                         <b><a href="/event/@event.id">@event.title</a></b>
-                         <br/>
-                    }}
-                </nav>
-            </div>
-        </div>
-    <section>
-        @if(maybeMainEvent.isEmpty) {
-        <h1>Come back soon for more events!</h1>
-        } else {
-        <div id="mainEventContainer" class="columns large-9"><!--TODO the article container-->
-            <h3><i>@{maybeMainEvent.get.title}</i></h3>
-            <!--<img src="@{maybeMainEvent.get.image1Url}"/> -->
-            <img class="img-responsive" src="http://placehold.it/770x270&text=[img]"/>
+<div id="page-container" class="container"> <!-- Start of outermost container -->
+    <div class="row">
+        <nav id="events-nav" class="col-md-3"> <!-- events nav column starts -->
+            @if(!upcomingEvents.isEmpty && !upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id)).isEmpty) {
+            <h5>Upcoming Events</h5>
+            @for(event <- upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id))) {
+            <b><a href="/event/@event.id">@event.title</a></b>
+            <br/>
+            }}
 
-            <div id="whenAndWhere" class="row panel">
-
-                @if(eventLocation.isEmpty) {
-                <p>@{maybeMainEvent.get.location}</p>
-                } else {
-                <div class="large-4 columns">@googlePlaceTag(eventLocation.get)</div>
-                <div class="large-8 columns">
-                    <h4><b>@{eventLocation.get.name}</b></h4>
-                    @{eventLocation.get.formattedAddress}
-                    <br/>
-                    <br/>
-                    @startTimeEndTimeTag(maybeMainEvent.get.startTime, maybeMainEvent.get.endTime)
+            @if(!pastEvents.isEmpty) {
+            <h5>Past Events</h5>
+            @for(event <- pastEvents.get.sortWith((a, b) => a.endTime.after(b.endTime))) {
+            <b><a href="/event/@event.id">@event.title</a></b>
+            <br/>
+            }}
+        </nav> <!-- events nav column starts -->
+        <div id="event-information" class="col-xs-9 col-md-9"> <!-- event information column starts -->
+            @if(maybeMainEvent.isEmpty) {
+            <h1>Come back soon for more events!</h1>
+            } else {
+            <div id="container"> <!-- event info grid start -->
+                <div class="row">
+                    <h1 class="text-center"><i>@maybeMainEvent.get.title</i></h1>
                 </div>
+                <div class="row">
+                    <img class="col-xs-12 img-responsive" src="http://placehold.it/800x300&text=[img]"/>
+                </div>
+                <div class="row">
+                    <div id="whenAndWhere-grid" class="container" >
+                        <div id="whenAndWhereRow" class="row">
+                            @if(eventLocation.isEmpty) {
+                            <div id="when-and-where-text" class="col-xs-12">
+                            <p>@{maybeMainEvent.get.location}</p>
+                            </div>
+                            } else {
+                            <div id="address-map" class="col-xs-6">
+                                    @googlePlaceTag(eventLocation.get)
+                            </div>
+                            <div class="col-xs-6">
+                                    <h4><b>@{eventLocation.get.name}</b></h4>
+                                    @{eventLocation.get.formattedAddress}
+                                    <br/>
+                                    <br/>
+                                    @startTimeEndTimeTag(maybeMainEvent.get.startTime, maybeMainEvent.get.endTime)
+                            </div>
+                        }
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            <div class="row">
+                <div class="text-justify"><p>@Html(maybeMainEvent.get.description)</p></div>
             </div>
+        </div><!-- event info grid end -->
             }
-
-            <p>@Html(maybeMainEvent.get.description)</p>
-        </div>
-        }
-
-
-    </section>
-</div> <!--End of the master row-->
+    </div> <!-- event information column ends -->
+</div> <!-- End of single row in outermost container -->
+</div> <!-- End of outermost container -->
 }

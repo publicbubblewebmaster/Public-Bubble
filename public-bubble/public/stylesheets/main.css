@@ -46,8 +46,3 @@ html, body, #container { height: 70%; }
     display: block;
     color: white;
 }
-
-.bigMap {
-    height: 150px;
-    width:200px;
-    }

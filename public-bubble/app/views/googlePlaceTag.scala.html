@@ -7,5 +7,5 @@
     <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-map.js")" defer></script>
     <div id="map"></div>
     <script type="text/jsx">
-                        React.render(<GoogleMap lat={@{googlePlace.coords._1}} lng={@{googlePlace.coords._2}}/>, document.getElementById("map"));
+        React.render(<GoogleMap lat={@{googlePlace.coords._1}} lng={@{googlePlace.coords._2}}/>, document.getElementById("map"));
     </script>

@@ -2,35 +2,26 @@
 
 @main("Blogs") {
 
-
-<div id="blogPage" class="row">
-    <div class="large-3 columns">
-    <div class="sidebar">
-    <div class="hide-for-small">
-
-        <nav class="side-nav ">
-        @for(blog <- remainingBlogs) {
-
-        <h3><a href="/blog/@blog.id">@blog.title</a></h3>
-        <p>@blog.intro</p>
-        }
-        </nav>
-    </div>
-    </div>
-    </div>
-<section>
-
-    <div class="large-9 columns" >
-                <h3>@{mainBlog.title}</h3>
-                <h6>by @{mainBlog.author}</h6>
-                <i style="color:#1371b7">
-                    @{mainBlog.title}
-            <div>
+<div id="page-container" class="container"> <!-- Start of outermost container -->
+    <div class="row">
+        <nav id="events-nav" class="col-md-3"> <!-- events nav column starts -->
+            @if(!remainingBlogs.isEmpty){
+            <h3>Blogs</h3>
+            @for(blog <- remainingBlogs) {
+            <h3><a href="/blog/@blog.id">@blog.title</a></h3>
+            <p>@blog.intro</p>
+            }}
+        </nav> <!-- events nav column starts -->
+        <div id="event-information" class="col-xs-12 col-md-9"> <!-- event information column starts -->
+            <div id="container"> <!-- event info grid start -->
+                <h1 "text-center"><i>@mainBlog.title</i></h1>
+                <h4>by @mainBlog.author</h4>
                 <img class="img-responsive" src="@{mainBlog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
-            </div>
-            <div>
-                <p>@Html(mainBlog.content)</p>
-            </div>
-    </section>
-</div>
+                <img class="img-responsive" src="http://placehold.it/800x300&text=[img]"/>
+                <h3>@mainBlog.intro</h3>
+                <div class="text-justify">@Html(mainBlog.content)</div>
+            </div><!-- event info grid end -->
+        </div> <!-- event information column ends -->
+    </div> <!-- End of single row in outermost container -->
+</div> <!-- End of outermost container -->
 }
