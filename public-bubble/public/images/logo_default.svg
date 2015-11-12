@@ -8,9 +8,11 @@
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
    id="svg2"
-   viewBox="0 0 967.93023 460.60646"
-   height="129.99338mm"
-   width="273.17136mm">
+   viewBox="0 0 1000 1000"
+   height="200px"
+   width="210px"
+   preserveAspectRatio="xMidYMid meet"
+   >
   <defs
      id="defs4">
     <linearGradient
@@ -75,14 +77,14 @@
        id="text4182"
        y="619.29974"
        x="468.64694"
-       style="font-style:normal;font-weight:normal;font-size:81.63547516px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="font-family: helvetica, arial;font-weight:normal;font-size:81.63547516px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        xml:space="preserve"><tspan
          id="tspan4345"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75000763px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:49px;fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          y="619.29974"
          x="468.64694">A thinking space for </tspan><tspan
          id="tspan4347"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75000763px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:49px;fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          y="673.98724"
          x="468.64694">public sector graduates</tspan></text>
     <circle
@@ -103,17 +105,17 @@
        id="text4182-1"
        y="487.20547"
        x="126.66307"
-       style="font-style:normal;font-weight:normal;font-size:59.89380264px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="font-family: helvetica, arial  ;font-weight:normal;font-size:59.89380264px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          y="487.20547"
          x="126.66307"
          id="tspan4184-1">  THE</tspan><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          id="tspan4186-4"
          y="562.07275"
          x="126.66307">PUBLIC</tspan><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
          id="tspan4188-0"
          y="636.94"
          x="126.66307">BUBBLE</tspan></text>
