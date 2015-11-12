@@ -15,17 +15,22 @@ var ImageUploadButton = React.createClass({
                                 Upload failed :(
                                   <button href="#" className="close">&times;</button>
                                </div>;
+                               } else if (this.state.uploadStatus === 200) {
+                        return <div className="large-3 columns alert-box success round " data-alert >
+                                                        Upload successful :)
+                                                          <button href="#" className="close">&times;</button>
+                                                       </div>;
                                }
                                },
     uploadImage : function() {
 
                         var x = new FormData()
                         x.append("image1", document.getElementById("image1").files[0]);
-                        x.append("domainObject", "blog");
+                        x.append("domainObject", this.props.domainObject);
 
-                        var blogId = document.getElementById("image1").value
+                        var id = document.getElementById("id").value
 
-                        x.append("id", blogId)
+                        x.append("id", id)
                         var request = new XMLHttpRequest();
                         request.open("POST", this.props.imageUploadUrl, method="post" );
                         var uploadStatusCode = 0
@@ -44,11 +49,11 @@ var ImageUploadButton = React.createClass({
         return (
         <div className="row">
             <br/>
-            <button onClick={this.uploadImage} disabled={!this.state.imageAttached} className="large-3 columns">
+            <button onClick={this.uploadImage} disabled={!this.state.imageAttached} className="small-6 columns">
             Upload image
             </button>
             {this.uploadStatusChange()}
-            <input className="large-3 columns" id="image1" type="file" name="image" onChange={this.imageAttached} ></input>
+            <input className="small-6 columns" id="image1" type="file" name="image" onChange={this.imageAttached} ></input>
 
         </div>
         );

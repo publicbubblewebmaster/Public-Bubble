@@ -2,3 +2,16 @@
     height: 150px;
     width:200px;
     }
+
+    .bigMap {
+        height: 150px;
+        width:200px;
+        }
+
+    .nav-text {
+        color : white;
+    }
+
+    .nav-text:hover {
+        color : grey;
+    }    

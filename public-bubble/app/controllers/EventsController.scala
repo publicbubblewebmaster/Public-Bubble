@@ -2,7 +2,7 @@ package controllers
 
 import java.util.Date
 
-import _root_.util.{GooglePlace, GooglePlaceFinder}
+import _root_.util.{CloudinaryUploader, GooglePlace, GooglePlaceFinder}
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import dao.{SlickEventDao}
@@ -14,32 +14,30 @@ import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 import play.api.cache.{Cached, Cache}
-import scala.concurrent.{Promise, Future}
-import scala.util.Success
+import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object EventsController extends Controller {
+object EventsController extends Controller with CloudinaryUploader {
 
   lazy val eventDao = new SlickEventDao
   lazy val placeFinder = new GooglePlaceFinder
 
   val BLOGS_CACHE = "events"
   val BLOGS_JSON_CACHE = "eventsJson"
-  lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
-  lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
-  lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
-  def maybeMainEventPlace(futureMainEvent : Future[Option[Event]]) : Future[Option[GooglePlace]] = futureMainEvent.flatMap(
+  def maybeMainEventPlace(futureMainEvent: Future[Option[Event]]): Future[Option[GooglePlace]] = futureMainEvent.flatMap(
     maybeEvent => {
       if (maybeEvent.isEmpty) {
-        Future{None}
+        Future {
+          None
+        }
       } else {
         placeFinder.findPlace(maybeEvent.get.location)
       }
     }
   )
 
-  def getResult(futureMainEvent : Future[Option[Event]], futureAndPastEvents : Future[(Seq[Event], Seq[Event])]) : Future[Result] = for {
+  def getResult(futureMainEvent: Future[Option[Event]], futureAndPastEvents: Future[(Seq[Event], Seq[Event])]): Future[Result] = for {
     (upcomingEvents, pastEvents) <- futureAndPastEvents
     maybeMainEvent <- futureMainEvent
     maybePlace <- maybeMainEventPlace(futureMainEvent)
@@ -53,27 +51,29 @@ object EventsController extends Controller {
       }
     }
 
-  private def sortIntoFutureAndPast(input : Future[Seq[Event]]) : Future[(Seq[Event], Seq[Event])] = {
-    input.map{_.partition(_.endTime.after(new Date))}
+  private def sortIntoFutureAndPast(input: Future[Seq[Event]]): Future[(Seq[Event], Seq[Event])] = {
+    input.map {
+      _.partition(_.endTime.after(new Date))
+    }
   }
 
   def events = Action.async {
-        implicit request => {
-          val partitionedEvents : Future[(Seq[Event], Seq[Event])] = sortIntoFutureAndPast(eventDao.allEvents)
-          val futureMainEvent : Future[Option[Event]] = partitionedEvents.map{case (future, past) => future.reverse.headOption}
+    implicit request => {
+      val partitionedEvents: Future[(Seq[Event], Seq[Event])] = sortIntoFutureAndPast(eventDao.allEvents)
+      val futureMainEvent: Future[Option[Event]] = partitionedEvents.map { case (future, past) => future.reverse.headOption }
 
-          getResult(futureMainEvent, partitionedEvents)
-        }
-}
+      getResult(futureMainEvent, partitionedEvents)
+    }
+  }
 
-  def getEvent(id : Long) = Action.async{ implicit request => {
+  def getEvent(id: Long) = Action.async { implicit request => {
 
     val allEvents = eventDao.allEvents
     val foundEvents = allEvents.map(_.filter(_.id.get.equals(id)))
     val maybeMainEvent = foundEvents.map(_.headOption)
     val remainingEvents = allEvents.map(_.filter(_.id.get != id))
 
-    val partitionedEvents : Future[(Seq[Event], Seq[Event])] = sortIntoFutureAndPast(remainingEvents)
+    val partitionedEvents: Future[(Seq[Event], Seq[Event])] = sortIntoFutureAndPast(remainingEvents)
 
     getResult(maybeMainEvent, partitionedEvents)
   }
@@ -86,22 +86,22 @@ object EventsController extends Controller {
     Ok(views.html.createEvent(eventForm))
   }
 
-  def updateEvent(id : Long) = Action.async {
+  def updateEvent(id: Long) = Action.async {
     //    clearCache
     val futureEventOption = Event.getById(id)
 
-    val result : Future[Result] = futureEventOption.map(
+    val result: Future[Result] = futureEventOption.map(
       _ match {
-        case eventOption : Some[Event] => {
-            val eventFormData = EventFormData(
-                  eventOption.get.id,
-                  eventOption.get.title,
-                  eventOption.get.location,
-                  eventOption.get.startTime,
-                  eventOption.get.endTime,
-                  eventOption.get.description);
-          val filledForm : Form[EventFormData] = eventForm.fill(eventFormData)
-          Ok(views.html.createEvent(eventForm.fill(eventFormData)))}
+        case eventOption: Some[Event] => {
+          val eventFormData = EventFormData(
+            eventOption.get.id,
+            eventOption.get.title,
+            eventOption.get.location,
+            eventOption.get.startTime,
+            eventOption.get.endTime,
+            eventOption.get.description);
+          Ok(views.html.createEvent(eventForm.fill(eventFormData)))
+        }
         case _ => NotFound
       })
 
@@ -110,11 +110,12 @@ object EventsController extends Controller {
 
   def save = Action { implicit request =>
     eventForm.bindFromRequest.fold(
-      formWithErrors =>     {
+      formWithErrors => {
 
         Logger.warn("formErrors=" + formWithErrors.errorsAsJson);
 
-        Ok(views.html.createEvent(formWithErrors))},
+        Ok(views.html.createEvent(formWithErrors))
+      },
 
       createdEvent => {
         if (createdEvent.id.isEmpty) {
@@ -125,7 +126,7 @@ object EventsController extends Controller {
         else {
           Event.update(Event.createFrom(createdEvent))
         }
-        val filledForm : Form[EventFormData] = eventForm.fill(createdEvent)
+        val filledForm: Form[EventFormData] = eventForm.fill(createdEvent)
         println("filled form:")
         println(filledForm.data)
 
@@ -134,16 +135,16 @@ object EventsController extends Controller {
     )
   }
 
-  def deleteEvent(id : Int)= Action { implicit request =>
+  def deleteEvent(id: Int) = Action { implicit request =>
     //    clearCache
-    eventDao delete(id)
+    eventDao delete (id)
     Ok(views.html.createEvent(eventForm))
   }
 
   def eventsJson = Action.async { implicit request =>
 
-    val futureAllEvents : Future[Seq[Event]] = eventDao.sortedById
-    val futureJson : Future[Seq[JsValue]] = futureAllEvents.map(_.map(event => Json.obj("id" -> event.id, "title" -> event.title)))
+    val futureAllEvents: Future[Seq[Event]] = eventDao.sortedById
+    val futureJson: Future[Seq[JsValue]] = futureAllEvents.map(_.map(event => Json.obj("id" -> event.id, "title" -> event.title)))
 
     futureJson.map(jsList => Ok(JsArray(jsList)))
   }
@@ -161,23 +162,18 @@ object EventsController extends Controller {
 
   // here we are calling the ActionBuilder apply method
   // the apply method can accept a function
-  def authenticatedEventForm = Authenticated { request  =>
+  def authenticatedEventForm = Authenticated { request =>
     Ok(views.html.createEvent(eventForm))
   }
 
   import java.nio.file.{Path, Paths, Files}
-  def uploadImage = Action.async(parse.multipartFormData) { request =>
 
+  def uploadImage = Action.async(parse.multipartFormData) { request =>
 
     val id: String = request.body.dataParts.get("id").get.head
     val domainObject: String = request.body.dataParts.get("domainObject").get.head
 
     request.body.file("image1").map { file =>
-
-      val cloudinary: Cloudinary = new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", CLOUD_NAME,
-        "api_key", CLOUD_KEY,
-        "api_secret", CLOUD_SECRET));
 
       val uploadResult = cloudinary.uploader().upload(file.ref.file,
         ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))

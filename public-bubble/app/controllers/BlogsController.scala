@@ -2,6 +2,7 @@ package controllers
 
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
+import controllers.EventsController._
 import dao.{SlickBlogDao}
 import models.{BlogFormData, Blog}
 import play.api.{Play, Logger}
@@ -13,8 +14,9 @@ import play.api.mvc._
 import play.api.cache.{Cached, Cache}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Promise, Future}
+import _root_.util.{CloudinaryUploader, GooglePlace, GooglePlaceFinder}
 
-object BlogsController extends Controller {
+object BlogsController extends Controller with CloudinaryUploader {
 
   lazy val blogDao = new SlickBlogDao
 
@@ -24,9 +26,6 @@ object BlogsController extends Controller {
 
   val BLOGS_CACHE = "blogs"
   val BLOGS_JSON_CACHE = "blogsJson"
-  lazy val CLOUD_NAME : String = Play.current.configuration.getString("cloudinary.name").get
-  lazy val CLOUD_KEY : String = Play.current.configuration.getString("cloudinary.key").get
-  lazy val CLOUD_SECRET : String = Play.current.configuration.getString("cloudinary.secret").get
 
   def blogs = Action.async { implicit request =>
 
@@ -58,7 +57,15 @@ object BlogsController extends Controller {
 
     val result : Future[Result] = futureBlogOption.map(
       _ match {
-          case blogOption : Some[Blog] => {val blogFormData = BlogFormData(blogOption.get.id, blogOption.get.title, blogOption.get.author, blogOption.get.intro, blogOption.get.content, blogOption.get.publishDate); Ok(views.html.createBlog(blogForm.fill(blogFormData)))}
+          case blogOption : Some[Blog] => {
+            val blogFormData = BlogFormData(
+                  blogOption.get.id,
+                  blogOption.get.title,
+                  blogOption.get.author,
+                  blogOption.get.intro,
+                  blogOption.get.content,
+                  blogOption.get.publishDate);
+            Ok(views.html.createBlog(blogForm.fill(blogFormData)))}
           case _ => NotFound
         })
 
@@ -117,18 +124,13 @@ object BlogsController extends Controller {
   }
 
   import java.nio.file.{Path, Paths, Files}
-  def uploadImage = Action.async(parse.multipartFormData) { request =>
 
+  def uploadImage = Action.async(parse.multipartFormData) { request =>
 
     val id: String = request.body.dataParts.get("id").get.head
     val domainObject: String = request.body.dataParts.get("domainObject").get.head
 
     request.body.file("image1").map { file =>
-
-      val cloudinary: Cloudinary = new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", CLOUD_NAME,
-        "api_key", CLOUD_KEY,
-        "api_secret", CLOUD_SECRET));
 
       val uploadResult = cloudinary.uploader().upload(file.ref.file,
         ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))

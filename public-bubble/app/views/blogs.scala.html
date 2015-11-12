@@ -4,20 +4,20 @@
 
 <div id="page-container" class="container"> <!-- Start of outermost container -->
     <div class="row">
-        <nav id="events-nav" class="col-md-3"> <!-- events nav column starts -->
+        <nav id="events-nav" class="col-md-3 col-lg-2 col-xl-2"> <!-- events nav column starts -->
             @if(!remainingBlogs.isEmpty){
-            <h3>Blogs</h3>
-            @for(blog <- remainingBlogs) {
-            <h3><a href="/blog/@blog.id">@blog.title</a></h3>
-            <p>@blog.intro</p>
+            <h4>Blogs</h4>
+            <b><a href="/blog/@remainingBlogs.head.id">@remainingBlogs.head.title</a></b>
+            @for(blog <- remainingBlogs.tail) {
+            <hr/>
+            <b><a href="/blog/@blog.id">@blog.title</a></b>
             }}
         </nav> <!-- events nav column starts -->
-        <div id="event-information" class="col-xs-12 col-md-9"> <!-- event information column starts -->
+        <div id="event-information" class="col-xs-12 col-md-9 col-lg-10 col-xl-10"> <!-- event information column starts -->
             <div id="container"> <!-- event info grid start -->
-                <h1 "text-center"><i>@mainBlog.title</i></h1>
+                <h1 class="text-center"><i>@mainBlog.title</i></h1>
                 <h4>by @mainBlog.author</h4>
                 <img class="img-responsive" src="@{mainBlog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
-                <img class="img-responsive" src="http://placehold.it/800x300&text=[img]"/>
                 <h3>@mainBlog.intro</h3>
                 <div class="text-justify">@Html(mainBlog.content)</div>
             </div><!-- event info grid end -->

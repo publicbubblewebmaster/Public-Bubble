@@ -9,7 +9,7 @@
     <div class="row">
         <nav id="events-nav" class="col-md-3"> <!-- events nav column starts -->
             @if(!upcomingEvents.isEmpty && !upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id)).isEmpty) {
-            <h5>Upcoming Events</h5>
+            <h4>Upcoming Events</h4>
             @for(event <- upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id))) {
             <b><a href="/event/@event.id">@event.title</a></b>
             <br/>
@@ -17,10 +17,16 @@
 
             @if(!pastEvents.isEmpty) {
             <h5>Past Events</h5>
-            @for(event <- pastEvents.get.sortWith((a, b) => a.endTime.after(b.endTime))) {
+            @defining(pastEvents.get.sortWith((a, b) => a.endTime.after(b.endTime))) {sortedEvents =>
+            <b><a href="/event/@sortedEvents.head.id">@sortedEvents.head.title</a></b>
+            <br/>
+            @for(event <- sortedEvents.tail) {
+            <hr/>
             <b><a href="/event/@event.id">@event.title</a></b>
             <br/>
             }}
+            }
+
         </nav> <!-- events nav column starts -->
         <div id="event-information" class="col-xs-9 col-md-9"> <!-- event information column starts -->
             @if(maybeMainEvent.isEmpty) {
@@ -28,12 +34,12 @@
             } else {
             <div id="container"> <!-- event info grid start -->
                 <div class="row">
-                    <h1 class="text-center"><i>@maybeMainEvent.get.title</i></h1>
+                    <h2 class="text-center"><i>@maybeMainEvent.get.title</i></h2>
                 </div>
                 <div class="row">
-                    <img class="col-xs-12 img-responsive" src="http://placehold.it/800x300&text=[img]"/>
+                    <img class="col-xs-12 img-responsive" src="@{maybeMainEvent.get.image1Url}"/>
                 </div>
-                <div class="row">
+                <div class="row" style="margin-top: 5px">
                     <div id="whenAndWhere-grid" class="container" >
                         <div id="whenAndWhereRow" class="row">
                             @if(eventLocation.isEmpty) {
