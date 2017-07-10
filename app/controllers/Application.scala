@@ -1,11 +1,13 @@
 package controllers
 
 import play.api.mvc._
+import dao.CommitteeDao
 
 object Application extends Controller {
 
   def aboutUs = Action {
-    Ok(views.html.aboutUs())
+    val dao = new CommitteeDao()
+    Ok(views.html.aboutUs(dao.listMembers()))
   }
 
   def twitter = Action {
