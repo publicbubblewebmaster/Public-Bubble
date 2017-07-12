@@ -4,7 +4,9 @@
 
 GET     /                           controllers.Application.aboutUs
 GET     /aboutUs                    controllers.Application.aboutUs
-GET     /update/frontpage           controllers.Application.updateFrontpage
+GET     /update/frontpage           controllers.Application.frontpageEditor
+POST    /update/frontpage           controllers.Application.updateFrontpage
+POST    /update/commitee            controllers.Application.updateCommitee
 GET     /login                      controllers.Security.showLoginForm
 GET     /logout                     controllers.Security.logout
 POST    /login                      controllers.Security.handleLogin

@@ -1,15 +1,19 @@
 package dao
 
-import play.api.{Logger}
+import play.api.Logger
 import java.sql.Date
-import models.StaticPage
+
+import models.{Blog, StaticPage}
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.backend.DatabaseConfig
 import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
+
+import scala.concurrent.Await
 import scala.concurrent.Future
+import scala.concurrent.duration.Duration
 
 trait StaticPageComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
@@ -37,15 +41,16 @@ class SlickStaticPageDao extends HasDatabaseConfig[JdbcProfile] with StaticPageC
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-  def delete(id: Long): Future[Int] = {
-    val findById = staticpages.filter(_.id === id)
-    dbConfig.db.run(findById.delete)
+  def updateFrontpage(content: String, imageUrl: String): Future[Boolean] = {
+    val query = for {b <- staticpages if b.id === 1L} yield (b.id, b.content, b.imageUrl)
+    var imageUrlForUpdate = if (imageUrl == null) {getFrontPage().imageUrl} else imageUrl
+    db.run(query.update(1L, content, imageUrlForUpdate)).map(_ == 1)
   }
 
   def create(staticPage: StaticPage) = {
     dbConfig.db.run(staticpages += staticPage)
   }
 
- def getFrontPage(): Future[StaticPage] = db.run(staticpages.filter(_.id === 1L).result.head)
+  def getFrontPage(): StaticPage = Await.result(db.run(staticpages.filter(_.id === 1L).result.head), Duration(10, "seconds"))
 
 }

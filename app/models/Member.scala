@@ -6,4 +6,4 @@ case class Member(id : Option[Long],
 
 case class StaticPage(id : Option[Long],
                      content: String,
-                  imageUrl : String)
+                     imageUrl : String)

@@ -8,52 +8,61 @@
 
 <div class="row">
 
-    <div class="small-8 columns small-centered">
-        <input id="wysiwyg-editor" value="@frontpage.content"/>
-    </div>
+    <form id="text-editor" class="small-8 columns small-centered" action="/update/frontpage" method="post" enctype="multipart/form-data">
+        <image-uploader previewHeight="150" previewWidth="300"></image-uploader>
+        <input id="wysiwyg-editor" value="@frontpage.content" name="intro"/>
+        <button>Submit</button>
+    </form>
 </div>
 
-<h4 class="text-center">Edit the committee</h4>
+   <h4 class="text-center">Edit the committee</h4>
 
-    <div class="small-8 columns small-centered" id="app-4">
-    <person v-for="person in people" v-on:bye="removePerson" class="row" imageUrl="person.imageUrl"></person>
+    <form class="small-8 columns small-centered" id="app-4" action="/update/commitee" method="post" enctype="multipart/form-data">
+    <person v-for="(person, index) in people" v-on:bye="removePerson" class="row" imageUrl="person.imageUrl" v-bind:index="index"></person>
 
-    <button v-on:click="addPerson">New Member</button>
-    <button v-on:click="addPerson">Save</button>
-
-</div>
+    <div v-on:click="addPerson">New Member</div>
+    <div v-on:click="addPerson">Save</div>
+    <button>SUBMIT</button>
+    </form>
 
 <script>
+
+        var imageUploader = Vue.component('image-uploader', {
+          template: '\<div>\
+                        <img height="this.previewHeight" width="this.previewWidth" style="display: block" id="blah" v-bind:src="this.imageUrl" />\
+                        <input v-on:change="this.readURL" type="file" id="imgInp" v-bind:name="inputLabel" />\
+                      </div>',
+          props : ['imageUrl', 'previewHeight', 'previewWidth', 'inputLabel'],
+          methods: {
+          readURL: function (e) {
+          if (e.target.files && e.target.files[0]) {
+            console.log('file upload found')
+            var reader = new FileReader();
+            reader.onload = function (e) {this.imageUrl = e.target.result;}.bind(this)
+            this.imageUrl = reader.readAsDataURL(e.target.files[0]);}
+          }}});
+
         var person = Vue.component('person', {
-            props : ['imageUrl'],
+        props : ['index'],
             data: function () { return {file: undefined } },
             methods: {
-                readURL: function (e) {
-                    if (e.target.files && e.target.files[0]) {
 
-                        console.log('file upload found')
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            this.imageUrl = e.target.result;
-                        }.bind(this)
-
-                        this.imageUrl = reader.readAsDataURL(e.target.files[0]);
-
-                    }
-                },
                 remove: function () {
                     this.$emit('bye')
+                },
+                positionInputLabel : function () {
+                   return 'member[' + this.index + ']position'
+                },
+                imageInputLabel : function () {
+                   return 'member[' + this.index + ']image'
                 }
             },
-            template: '\
-            <div class="">\
-                    <form runat="server">\
-                       <img class="headshot" style="display: block" id="blah" v-bind:src="this.imageUrl" alt="your image" />\
-                       <input v-on:change="this.readURL" type="file" id="imgInp"/> \
-                       <input type="text" placeholder="Committee Position" />\
-                       <button v-on:click="remove">DELETE</button>\
-                    </form>\
+            template: '<div class="">\
+                    <div runat="server">\
+                       <image-uploader v-bind:inputLabel="imageInputLabel()"></image-uploader>\
+                       <input type="text" placeholder="Committee Position" v-bind:name="positionInputLabel()"/>\
+                       <div v-on:click="remove">DELETE</div>\
+                    </div>\
             </div>',
 
 
@@ -63,10 +72,14 @@
             }
         })
 
+        var textEditor = new Vue({el: '#text-editor'})
+
         var app4 = new Vue({
             el: '#app-4',
-            data: {
+           data: function () {
+                return {
                 people: []
+                    }
             },
             created: function () {
                 var people = this.people
@@ -88,6 +101,7 @@ console.log('calling listener')
                 },
                 removePerson: function () {
                     console.log('removing a person')
+                    this.people.pop()
                 }
             }
         })
