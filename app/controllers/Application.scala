@@ -59,55 +59,76 @@ object Application extends Controller {
     *       member[0]position -> List(asdf))
     *
     * */
-
     var members = scala.collection.mutable.Map[String, Member]()
-    for ((k, v) <- request.body.dataParts) {
-      val pattern = """member\[([0-9]+)\]position""".r
-      val pattern(memberIdx) = k
+
+    println(s"FORM ${request.body}")
+
+    val pattern = """.+\[([0-9]+)\].+""".r
+
+
+    val indices = request.body.dataParts.keys.map(pattern.findFirstMatchIn(_).get.group(1)).toSet
+
+    println(indices)
+
+    indices.foreach(memberIdx => {
       val photo: Option[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.key == s"member[$memberIdx]image").headOption
-      if (photo.nonEmpty) {
-        println("TODO: upload file")
-      }
-      members.put(k, Member(Some(1L), "title", "imageUrl"))
-    }
+      val description: Option[String] = request.body.dataParts.get(s"member[$memberIdx]position").headOption.flatMap(_.headOption)
+      val technicalId :  Option[String] = request.body.dataParts.get(s"member[$memberIdx]id").headOption.flatMap(_.headOption)
 
-    println(request.body.files)
-    println(request.body.dataParts)
-    Future(Ok("TODO Commitee Upload and Commitee rename"))
-  }
-
-  def updateFrontpage = Action.async(parse.multipartFormData) { request =>
-
-    val content: String = request.body.dataParts.get("intro").get.head
-    val file = request.body.file("image1").orNull
-
-    if (file != null) {
-      /*      val uploadResult = cloudinary.uploader().upload(file.ref.file,
-        ObjectUtils.asMap("transformation", new Transformation().width(120), "transformation", new Transformation().height(120))
-      );
-
-      val imageUrl = uploadResult.get("url").asInstanceOf[String]*/
-
-    }
-
-
-    val updatedFrontpage = frontpageDao.updateFrontpage(content, "imageUrl");
-
-    updatedFrontpage.map(
-      b => if (b) {
-        Redirect("/update/frontpage")
+      if (technicalId.isDefined && !technicalId.get.isEmpty) {
+        committeDao.update(Member(technicalId.map(_.toLong), description.get, photo.get.toString)).foreach(_ => println("UPDATED"))
       } else {
-        InternalServerError("Error updating frontpage")
+        committeDao.create(Member(None, description.getOrElse("EMPTY"), "photo to come")).foreach(_ => println("CREATED"))
       }
-    )
-  }
+    })
+//
+//
+//    var imageUrl = ""
+//    if (photo.nonEmpty) {
+//      imageUrl = photo.get.ref.toString
+//    }
+//    members.put(k, Member(Some(1L), v.head, imageUrl))
+//  }
+//
+////  members.values.map()
+//
+//  println(members)
+  Future(Ok("TODO Commitee Upload and Commitee rename"))
+}
+
+def updateFrontpage = Action.async (parse.multipartFormData) {
+  request =>
+
+  val content: String = request.body.dataParts.get ("intro").get.head
+  val file = request.body.file ("image1").orNull
+
+  if (file != null) {
+  /*      val uploadResult = cloudinary.uploader().upload(file.ref.file,
+    ObjectUtils.asMap("transformation", new Transformation().width(120), "transformation", new Transformation().height(120))
+  );
+
+  val imageUrl = uploadResult.get("url").asInstanceOf[String]*/
+
+}
+
+
+  val updatedFrontpage = frontpageDao.updateFrontpage (content, "imageUrl");
+
+  updatedFrontpage.map (
+  b => if (b) {
+  Redirect ("/update/frontpage")
+} else {
+  InternalServerError ("Error updating frontpage")
+}
+  )
+}
 
 
   def twitter = Action {
-    Ok(views.html.twitter("Twitter"))
-  }
+  Ok (views.html.twitter ("Twitter") )
+}
 
   def facebook = Action {
-    Ok(views.html.facebook())
-  }
+  Ok (views.html.facebook () )
+}
 }

@@ -43,7 +43,7 @@
           }}});
 
         var person = Vue.component('person', {
-        props : ['index'],
+        props : ['index', 'technicalId'],
             data: function () { return {file: undefined } },
             methods: {
 
@@ -53,6 +53,12 @@
                 positionInputLabel : function () {
                    return 'member[' + this.index + ']position'
                 },
+                technicalIdLabel : function () {
+                   return 'member[' + this.index + ']id'
+                },
+                technicalId : function () {
+                   return undefined
+                },
                 imageInputLabel : function () {
                    return 'member[' + this.index + ']image'
                 }
@@ -61,6 +67,7 @@
                     <div runat="server">\
                        <image-uploader v-bind:inputLabel="imageInputLabel()"></image-uploader>\
                        <input type="text" placeholder="Committee Position" v-bind:name="positionInputLabel()"/>\
+                       <input  type="hidden" v-bind:value="technicalId()" v-bind:name="technicalIdLabel()">\
                        <div v-on:click="remove">DELETE</div>\
                     </div>\
             </div>',

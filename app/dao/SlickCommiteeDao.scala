@@ -61,4 +61,9 @@ class SlickCommiteeDao extends HasDatabaseConfig[JdbcProfile] with CommiteeCompo
 
   def listMembers: Future[Seq[Member]] = db.run(commitee.result)
 
+  def update(member : Member): Future[Int] = {
+    val q = for { m <- commitee if m.id === member.id.get } yield (m.description, m.imageUrl)
+    return dbConfig.db.run(q.update(member.title, member.imageUrl))
+  }
+
 }
