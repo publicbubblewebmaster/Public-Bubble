@@ -8,6 +8,7 @@ import play.api.mvc._
 import dao.{SlickCommiteeDao, SlickStaticPageDao}
 import play.api.data._
 import play.api.data.Forms._
+import play.api.libs.Files
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
@@ -24,7 +25,7 @@ object Application extends Controller {
 
   def aboutUs = Action {
     val commitee = Await.result(committeDao.listMembers, Duration(5, "seconds"))
-    val frontpage =frontpageDao.getFrontPage()
+    val frontpage = frontpageDao.getFrontPage()
     Ok(views.html.aboutUs(frontpage, commitee))
   }
 
@@ -47,18 +48,33 @@ object Application extends Controller {
   }
 
   def updateCommitee = Action.async(parse.multipartFormData) { request =>
- /* Deal with
- *
- * List(FilePart(member[0]image,nasa.jpg,Some(image/jpeg),TemporaryFile(/tmp/multipartBody9152114886734519325asTemporaryFile)), FilePart(member[1]image,vs300_boarding_pass.jpeg,Some(image/jpeg),TemporaryFile(/tmp/multipartBody4550472096845962971asTemporaryFile)), FilePart(member[2]image,download.jpg,Some(image/jpeg),TemporaryFile(/tmp/multipartBody1112734292670041851asTemporaryFile)))
-   Map(member[2]position -> List(asdf3232323), member[1]position -> List(asdf333), member[0]position -> List(asdf))
+    /* Deal with
+    *
+    * List(FilePart(member[0]image,nasa.jpg,Some(image/jpeg),TemporaryFile(/tmp/multipartBody9152114886734519325asTemporaryFile)),
+    *      FilePart(member[1]image,vs300_boarding_pass.jpeg,Some(image/jpeg),TemporaryFile(/tmp/multipartBody4550472096845962971asTemporaryFile)),
+    *      FilePart(member[2]image,download.jpg,Some(image/jpeg),TemporaryFile(/tmp/multipartBody1112734292670041851asTemporaryFile)))
+    *      Map(
+    *       member[2]position -> List(asdf3232323),
+    *       member[1]position -> List(asdf333),
+    *       member[0]position -> List(asdf))
+    *
+    * */
 
+    var members = scala.collection.mutable.Map[String, Member]()
+    for ((k, v) <- request.body.dataParts) {
+      val pattern = """member\[([0-9]+)\]position""".r
+      val pattern(memberIdx) = k
+      val photo: Option[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.key == s"member[$memberIdx]image").headOption
+      if (photo.nonEmpty) {
+        println("TODO: upload file")
+      }
+      members.put(k, Member(Some(1L), "title", "imageUrl"))
+    }
 
- *
- * */
     println(request.body.files)
     println(request.body.dataParts)
     Future(Ok("TODO Commitee Upload and Commitee rename"))
-    }
+  }
 
   def updateFrontpage = Action.async(parse.multipartFormData) { request =>
 
@@ -75,16 +91,16 @@ object Application extends Controller {
     }
 
 
-      val updatedFrontpage = frontpageDao.updateFrontpage(content, "imageUrl");
+    val updatedFrontpage = frontpageDao.updateFrontpage(content, "imageUrl");
 
-      updatedFrontpage.map(
-        b => if (b) {
-          Redirect("/update/frontpage")
-        } else {
-          InternalServerError("Error updating frontpage")
-        }
-      )
-    }
+    updatedFrontpage.map(
+      b => if (b) {
+        Redirect("/update/frontpage")
+      } else {
+        InternalServerError("Error updating frontpage")
+      }
+    )
+  }
 
 
   def twitter = Action {
