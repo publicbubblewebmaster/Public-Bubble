@@ -14,7 +14,6 @@ POST    /login                      controllers.Security.handleLogin
 #Events
 
 GET     /events                     controllers.EventsController.events
-GET     /json/commitee                   controllers.Application.jsonCommitee
 GET     /event/:id                  controllers.EventsController.getEvent(id : Long)
 
 GET     /events/all                 controllers.EventsController.eventsJson
@@ -45,4 +44,8 @@ POST    /emailUs                    controllers.Email.sendEmail
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# AJAX
+GET     /json/commitee              controllers.AjaxController.jsonCommitee
+DELETE  /json/commitee/:id          controllers.AjaxController.deleteCommiteeMember(id : Long)
 

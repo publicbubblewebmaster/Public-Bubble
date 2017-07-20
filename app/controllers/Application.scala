@@ -1,8 +1,7 @@
 package controllers
 
-import com.cloudinary.Transformation
-import com.cloudinary.utils.ObjectUtils
-import controllers.BlogsController.{BadRequest, InternalServerError, Ok, cloudinary}
+import java.nio.file.Paths
+
 import models.{Member, StaticPage}
 import play.api.mvc._
 import dao.{SlickCommiteeDao, SlickStaticPageDao}
@@ -34,11 +33,6 @@ object Application extends Controller {
       "title" -> location.title,
       "imageUrl" -> location.imageUrl
     )
-  }
-
-  def jsonCommitee = Action {
-    val commitee = Await.result(committeDao.listMembers, Duration(5, "seconds"))
-    Ok(Json.toJson(commitee))
   }
 
   def frontpageEditor = Action {
@@ -75,25 +69,19 @@ object Application extends Controller {
       val description: Option[String] = request.body.dataParts.get(s"member[$memberIdx]position").headOption.flatMap(_.headOption)
       val technicalId :  Option[String] = request.body.dataParts.get(s"member[$memberIdx]id").headOption.flatMap(_.headOption)
 
+      import java.nio.file.Files
+
+      val filename = s"${java.time.LocalDateTime.now().getNano}.png"
+
+      photo.map(f => {Files.copy(f.ref.file.toPath, Paths.get(s"public/images/$filename"))})
+
       if (technicalId.isDefined && !technicalId.get.isEmpty) {
-        committeDao.update(Member(technicalId.map(_.toLong), description.get, photo.get.toString)).foreach(_ => println("UPDATED"))
+        committeDao.update(Member(technicalId.map(_.toLong), description.get, photo.map(_.toString).orNull)).foreach(_ => println("UPDATED"))
       } else {
-        committeDao.create(Member(None, description.getOrElse("EMPTY"), "photo to come")).foreach(_ => println("CREATED"))
+        committeDao.create(Member(None, description.getOrElse("EMPTY"), s"/assets/pictures/$filename")).foreach(_ => println("CREATED"))
       }
     })
-//
-//
-//    var imageUrl = ""
-//    if (photo.nonEmpty) {
-//      imageUrl = photo.get.ref.toString
-//    }
-//    members.put(k, Member(Some(1L), v.head, imageUrl))
-//  }
-//
-////  members.values.map()
-//
-//  println(members)
-  Future(Ok("TODO Commitee Upload and Commitee rename"))
+  Future(Redirect("/update/frontpage"))
 }
 
 def updateFrontpage = Action.async (parse.multipartFormData) {
