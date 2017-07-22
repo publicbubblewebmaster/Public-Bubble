@@ -28,7 +28,6 @@ object FrontpageController extends Controller with CloudinaryUploader {
       val content: String = request.body.dataParts.get("intro").get.head
       val photo: Option[MultipartFormData.FilePart[play.api.libs.Files.TemporaryFile]] = request.body.files.filter(_.key == "image1").headOption
 
-      val filename = s"${java.time.LocalDateTime.now().getNano}.png"
       val fileforUpload = photo.filter(f => !f.ref.file.getName.isEmpty).map(f => upload(f.ref.file, 800, 370))
 
       val updatedFrontpage = frontpageDao.updateFrontpage(content, fileforUpload.orNull);
