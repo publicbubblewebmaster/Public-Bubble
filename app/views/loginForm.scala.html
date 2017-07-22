@@ -1,0 +1,29 @@
+@import play.api.Play
+
+@main("Event Form") {
+
+<form id="loginForm" action="/login" method="POST">
+    <input id="id" type="hidden" name="id" value="default">
+</form>
+
+<div class="g-signin2 small-centered column small-1" data-onsuccess="onSignIn"></div>
+
+
+
+<script src="https://apis.google.com/js/client:platform.js" async defer></script>
+<meta name="google-signin-client_id"
+      content="@{Play.current.configuration.getString("google.oauth.clientId")}">
+
+<script>
+    function onSignIn(googleUser) {
+          console.log("onSignIn is clicked")
+
+          console.log("id value before change: " + document.getElementById("id").value)
+            var token = googleUser.getAuthResponse().id_token;
+          document.getElementById("id").value = token;
+          document.getElementById("loginForm").submit();
+    }
+</script>
+
+
+}

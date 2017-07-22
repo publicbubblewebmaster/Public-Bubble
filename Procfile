@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/public-bubble -Dhttp.port=${PORT} -Dplay.evolutions.db.default.autoApply=true -Dplay.evolutions.db.default.autoApplyDowns=true

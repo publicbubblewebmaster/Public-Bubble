@@ -1,0 +1,27 @@
+@(mainBlog : Blog, remainingBlogs: Seq[Blog])
+
+@main("Blogs") {
+
+<div id="page-container" class="container"> <!-- Start of outermost container -->
+    <div class="row">
+        <nav id="events-nav" class="col-md-3 col-lg-2 col-xl-2"> <!-- events nav column starts -->
+            @if(!remainingBlogs.isEmpty){
+            <h4>Blogs</h4>
+            <b><a href="/blog/@remainingBlogs.head.id">@remainingBlogs.head.title</a></b>
+            @for(blog <- remainingBlogs.tail) {
+            <hr/>
+            <b><a href="/blog/@blog.id">@blog.title</a></b>
+            }}
+        </nav> <!-- events nav column starts -->
+        <div id="event-information" class="col-xs-12 col-md-9 col-lg-10 col-xl-10"> <!-- event information column starts -->
+            <div id="container"> <!-- event info grid start -->
+                <h1 class="text-center"><i>@mainBlog.title</i></h1>
+                <h4>by @mainBlog.author</h4>
+                <img class="img-responsive" src="@{mainBlog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+                <h3>@mainBlog.intro</h3>
+                <div class="text-justify">@Html(mainBlog.content)</div>
+            </div><!-- event info grid end -->
+        </div> <!-- event information column ends -->
+    </div> <!-- End of single row in outermost container -->
+</div> <!-- End of outermost container -->
+}

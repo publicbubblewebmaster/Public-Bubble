@@ -1,0 +1,49 @@
+@(frontpage: StaticPage)
+
+@contentCreator("Edit the frontpage") {
+<script src="@routes.Assets.at("javascripts/vue/vue.js")"></script>
+
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<h4 class="text-center">Edit the intro page</h4>
+
+<div class="row">
+<div id="frontpage-editor"></div>
+</div>
+
+<script>
+var imageUploader = Vue.component('image-uploader', {
+    template: '\<div>\
+                  <img v-bind:height="this.previewheight" v-bind:width="this.previewwidth" style="display: block" v-bind:src="this.imageUrl" />\
+                  <input v-on:change="this.readURL" type="file" v-bind:name="this.inputLabel" />\
+                </div>',
+    props: ['imageUrl', 'previewheight', 'previewwidth', 'inputLabel'],
+    methods: {
+        readURL: function (e) {
+            if (e.target.files && e.target.files[0]) {
+                console.log('file upload found')
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    this.imageUrl = e.target.result;
+                }.bind(this)
+                this.$emit('updated')
+                this.imageUrl = reader.readAsDataURL(e.target.files[0]);
+            }
+        }
+    }
+});
+
+
+var textEditor = new Vue({
+    data : {"inputlabel" : "image1", "imageurl" : "@frontpage.imageUrl"},
+    el: '#frontpage-editor',
+    template : '<form class="small-8 columns small-centered" action="/update/frontpage" method="post" enctype="multipart/form-data" runat="server">\
+                  <image-uploader v-bind:inputLabel="inputlabel" v-bind:imageUrl="imageurl" v-bind:previewheight="500" v-bind:previewwidth="500"></image-uploader>\
+                  <input id="wysiwyg-editor" value="@frontpage.content" name="intro"/>\
+                  <button>Submit</button>\
+                </form>'
+})
+
+</script>
+
+
+}

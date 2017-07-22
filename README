@@ -1,0 +1,11 @@
+This is your new Play application
+=================================
+
+This file will be packaged with your application, when using `activator dist`.
+
+# To run
+
+```sh
+docker run --rm -p 5432:5432 -e POSTGRES_DB=public_bubble_local -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=password postgres:9.4
+./activator run
+```

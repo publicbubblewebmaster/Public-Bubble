@@ -1,0 +1,74 @@
+@import play.api.Play
+@import util.GooglePlace
+
+@(maybeMainEvent : Option[Event], eventLocation: Option[GooglePlace], upcomingEvents: Option[Seq[Event]], pastEvents : Option[Seq[Event]])
+
+@main("Events") {
+
+<div id="page-container" class="container"> <!-- Start of outermost container -->
+    <div class="row">
+        <nav id="events-nav" class="col-md-3"> <!-- events nav column starts -->
+            @if(!upcomingEvents.isEmpty && !upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id)).isEmpty) {
+            <h4>Upcoming Events</h4>
+            @for(event <- upcomingEvents.get.filter(!_.id.equals(maybeMainEvent.get.id))) {
+            <b><a href="/event/@event.id">@event.title</a></b>
+            <br/>
+            }}
+
+            @if(!pastEvents.isEmpty) {
+            <h5>Past Events</h5>
+            @defining(pastEvents.get.sortWith((a, b) => a.endTime.after(b.endTime))) {sortedEvents =>
+            <b><a href="/event/@sortedEvents.head.id">@sortedEvents.head.title</a></b>
+            <br/>
+            @for(event <- sortedEvents.tail) {
+            <hr/>
+            <b><a href="/event/@event.id">@event.title</a></b>
+            <br/>
+            }}
+            }
+
+        </nav> <!-- events nav column starts -->
+        <div id="event-information" class="col-xs-9 col-md-9"> <!-- event information column starts -->
+            @if(maybeMainEvent.isEmpty) {
+            <h1>Come back soon for more events!</h1>
+            } else {
+            <div id="container"> <!-- event info grid start -->
+                <div class="row">
+                    <h2 class="text-center"><i>@maybeMainEvent.get.title</i></h2>
+                </div>
+                <div class="row">
+                    <img class="col-xs-12 img-responsive" src="@{maybeMainEvent.get.image1Url}"/>
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <div id="whenAndWhere-grid" class="container" >
+                        <div id="whenAndWhereRow" class="row">
+                            @if(eventLocation.isEmpty) {
+                            <div id="when-and-where-text" class="col-xs-12">
+                            <p>@{maybeMainEvent.get.location}</p>
+                            </div>
+                            } else {
+                            <div id="address-map" class="col-xs-6">
+                                    @googlePlaceTag(eventLocation.get)
+                            </div>
+                            <div class="col-xs-6">
+                                    <h4><b>@{eventLocation.get.name}</b></h4>
+                                    @{eventLocation.get.formattedAddress}
+                                    <br/>
+                                    <br/>
+                                    @startTimeEndTimeTag(maybeMainEvent.get.startTime, maybeMainEvent.get.endTime)
+                            </div>
+                        }
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            <div class="row">
+                <div class="text-justify"><p>@Html(maybeMainEvent.get.description)</p></div>
+            </div>
+        </div><!-- event info grid end -->
+            }
+    </div> <!-- event information column ends -->
+</div> <!-- End of single row in outermost container -->
+</div> <!-- End of outermost container -->
+}
