@@ -8,7 +8,7 @@ GET     /update/committee           controllers.CommitteeController.committeeEdi
 POST    /update/committee           controllers.CommitteeController.updateCommittee
 POST    /update/frontpage           controllers.FrontpageController.updateFrontpage
 GET     /update/frontpage           controllers.FrontpageController.frontpageEditor
-GET     /login                      controllers.Security.showLoginForm
+GET     /editor                     controllers.Security.showLoginForm
 GET     /logout                     controllers.Security.logout
 POST    /login                      controllers.Security.handleLogin
 
