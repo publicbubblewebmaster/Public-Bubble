@@ -1,4 +1,4 @@
-@(frontpage: StaticPage, commitee : Seq[Member])
+@(frontpage: StaticPage)
 
 @contentCreator("Edit the frontpage") {
 <script src="@routes.Assets.at("javascripts/vue/vue.js")"></script>
@@ -7,152 +7,41 @@
 <h4 class="text-center">Edit the intro page</h4>
 
 <div class="row">
-
-    <form id="text-editor" class="small-8 columns small-centered" action="/update/frontpage" method="post" enctype="multipart/form-data">
-        <image-uploader preview-height="150" preview-width="300"></image-uploader>
-        <input id="wysiwyg-editor" value="@frontpage.content" name="intro"/>
-        <button>Submit</button>
-    </form>
+<div id="frontpage-editor"></div>
 </div>
 
-   <h4 class="text-center">Edit the committee</h4>
-
-    <form class="small-8 columns small-centered" id="comitee-updater" action="/update/commitee" method="post" enctype="multipart/form-data">
-    <person v-for="(person, index) in people" v-on:bye="removePerson" v-bind:text="person.text" v-on:edit="editPerson" class="row" v-bind:picture="person.imageUrl" v-bind:description="person.title" v-bind:index="index" v-bind:random-id="person.randomId"></person>
-
-    <div v-on:click="addPerson">New Member</div>
-    <div v-on:click="addPerson">Save</div>
-    <button>SUBMIT</button>
-    </form>
-
 <script>
-
-
-const peopleTruth = {}
-
- var imageUploader = Vue.component('image-uploader', {
-          template: '\<div>\
-                        <img height="this.preview-height" width="this.preview-width" style="display: block" id="blah" v-bind:src="this.imageUrl" />\
-                        <input v-on:change="this.readURL" type="file" id="imgInp" v-bind:name="inputLabel" />\
-                      </div>',
-          props : ['imageUrl', 'preview-height', 'preview-width', 'inputLabel'],
-          methods: {
-          readURL: function (e) {
-          if (e.target.files && e.target.files[0]) {
-            console.log('file upload found')
-            var reader = new FileReader();
-            reader.onload = function (e) {this.imageUrl = e.target.result;}.bind(this)
-            this.imageUrl = reader.readAsDataURL(e.target.files[0]);}
-          }}});
-
-
-        var person = Vue.component('person', {
-        props : ['index', 'technicalId', 'text',  'picture', 'random-id'],
-            data: function () {
-                    return {
-                      file: undefined,
-                      textModel : this.text }
-                    },
-
-
-            methods: {
-              change: function(e) {
-
-                console.log('change listener within person' + e.target.value)
-                this.$emit('edit', {text: e.target.value, randomId: this.randomId})
-
-              },
-              remove: function () {
-                this.$emit('bye', {index : this.index, id : this.technicalId, randomId: this.randomId})
-              },
-              positionInputLabel : function () {
-                return 'member[' + this.index + ']position'
-              },
-              technicalIdLabel : function () {
-                return 'member[' + this.index + ']id'
-              },
-              imageInputLabel : function () {
-                return 'member[' + this.index + ']image'
-              }
-            },
-            template: '<div class="">\
-                    <div runat="server">\
-                       <image-uploader v-bind:inputLabel="imageInputLabel()" v-bind:imageUrl="this.picture"></image-uploader>\
-                       <input type="text" v-on:change="change" placeholder="Committee Position" v-bind:name="positionInputLabel()" v-bind:value="this.text"/>\
-                       <input  type="hidden" v-bind:value="technicalId" v-bind:name="technicalIdLabel()">\
-                       <span v-on:click="remove">DELETE</span></div>\
-                    </div>\
-            </div>'
-        })
-
-        var textEditor = new Vue({el: '#text-editor'})
-
-        var commiteeUpdater = new Vue({
-           el: '#comitee-updater',
-
-           data: function () {
-                return {
-                  people: peopleTruth
-                  }
-                },
-                updated: function () {
-             console.log('updated')
-             console.log(JSON.stringify(this.people))
-            },
-
-           created: function () {
-             var people = this.people
-             var oReq = new XMLHttpRequest();
-             oReq.onload = function () {
-                              console.log('calling listener')
-                              var ppl = JSON.parse(oReq.responseText)
-                              console.log(ppl)
-                              this.people = ppl;
-                              }.bind(this);
-             oReq.addEventListener("load", this.reqListener);
-             oReq.open("GET", "/json/commitee");
-             oReq.send();
-            },
-
-           beforeUpdate: function () {
-             console.log('beforeUpdate')
-            },
-
-            methods: {
-                generateRandomId : function() {
-                  return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-                },
-
-                addPerson: function () {
-                  this.people.push({randomId : this.generateRandomId()})
-                },
-
-                editPerson: function (args) {
-                  let personIdx = this.people.findIndex((x) => (x.randomId == args.randomId))
-                  this.people[personIdx].text = args.text
-                  console.log(JSON.stringify(this.people));
-                  this.$forceUpdate()
-                },
-
-                removePerson: function (args) {
-                  console.log('removing a person' + JSON.stringify(args))
-                  let personIdx = this.people.findIndex((x) => (x.randomId == args.randomId))
-                  this.people.splice(personIdx, personIdx)
-                  this.$forceUpdate()
-                  if (args.technicalId) {
-                    this.deleteCommiteeMember(args);
-                  }},
-
-                deleteCommiteeMember : function(person) {
-                  var oReq = new XMLHttpRequest();
-                  oReq.addEventListener("load", this.reqListener);
-                  oReq.open("DELETE", "/json/commitee/");
-                  oReq.send();
-                }
+var imageUploader = Vue.component('image-uploader', {
+    template: '\<div>\
+                  <img v-bind:height="this.previewheight" v-bind:width="this.previewwidth" style="display: block" v-bind:src="this.imageUrl" />\
+                  <input v-on:change="this.readURL" type="file" v-bind:name="this.inputLabel" />\
+                </div>',
+    props: ['imageUrl', 'previewheight', 'previewwidth', 'inputLabel'],
+    methods: {
+        readURL: function (e) {
+            if (e.target.files && e.target.files[0]) {
+                console.log('file upload found')
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    this.imageUrl = e.target.result;
+                }.bind(this)
+                this.$emit('updated')
+                this.imageUrl = reader.readAsDataURL(e.target.files[0]);
             }
-        })
+        }
+    }
+});
 
 
+var textEditor = new Vue({
+    data : {"inputlabel" : "image1", "imageurl" : "@frontpage.imageUrl"},
+    el: '#frontpage-editor',
+    template : '<form class="small-8 columns small-centered" action="/update/frontpage" method="post" enctype="multipart/form-data" runat="server">\
+                  <image-uploader v-bind:inputLabel="inputlabel" v-bind:imageUrl="imageurl" v-bind:previewheight="500" v-bind:previewwidth="500"></image-uploader>\
+                  <input id="wysiwyg-editor" value="@frontpage.content" name="intro"/>\
+                  <button>Submit</button>\
+                </form>'
+})
 
 </script>
 

@@ -1,7 +1,8 @@
 package dao
 
-import play.api.{Logger}
+import play.api.Logger
 import java.sql.Date
+
 import models.Member
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
@@ -9,21 +10,23 @@ import slick.backend.DatabaseConfig
 import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
-import scala.concurrent.Future
+import slick.lifted.QueryBase
 
-trait CommiteeComponent {
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+
+trait CommitteeComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
 
-  class Commitee(tag: Tag) extends Table[Member](tag, Some("public_bubble"), "commitee") {
+  class Committee(tag: Tag) extends Table[Member](tag, Some("public_bubble"), "committee") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-
     def description = column[String]("description")
-
     def imageUrl = column[String]("image_url")
+    def position = column[Long]("position")
 
     // the ? method lifts the column into an option
-    def * = (id.?, description, imageUrl) <> ((Member.apply _).tupled, Member.unapply)
+    def * = (id.?, description, imageUrl, position) <> ((Member.apply _).tupled, Member.unapply)
 
     // the default projection is Member
 
@@ -31,45 +34,39 @@ trait CommiteeComponent {
 
 }
 
-class SlickCommiteeDao extends HasDatabaseConfig[JdbcProfile] with CommiteeComponent {
+class SlickCommitteeDao extends HasDatabaseConfig[JdbcProfile] with CommitteeComponent {
 
-  private val commitee = TableQuery[Commitee]
+  private val committee = TableQuery[Committee]
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-//  override def update(Member: Member): Unit = {
-//    val query = for {b <- commitee if b.id === Member.id} yield
-//      (b.title, b.intro, b.author, b.content, b.publishDate)
-//
-//    db.run(query.update(Member.title, Member.intro, Member.author, Member.content, Member.publishDate))
-//  }
-
-//  override def addImage(id: Long, url: String): Future[Boolean] = {
-//    val q = for {b <- commitee if b.id === id} yield b.image1Url
-//    val updateImage = q.update(Some(url))
-//    db.run(updateImage).map(_ == 1)
-//  }
-
   def delete(id: Long): Future[Int] = {
-    val findById = commitee.filter(_.id === id)
+    val findById = committee.filter(_.id === id)
     dbConfig.db.run(findById.delete)
   }
 
-  def create(Member: Member) = {
-    dbConfig.db.run(commitee += Member)
+  def create(member: Member) = {
+    println(s"Creating $member")
+    dbConfig.db.run(committee += member)
   }
 
-  def listMembers: Future[Seq[Member]] = db.run(commitee.result)
+  def listMembers: Future[Seq[Member]] = db.run(committee.result)
 
   def update(member : Member): Future[Int] = {
-    val q = for { m <- commitee if m.id === member.id.get } yield (m.description, m.imageUrl)
+    println(s"Updating $member")
+
+
+    val q = for { m <- committee if m.id === member.id.get } yield (m.description, m.imageUrl, m.position)
 
     println("Q is " + q)
 
-//    val image = if (member.imageUrl == null) {
-//      commitee.filter(_.id === id)    }
 
-    return dbConfig.db.run(q.update(member.title, member.imageUrl))
+    val findUrl: QueryBase[Seq[String]] = committee.filter(_.id === member.id).map(_.imageUrl)
+
+    // messy code
+    val image = if (member.imageUrl == null) {Await.result(dbConfig.db.run(findUrl.result), Duration(10, "seconds")).head} else {member.imageUrl}
+
+    return dbConfig.db.run(q.update(member.description, image, member.position))
   }
 
 }

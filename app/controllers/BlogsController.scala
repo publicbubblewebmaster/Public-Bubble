@@ -132,11 +132,7 @@ object BlogsController extends Controller with CloudinaryUploader {
 
     request.body.file("image1").map { file =>
 
-      val uploadResult = cloudinary.uploader().upload(file.ref.file,
-        ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))
-      );
-
-      val imageUrl = uploadResult.get("url").asInstanceOf[String]
+      val imageUrl = upload(file.ref.file, 800, 370)
 
       val blogWithImage = blogDao.addImage(id.toLong, imageUrl);
 

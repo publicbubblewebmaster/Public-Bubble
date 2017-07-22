@@ -8,7 +8,7 @@
          src="@frontpage.imageUrl"/>
 
     <p class="large-9 columns">
-        @frontpage.content
+        @Html(frontpage.content)
     </p>
 
     <h2>The Team</h2>
@@ -16,16 +16,17 @@
     The Public Bubble is run by a committee of volunteers, and we’re all public sector graduates from
 
     across a range of schemes.
+    <br/><br/>
 
     <div class="container">
 
         <div class="row">
-            @for(member <- members) {
+            @for(member <- members.sortWith(_.position < _.position)) {
 
             <div class="col-xs-6">
                 <img class="headshot"
                      src="@member.imageUrl"/>
-                <h4>@member.title</h4>
+                <h4>@member.description</h4>
             </div>
             }
         </div>

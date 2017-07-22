@@ -1,6 +1,6 @@
 package controllers
 
-import dao.{SlickCommiteeDao, SlickStaticPageDao}
+import dao.{SlickCommitteeDao, SlickStaticPageDao}
 import models.Member
 import play.api.libs.json._
 import play.api.mvc._
@@ -12,23 +12,25 @@ object AjaxController extends Controller {
 
   lazy val HOME_404 = NotFound(views.html.noContent("Home"))
 
-  lazy val committeDao = new SlickCommiteeDao()
+  lazy val committeDao = new SlickCommitteeDao()
   lazy val frontpageDao = new SlickStaticPageDao()
 
-  implicit val locationWrites = new Writes[Member] {
-    def writes(location: Member) = Json.obj(
-      "title" -> location.title,
-      "imageUrl" -> location.imageUrl
+  implicit val memberWrites = new Writes[Member] {
+    def writes(member: Member) = Json.obj(
+      "description" -> member.description,
+      "imageUrl" -> member.imageUrl,
+      "technicalId" -> member.id,
+      "position" -> member.position
     )
   }
 
-  def jsonCommitee = Action {
-    val commitee = Await.result(committeDao.listMembers, Duration(5, "seconds"))
-    Ok(Json.toJson(commitee))
+  def jsonCommittee = Action {
+    val committee = Await.result(committeDao.listMembers, Duration(5, "seconds"))
+    Ok(Json.toJson(committee))
   }
 
-  def deleteCommiteeMember(id: Long) = Action {
-    val commitee = Await.result(committeDao.delete(id), Duration(5, "seconds"))
+  def deleteCommitteeMember(id: Long) = Action {
+    val committee = Await.result(committeDao.delete(id), Duration(5, "seconds"))
     Redirect("/update/frontpage")
   }
 
