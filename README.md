@@ -14,3 +14,6 @@ To interact with the database
 ```sh
 docker run -it  --link public_bubble_postgres postgres:9.4 bash
 ```
+
+
+Visit www.publicbubble.co.uk/login and log-in using the public bubble gmail address.
