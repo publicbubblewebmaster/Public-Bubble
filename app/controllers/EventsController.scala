@@ -78,6 +78,10 @@ object EventsController extends Controller {
 
   }
 
+  def image(id : Long) = Action.async {
+    eventDao.imageById(id).map(img => if (img.isDefined) {Ok(img.get)} else {NotFound("No image found")})
+  }
+
   //Authenticated extends ActionBuilder - here we're calling ACtionBuilder's apply method.
   def createEvent = Authenticated {
     //    clearCache

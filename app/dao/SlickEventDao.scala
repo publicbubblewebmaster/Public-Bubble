@@ -24,10 +24,10 @@ trait EventsComponent {
     def startTime = column[Timestamp]("start_time")
     def endTime = column[Timestamp]("end_time")
     def description = column[String]("description")
-    def image1Url = column[Option[Array[Byte]]]("image_1")
+    def image1 = column[Option[Array[Byte]]]("image_1")
 
     // the ? method lifts the column into an option
-    def * = (id.?, title, location, startTime, endTime, description, image1Url) <> ((Event.apply _).tupled, Event.unapply)
+    def * = (id.?, title, location, startTime, endTime, description, image1) <> ((Event.apply _).tupled, Event.unapply)
     // the default projection is Event
   }
 }
@@ -48,7 +48,7 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
   }
 
   override def addImage(id: Long, url: Array[Byte]): Future[Boolean] = {
-    val q = for { b <- events if b.id === id } yield b.image1Url
+    val q = for { b <- events if b.id === id } yield b.image1
     val updateImage = q.update(Some(url))
     db.run(updateImage).map(_ == 1)
   }
@@ -74,5 +74,10 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
   override def allEvents: Future[Seq[Event]] = {
     val eventSortedByEndTime = events.sortBy(_.endTime.desc)
     dbConfig.db.run(eventSortedByEndTime.result)
+  }
+
+  def imageById(id : Long): Future[Option[Array[Byte]]] = {
+    val findById = events.filter(_.id === id)
+    return dbConfig.db.run(findById.map(_.image1).result.head)
   }
 }

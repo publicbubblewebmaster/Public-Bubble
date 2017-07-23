@@ -150,16 +150,18 @@ object BlogsController extends Controller {
 
       val image = java.nio.file.Files.readAllBytes(file.ref.file.toPath)
 
+      Logger.info("Uploading an image")
+
       val blogWithImage = blogDao.addImage(id.toLong, image);
 
       blogWithImage.map(
         b => if (b) {
-          Ok("image uploaded")
+          Redirect(s"/update/blog/$id")
         } else {
           InternalServerError("upload failed")
         }
       )
-    }.getOrElse(Future(BadRequest("image upload")))
+    }.getOrElse(Future(BadRequest("image upload failed")))
   }
 
   private def clearCache = {
