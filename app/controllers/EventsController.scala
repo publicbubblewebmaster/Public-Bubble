@@ -3,8 +3,6 @@ package controllers
 import java.util.Date
 
 import _root_.util.{GooglePlace, GooglePlaceFinder}
-import com.cloudinary.{Transformation, Cloudinary}
-import com.cloudinary.utils.ObjectUtils
 import dao.{SlickEventDao}
 import models.{EventFormData, Event}
 import play.api.{Play, Logger}
