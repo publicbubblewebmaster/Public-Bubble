@@ -22,7 +22,7 @@ trait BlogsComponent {
     def intro = column[String]("intro")
     def content = column[String]("content")
     def publishDate = column[Date]("publish_date")
-    def image1Url = column[Option[Array[Byte]]]("image_1")
+    def image1 = column[Option[Array[Byte]]]("image_1")
 
     /* It is possible to define a mapped table
     that uses a custom type for its * projection
@@ -31,7 +31,7 @@ trait BlogsComponent {
     The <> operator is optimized for case classes*/
 
     // the ? method lifts the column into an option
-    def * = (id.?, title, author, intro, content, publishDate, image1Url) <> ((Blog.apply _).tupled, Blog.unapply)
+    def * = (id.?, title, author, intro, content, publishDate, image1) <> ((Blog.apply _).tupled, Blog.unapply)
     // the default projection is Blog
 
   }
@@ -52,7 +52,7 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
   }
 
   override def addImage(id: Long, url: Array[Byte]): Future[Boolean] = {
-    val q = for { b <- blogs if b.id === id } yield b.image1Url
+    val q = for { b <- blogs if b.id === id } yield b.image1
     val updateImage = q.update(Some(url))
     db.run(updateImage).map(_ == 1)
   }
