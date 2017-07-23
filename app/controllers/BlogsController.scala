@@ -1,7 +1,5 @@
 package controllers
 
-import com.cloudinary.{Cloudinary, Transformation}
-import com.cloudinary.utils.ObjectUtils
 import controllers.EventsController._
 import dao.SlickBlogDao
 import models.{Blog, BlogFormData}
