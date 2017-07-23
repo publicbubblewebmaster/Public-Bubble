@@ -17,8 +17,6 @@ object User {
 
   lazy val userDao = new SlickUserDao
 
-//  val FIND_ROLE_BY_EMAIL : SqlQuery = SQL()
-
   val HTTP_TRANSPORT = new NetHttpTransport();
   val JSON_FACTORY = new JacksonFactory();
 
