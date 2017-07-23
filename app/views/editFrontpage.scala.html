@@ -37,7 +37,7 @@ var textEditor = new Vue({
     data : {"inputlabel" : "image1", "imageurl" : "@frontpage.image"},
     el: '#frontpage-editor',
     template : '<form class="small-8 columns small-centered" action="/update/frontpage" method="post" enctype="multipart/form-data" runat="server">\
-                  <image-uploader v-bind:inputLabel="inputlabel" v-bind:image="imageurl" v-bind:previewheight="500" v-bind:previewwidth="500"></image-uploader>\
+                  <image-uploader v-bind:inputLabel="inputlabel" image="/frontpage/image" v-bind:previewheight="500" v-bind:previewwidth="500"></image-uploader>\
                   <input id="wysiwyg-editor" value="@frontpage.content" name="intro"/>\
                   <button>Submit</button>\
                 </form>'
