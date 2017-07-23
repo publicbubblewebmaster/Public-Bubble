@@ -1,22 +1,25 @@
 package controllers
 
-import com.cloudinary.{Transformation, Cloudinary}
+import com.cloudinary.{Cloudinary, Transformation}
 import com.cloudinary.utils.ObjectUtils
 import controllers.EventsController._
-import dao.{SlickBlogDao}
-import models.{BlogFormData, Blog}
-import play.api.{Play, Logger}
+import dao.SlickBlogDao
+import models.{Blog, BlogFormData}
+import play.api.{Logger, Play}
 import play.api.data.{Form, Forms}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.cache.{Cached, Cache}
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Promise, Future}
-import _root_.util.{CloudinaryUploader, GooglePlace, GooglePlaceFinder}
+import play.api.cache.{Cache, Cached}
 
-object BlogsController extends Controller with CloudinaryUploader {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Await, Future, Promise}
+import _root_.util.{GooglePlace, GooglePlaceFinder}
+
+import scala.concurrent.duration.Duration
+
+object BlogsController extends Controller {
 
   lazy val blogDao = new SlickBlogDao
 
@@ -44,6 +47,19 @@ object BlogsController extends Controller with CloudinaryUploader {
           Logger.info(s"foundBlogs = $foundBlog remaining=$remainingBlogs")
           Ok(views.html.blogs(foundBlog.head, remainingBlogs))
       }.fallbackTo(Future{BLOGS_404})
+  }
+
+  def image(id : Long) = Action {implicit request => {
+    val maybeBlog = Await.result(blogDao.findById(id), Duration(10, "seconds"))
+    val image = maybeBlog.map(b => b.image1Url).map(_.get)
+
+    if (image.isDefined) {
+      Ok(image.get)
+    } else {
+      NotFound(s"Blog $id has no image")
+    }
+  }
+
   }
 
   def createBlog = Authenticated {
@@ -132,9 +148,9 @@ object BlogsController extends Controller with CloudinaryUploader {
 
     request.body.file("image1").map { file =>
 
-      val imageUrl = upload(file.ref.file, 800, 370)
+      val image = java.nio.file.Files.readAllBytes(file.ref.file.toPath)
 
-      val blogWithImage = blogDao.addImage(id.toLong, imageUrl);
+      val blogWithImage = blogDao.addImage(id.toLong, image);
 
       blogWithImage.map(
         b => if (b) {

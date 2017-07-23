@@ -1,7 +1,7 @@
 package dao
 
 import play.api.Logger
-import java.sql.Date
+import java.sql.{Blob, Date}
 
 import models.{Blog, StaticPage}
 import play.api.Play
@@ -24,10 +24,10 @@ trait StaticPageComponent {
 
     def content = column[String]("content")
 
-    def imageUrl = column[String]("image_url")
+    def image = column[Array[Byte]]("image")
 
     // the ? method lifts the column into an option
-    def * = (id.?, content, imageUrl) <> ((StaticPage.apply _).tupled, StaticPage.unapply)
+    def * = (id.?, content, image) <> ((StaticPage.apply _).tupled, StaticPage.unapply)
 
     // the default projection is StaticPage
 
@@ -41,10 +41,10 @@ class SlickStaticPageDao extends HasDatabaseConfig[JdbcProfile] with StaticPageC
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-  def updateFrontpage(content: String, imageUrl: String): Future[Boolean] = {
-    val query = for {b <- staticpages if b.id === 1L} yield (b.id, b.content, b.imageUrl)
-    var imageUrlForUpdate = if (imageUrl == null) {getFrontPage().imageUrl} else imageUrl
-    db.run(query.update(1L, content, imageUrlForUpdate)).map(_ == 1)
+  def updateFrontpage(content: String, image: Array[Byte]): Future[Boolean] = {
+    val query = for {b <- staticpages if b.id === 1L} yield (b.id, b.content, b.image)
+    var imageForUpdate = if (image == null) {getFrontPage().image} else image
+    db.run(query.update(1L, content, imageForUpdate)).map(_ == 1)
   }
 
   def create(staticPage: StaticPage) = {

@@ -24,7 +24,7 @@ trait EventsComponent {
     def startTime = column[Timestamp]("start_time")
     def endTime = column[Timestamp]("end_time")
     def description = column[String]("description")
-    def image1Url = column[Option[String]]("image_1_url")
+    def image1Url = column[Option[Array[Byte]]]("image_1")
 
     // the ? method lifts the column into an option
     def * = (id.?, title, location, startTime, endTime, description, image1Url) <> ((Event.apply _).tupled, Event.unapply)
@@ -47,7 +47,7 @@ class SlickEventDao extends HasDatabaseConfig[JdbcProfile] with EventDao with Ev
     db.run(query.update(event.title, event.location, event.description, event.startTime, event.endTime))
   }
 
-  override def addImage(id: Long, url: String): Future[Boolean] = {
+  override def addImage(id: Long, url: Array[Byte]): Future[Boolean] = {
     val q = for { b <- events if b.id === id } yield b.image1Url
     val updateImage = q.update(Some(url))
     db.run(updateImage).map(_ == 1)

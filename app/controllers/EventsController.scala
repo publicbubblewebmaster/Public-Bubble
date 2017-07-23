@@ -2,7 +2,7 @@ package controllers
 
 import java.util.Date
 
-import _root_.util.{CloudinaryUploader, GooglePlace, GooglePlaceFinder}
+import _root_.util.{GooglePlace, GooglePlaceFinder}
 import com.cloudinary.{Transformation, Cloudinary}
 import com.cloudinary.utils.ObjectUtils
 import dao.{SlickEventDao}
@@ -17,7 +17,7 @@ import play.api.cache.{Cached, Cache}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object EventsController extends Controller with CloudinaryUploader {
+object EventsController extends Controller {
 
   lazy val eventDao = new SlickEventDao
   lazy val placeFinder = new GooglePlaceFinder
@@ -175,13 +175,8 @@ object EventsController extends Controller with CloudinaryUploader {
 
     request.body.file("image1").map { file =>
 
-      val uploadResult = cloudinary.uploader().upload(file.ref.file,
-        ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))
-      );
-
-      val imageUrl = uploadResult.get("url").asInstanceOf[String]
-
-      val eventWithImage = eventDao.addImage(id.toLong, imageUrl);
+      val image = java.nio.file.Files.readAllBytes(file.ref.file.toPath)
+      val eventWithImage = eventDao.addImage(id.toLong, image);
 
       eventWithImage.map(
         b => if (b) {

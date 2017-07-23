@@ -1,10 +1,12 @@
 package models
 
+import java.sql.Blob
+
 case class Member(id : Option[Long],
                   description: String,
-                  imageUrl : String,
+                  image : Array[Byte],
                   position: Long)
 
 case class StaticPage(id : Option[Long],
                      content: String,
-                     imageUrl : String)
+                     image : Array[Byte])

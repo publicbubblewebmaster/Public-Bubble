@@ -1,14 +1,16 @@
 package controllers
 
+import java.nio.file.Files
+
 import dao.{SlickCommitteeDao, SlickStaticPageDao}
 import models.Member
 import play.api.mvc._
-import util.CloudinaryUploader
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-object CommitteeController extends Controller with CloudinaryUploader {
+object CommitteeController extends Controller {
 
   lazy val HOME_404 = NotFound(views.html.noContent("Home"))
 
@@ -29,7 +31,7 @@ object CommitteeController extends Controller with CloudinaryUploader {
       val description: Option[String] = request.body.dataParts.get(s"member[$memberIdx]description").headOption.flatMap(_.headOption)
       val technicalId: Option[String] = request.body.dataParts.get(s"member[$memberIdx]id").headOption.flatMap(_.headOption)
       val position: Long = request.body.dataParts.get(s"member[$memberIdx]position").head.head.toLong
-      val fileforUpload = photo.filter(f => !f.ref.file.getName.isEmpty).map(f => upload(f.ref.file, 800, 370))
+      val fileforUpload = photo.filter(f => !f.ref.file.getName.isEmpty).map(f => Files.readAllBytes(f.ref.file.toPath))
 
       if (technicalId.isDefined && !technicalId.get.isEmpty) {
         committeDao.update(Member(technicalId.map(_.toLong), description.get, fileforUpload.orNull, position)).foreach(_ => println("UPDATED"))
@@ -38,6 +40,10 @@ object CommitteeController extends Controller with CloudinaryUploader {
       }
     })
     Future(Redirect("/update/committee"))
+  }
+
+  def image(id : Long) = Action.async {
+   committeDao.imageById(id).map(Ok(_))
   }
 
 }

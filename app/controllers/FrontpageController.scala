@@ -1,18 +1,18 @@
 package controllers
 
 import java.nio.file.Paths
+import java.sql.Blob
+import javax.sql.rowset.serial.SerialBlob
 
-import controllers.BlogsController.upload
 import dao.{SlickCommitteeDao, SlickStaticPageDao}
 import models.Member
 import play.api.mvc._
-import util.CloudinaryUploader
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-object FrontpageController extends Controller with CloudinaryUploader {
+object FrontpageController extends Controller {
 
   lazy val HOME_404 = NotFound(views.html.noContent("Home"))
 
@@ -23,12 +23,19 @@ object FrontpageController extends Controller with CloudinaryUploader {
     Ok(views.html.editFrontpage(frontpage))
   }
 
+  def image = Action {
+    Ok(frontpageDao.getFrontPage().image)
+  }
+
   def updateFrontpage = Authenticated(parse.multipartFormData) {
     request =>
       val content: String = request.body.dataParts.get("intro").get.head
       val photo: Option[MultipartFormData.FilePart[play.api.libs.Files.TemporaryFile]] = request.body.files.filter(_.key == "image1").headOption
 
-      val fileforUpload = photo.filter(f => !f.ref.file.getName.isEmpty).map(f => upload(f.ref.file, 800, 370))
+      val fileforUpload : Option[Array[Byte]] = photo.filter(f => !f.ref.file.getName.isEmpty).map(f => java.nio.file.Files.readAllBytes(f.ref.file.toPath))
+
+
+
 
       val updatedFrontpage = frontpageDao.updateFrontpage(content, fileforUpload.orNull);
 

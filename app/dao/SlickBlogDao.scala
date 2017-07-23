@@ -22,7 +22,7 @@ trait BlogsComponent {
     def intro = column[String]("intro")
     def content = column[String]("content")
     def publishDate = column[Date]("publish_date")
-    def image1Url = column[Option[String]]("image_1_url")
+    def image1Url = column[Option[Array[Byte]]]("image_1")
 
     /* It is possible to define a mapped table
     that uses a custom type for its * projection
@@ -51,7 +51,7 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
     db.run(query.update(blog.title, blog.intro, blog.author, blog.content, blog.publishDate))
   }
 
-  override def addImage(id: Long, url: String): Future[Boolean] = {
+  override def addImage(id: Long, url: Array[Byte]): Future[Boolean] = {
     val q = for { b <- blogs if b.id === id } yield b.image1Url
     val updateImage = q.update(Some(url))
     db.run(updateImage).map(_ == 1)

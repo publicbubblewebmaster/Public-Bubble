@@ -14,7 +14,7 @@ case class Event (
                    startTime: Timestamp,
                    endTime: Timestamp,
                    description: String,
-                   image1Url: Option[String] = None)
+                   image1: Option[Array[Byte]] = None)
 
 /* Same as model class but missing image url because this is handled via ajax*/
 case class EventFormData (
@@ -45,7 +45,7 @@ object Event {
 
   def update(event: Event): Unit = dao.update(event)
 
-  def addImage(id: Long, url: String): Future[Boolean] = dao.addImage(id, url)
+  def addImage(id: Long, url: Array[Byte]): Future[Boolean] = dao.addImage(id, url)
 
   def delete(id: Int):  Future[Int] = dao.delete(id)
 

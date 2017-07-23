@@ -13,20 +13,20 @@
 <script>
 var imageUploader = Vue.component('image-uploader', {
     template: '\<div>\
-                  <img v-bind:height="this.previewheight" v-bind:width="this.previewwidth" style="display: block" v-bind:src="this.imageUrl" />\
+                  <img v-bind:height="this.previewheight" v-bind:width="this.previewwidth" style="display: block" v-bind:src="this.image" />\
                   <input v-on:change="this.readURL" type="file" v-bind:name="this.inputLabel" />\
                 </div>',
-    props: ['imageUrl', 'previewheight', 'previewwidth', 'inputLabel'],
+    props: ['image', 'previewheight', 'previewwidth', 'inputLabel'],
     methods: {
         readURL: function (e) {
             if (e.target.files && e.target.files[0]) {
                 console.log('file upload found')
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    this.imageUrl = e.target.result;
+                    this.image = e.target.result;
                 }.bind(this)
                 this.$emit('updated')
-                this.imageUrl = reader.readAsDataURL(e.target.files[0]);
+                this.image = reader.readAsDataURL(e.target.files[0]);
             }
         }
     }
@@ -34,10 +34,10 @@ var imageUploader = Vue.component('image-uploader', {
 
 
 var textEditor = new Vue({
-    data : {"inputlabel" : "image1", "imageurl" : "@frontpage.imageUrl"},
+    data : {"inputlabel" : "image1", "imageurl" : "@frontpage.image"},
     el: '#frontpage-editor',
     template : '<form class="small-8 columns small-centered" action="/update/frontpage" method="post" enctype="multipart/form-data" runat="server">\
-                  <image-uploader v-bind:inputLabel="inputlabel" v-bind:imageUrl="imageurl" v-bind:previewheight="500" v-bind:previewwidth="500"></image-uploader>\
+                  <image-uploader v-bind:inputLabel="inputlabel" v-bind:image="imageurl" v-bind:previewheight="500" v-bind:previewwidth="500"></image-uploader>\
                   <input id="wysiwyg-editor" value="@frontpage.content" name="intro"/>\
                   <button>Submit</button>\
                 </form>'

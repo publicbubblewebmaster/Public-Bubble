@@ -7,7 +7,7 @@ trait EventDao {
 
   def update(event : Event)
 
-  def addImage(id : Long, url : String) : Future[Boolean]
+  def addImage(id : Long, url : Array[Byte]) : Future[Boolean]
 
   def findById(eventId : Long) : Future[Option[Event]]
 
