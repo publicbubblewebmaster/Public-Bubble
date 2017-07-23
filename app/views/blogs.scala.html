@@ -17,7 +17,7 @@
             <div id="container"> <!-- event info grid start -->
                 <h1 class="text-center"><i>@mainBlog.title</i></h1>
                 <h4>by @mainBlog.author</h4>
-                <img class="img-responsive" src="@{mainBlog.image1Url}"> <!-- http://placehold.it/800x370&text=[img] -->
+                <img class="img-responsive" src="/blog/@mainBlog.id/image"> <!-- http://placehold.it/800x370&text=[img] -->
                 <h3>@mainBlog.intro</h3>
                 <div class="text-justify">@Html(mainBlog.content)</div>
             </div><!-- event info grid end -->

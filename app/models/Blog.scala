@@ -12,7 +12,7 @@ case class Blog (
                    intro: String,
                    content: String,
                    publishDate: Date,
-                   image1Url: Option[String] = null)
+                   image1Url: Option[Array[Byte]] = null)
 
 /* Same as model class but missing image url because this is handled via ajax*/
 case class BlogFormData(id : Option[Long],
@@ -35,7 +35,7 @@ object Blog {
 
   def update(blog: Blog): Unit = dao.update(blog)
 
-  def addImage(id: Long, url: String): Future[Boolean] = dao.addImage(id, url)
+  def addImage(id: Long, url: Array[Byte]): Future[Boolean] = dao.addImage(id, url)
 
   def delete(id: Int):  Future[Int] = dao.delete(id)
 

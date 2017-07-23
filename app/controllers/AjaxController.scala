@@ -18,7 +18,6 @@ object AjaxController extends Controller {
   implicit val memberWrites = new Writes[Member] {
     def writes(member: Member) = Json.obj(
       "description" -> member.description,
-      "imageUrl" -> member.imageUrl,
       "technicalId" -> member.id,
       "position" -> member.position
     )

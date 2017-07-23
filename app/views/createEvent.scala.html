@@ -7,7 +7,7 @@
 @if(!eventForm.value.isEmpty){
 <button id="newEvent" onclick="window.location = '/create/event';">
     Create new event
-</div>
+</button>
 }
 <div id="eventsBox" class="columns small-2 columns"></div>
 
@@ -31,7 +31,7 @@
         @helper.input(eventForm("startTime"), '_label -> "Start Time", '_help -> "" ) { (id, name, value, args) =>
                 <input class="form-control" type="datetime-local" name="@name" id="@id" value="@value" @toHtmlArgs(args)>
             }
-        @helper.input(eventForm("endTime"), '_label -> "Start Time", '_help -> "" ) { (id, name, value, args) =>
+        @helper.input(eventForm("endTime"), '_label -> "End Time", '_help -> "" ) { (id, name, value, args) =>
                 <input class="form-control" type="datetime-local" name="@name" id="@id" value="@value" @toHtmlArgs(args)>
         }
         @helper.inputText(eventForm("description"), 'class -> "form-control", '_label -> "Description", '_help -> "", 'id -> "wysiwyg-editor")
@@ -48,8 +48,52 @@
 @if(!eventForm.value.isEmpty) {
 <script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
-<div id="imageUpload"></div>
-<script type="text/jsx">
+    <form class="small-8 columns small-centered" id="event-image-uploader" action="@routes.EventsController.uploadImage" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" v-bind:value="this.blogId()"/>
+    <input type="hidden" name="domainObject" value="blog"/>
+    <image-uploader v-bind:inputLabel="this.inputlabel" v-bind:image="this.image()"></image-uploader>
+    <button>Upload</button>
+    </form>
+
+
+<script>
+
+
+    var imageUploader = Vue.component('image-uploader', {
+    template: '\<div>\
+                  <img v-bind:height="this.previewheight" v-bind:width="this.previewwidth" style="display: block" v-bind:src="this.image" />\
+                  <input v-on:change="this.readURL" type="file" name="image1" />\
+                </div>',
+    props: ['image', 'previewheight', 'previewwidth', 'inputLabel'],
+    methods: {
+        readURL: function (e) {
+            if (e.target.files && e.target.files[0]) {
+                console.log('file upload found')
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    this.image = e.target.result;
+                }.bind(this)
+                this.$emit('updated')
+                this.image = reader.readAsDataURL(e.target.files[0]);
+            }
+        }
+    }
+});
+
+
+var committeeUpdater = new Vue({
+    data : {"inputlabel" : "image1"},
+    el: '#event-image-uploader',
+    methods : {
+    blogId : function() {return document.getElementById("id").value},
+    image : function() {return '/blog/' + document.getElementById("id").value +'/image'}
+    }
+    })
+
+</script>
+
+
+    <script type="text/jsx">
     React.render(
         <ImageUploadButton imageUploadUrl="@routes.EventsController.uploadImage"/>,
         document.getElementById('imageUpload')

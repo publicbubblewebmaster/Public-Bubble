@@ -2,9 +2,19 @@
 @contentCreator("Blog Form") {
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
+<script src="@routes.Assets.at("javascripts/vue/vue.js")"></script>
+
 <div id="blogsBox" class="small-2 columns"></div>
 <div class="row">
     @if(!blogForm.value.isEmpty) {
+
+    <form class="small-8 columns small-centered" id="blog-image-uploader" action="@routes.BlogsController.uploadImage" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" v-bind:value="this.blogId()"/>
+    <input type="hidden" name="domainObject" value="blog"/>
+    <image-uploader v-bind:inputLabel="this.inputlabel" v-bind:image="this.image()"></image-uploader>
+    <button>Upload</button>
+    </form>
+
     <div class="small-8 columns small-centered" id="imageUpload"></div>
     }
 </div>
@@ -35,11 +45,42 @@
 @if(!blogForm.value.isEmpty) {
 <script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>
 <script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
-<script type="text/jsx">
-    React.render(
-        <ImageUploadButton imageUploadUrl="@routes.BlogsController.uploadImage" domainObject="blog"/>,
-        document.getElementById('imageUpload')
-    );
-    </script>
+
+
+<script>
+
+
+    var imageUploader = Vue.component('image-uploader', {
+    template: '\<div>\
+                  <img v-bind:height="this.previewheight" v-bind:width="this.previewwidth" style="display: block" v-bind:src="this.image" />\
+                  <input v-on:change="this.readURL" type="file" name="image1" />\
+                </div>',
+    props: ['image', 'previewheight', 'previewwidth', 'inputLabel'],
+    methods: {
+        readURL: function (e) {
+            if (e.target.files && e.target.files[0]) {
+                console.log('file upload found')
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    this.image = e.target.result;
+                }.bind(this)
+                this.$emit('updated')
+                this.image = reader.readAsDataURL(e.target.files[0]);
+            }
+        }
+    }
+});
+
+
+var committeeUpdater = new Vue({
+    data : {"inputlabel" : "image1"},
+    el: '#blog-image-uploader',
+    methods : {
+    blogId : function() {return document.getElementById("id").value},
+    image : function() {return '/blog/' + document.getElementById("id").value +'/image'}
+    }
+    })
+
+</script>
 }
 }

@@ -2,9 +2,7 @@ package controllers
 
 import java.util.Date
 
-import _root_.util.{CloudinaryUploader, GooglePlace, GooglePlaceFinder}
-import com.cloudinary.{Transformation, Cloudinary}
-import com.cloudinary.utils.ObjectUtils
+import _root_.util.{GooglePlace, GooglePlaceFinder}
 import dao.{SlickEventDao}
 import models.{EventFormData, Event}
 import play.api.{Play, Logger}
@@ -17,7 +15,7 @@ import play.api.cache.{Cached, Cache}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object EventsController extends Controller with CloudinaryUploader {
+object EventsController extends Controller {
 
   lazy val eventDao = new SlickEventDao
   lazy val placeFinder = new GooglePlaceFinder
@@ -78,6 +76,10 @@ object EventsController extends Controller with CloudinaryUploader {
     getResult(maybeMainEvent, partitionedEvents)
   }
 
+  }
+
+  def image(id : Long) = Action.async {
+    eventDao.imageById(id).map(img => if (img.isDefined) {Ok(img.get)} else {NotFound("No image found")})
   }
 
   //Authenticated extends ActionBuilder - here we're calling ACtionBuilder's apply method.
@@ -175,13 +177,8 @@ object EventsController extends Controller with CloudinaryUploader {
 
     request.body.file("image1").map { file =>
 
-      val uploadResult = cloudinary.uploader().upload(file.ref.file,
-        ObjectUtils.asMap("transformation", new Transformation().width(800), "transformation", new Transformation().height(370))
-      );
-
-      val imageUrl = uploadResult.get("url").asInstanceOf[String]
-
-      val eventWithImage = eventDao.addImage(id.toLong, imageUrl);
+      val image = java.nio.file.Files.readAllBytes(file.ref.file.toPath)
+      val eventWithImage = eventDao.addImage(id.toLong, image);
 
       eventWithImage.map(
         b => if (b) {

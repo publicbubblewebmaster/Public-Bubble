@@ -50,3 +50,8 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /json/committee              controllers.AjaxController.jsonCommittee
 DELETE  /json/committee/:id          controllers.AjaxController.deleteCommitteeMember(id : Long)
 
+GET     /frontpage/image             controllers.FrontpageController.image
+
+GET     /blog/:id/image              controllers.BlogsController.image(id : Long)
+GET     /committee/:id/image         controllers.CommitteeController.image(id : Long)
+
