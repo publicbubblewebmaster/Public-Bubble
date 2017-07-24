@@ -49,7 +49,7 @@ object BlogsController extends Controller {
 
   def image(id : Long) = Action {implicit request => {
     val maybeBlog = Await.result(blogDao.findById(id), Duration(10, "seconds"))
-    val image = maybeBlog.map(b => b.image1).map(_.get)
+    val image = maybeBlog.flatMap(b => b.image1)
 
 
     if (image.isDefined) {
