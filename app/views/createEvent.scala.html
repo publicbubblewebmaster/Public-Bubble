@@ -11,7 +11,7 @@
 }
 <div id="eventsBox" class="columns small-2 columns"></div>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.apiKey")}"></script>
 
 <form class="row" id="eventForm" action="@routes.EventsController.save" method="post">
         <div class="columns small-8" >

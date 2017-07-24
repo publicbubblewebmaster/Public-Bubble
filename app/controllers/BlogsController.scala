@@ -51,6 +51,7 @@ object BlogsController extends Controller {
     val maybeBlog = Await.result(blogDao.findById(id), Duration(10, "seconds"))
     val image = maybeBlog.map(b => b.image1).map(_.get)
 
+
     if (image.isDefined) {
       Ok(image.get)
     } else {
