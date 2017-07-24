@@ -95,23 +95,15 @@ object BlogsController extends Controller {
 
         Ok(views.html.createBlog(formWithErrors))},
 
-
         createdBlog => {
-          var savedBlog : Blog = null
-        if (createdBlog.id.isEmpty) {
-          savedBlog = Blog.create(Blog.createFrom(createdBlog))
-
-
+          var updatedBlog : BlogFormData = if (createdBlog.id.isEmpty) {
+          val blogId = Await.result(Blog.create(Blog.createFrom(createdBlog)),Duration(5, "seconds"))
+            createdBlog.copy(id = Some(blogId))
         } else {
-          savedBlog = Blog.update(Blog.createFrom(createdBlog))
+            Blog.update(Blog.createFrom(createdBlog))
+            createdBlog
         }
-        Ok(views.html.createBlog(blogForm.fill(BlogFormData(
-          savedBlog.id,
-          savedBlog.title,
-          savedBlog.author,
-          savedBlog.intro,
-          savedBlog.content,
-          savedBlog.publishDate))))
+        Ok(views.html.createBlog(blogForm.fill(updatedBlog)))
       }
     )
   }
