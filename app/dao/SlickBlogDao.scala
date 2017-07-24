@@ -9,7 +9,7 @@ import slick.backend.DatabaseConfig
 import slick.driver.PostgresDriver.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
-import scala.concurrent.Future
+import scala.concurrent.{Future, Await}
 
 trait BlogsComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
@@ -44,7 +44,7 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override protected val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
-  override def update(blog: Blog): Unit = {
+  override def update(blog: Blog): Blog = {
     val query = for {b <- blogs if b.id === blog.id} yield
     (b.title, b.intro, b.author, b.content, b.publishDate)
     Await.result(db.run(query.update(blog.title, blog.intro, blog.author, blog.content, blog.publishDate)), Duration(10, "seconds"))

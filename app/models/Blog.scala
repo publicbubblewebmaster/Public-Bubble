@@ -33,7 +33,7 @@ object Blog {
     Option(Tuple6(blog.id, blog.title, blog.author, blog.intro, blog.content, blog.publishDate))
   }
 
-  def update(blog: Blog): Unit = dao.update(blog)
+  def update(blog: Blog): Blog = dao.update(blog)
 
   def addImage(id: Long, url: Array[Byte]): Future[Boolean] = dao.addImage(id, url)
 
@@ -41,6 +41,6 @@ object Blog {
 
   def getById(blogId: Long): Future[Option[Blog]] = dao.findById(blogId)
 
-  def create(blog: Blog) = dao.create(blog)
+  def create(blog: Blog) : Blog = dao.create(blog)
 
 }
