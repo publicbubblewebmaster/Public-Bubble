@@ -47,8 +47,7 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
   override def update(blog: Blog): Unit = {
     val query = for {b <- blogs if b.id === blog.id} yield
     (b.title, b.intro, b.author, b.content, b.publishDate)
-
-    db.run(query.update(blog.title, blog.intro, blog.author, blog.content, blog.publishDate))
+    Await.result(db.run(query.update(blog.title, blog.intro, blog.author, blog.content, blog.publishDate)), Duration(10, "seconds"))
   }
 
   override def addImage(id: Long, url: Array[Byte]): Future[Boolean] = {
@@ -64,8 +63,8 @@ class SlickBlogDao extends HasDatabaseConfig[JdbcProfile] with BlogDao with Blog
 
   override def findById(blogId: Long): Future[Option[Blog]] = db.run(blogs.filter(_.id === blogId).result.headOption)
 
-  override def create(blog: Blog) = {
-         dbConfig.db.run(blogs += blog)
+  override def create(blog: Blog) : Blog = {
+         Await.result(dbConfig.db.run(blogs += blog), Duration(10, "seconds"))
   }
 
   override def sortedById : Future[Seq[Blog]] = db.run(blogs.result)

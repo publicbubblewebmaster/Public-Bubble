@@ -5,7 +5,7 @@ import scala.concurrent.Future
 
 trait BlogDao {
 
-  def update(blog : Blog)
+  def update(blog : Blog) : Blog
 
   def addImage(id : Long, url : Array[Byte]) : Future[Boolean]
 
@@ -17,5 +17,5 @@ trait BlogDao {
 
   def sortedById : Future[Seq[Blog]]
 
-  def create(blog : Blog)
+  def create(blog : Blog) : Blog
   }

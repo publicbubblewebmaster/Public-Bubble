@@ -95,14 +95,14 @@ object BlogsController extends Controller {
 
         Ok(views.html.createBlog(formWithErrors))},
 
+      var savedBlog;
         createdBlog => {
         if (createdBlog.id.isEmpty) {
-          Blog.create(Blog.createFrom(createdBlog))
+          savedBlog = Blog.create(Blog.createFrom(createdBlog))
+        } else {
+          savedBlog = Blog.update(Blog.createFrom(createdBlog))
         }
-        else {
-          Blog.update(Blog.createFrom(createdBlog))
-        }
-        Ok(views.html.createBlog(blogForm.fill(createdBlog)))
+        Ok(views.html.createBlog(blogForm.fill(savedBlog)))
       }
     )
   }
