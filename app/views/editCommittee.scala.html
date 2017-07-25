@@ -4,15 +4,13 @@
 <script src="@routes.Assets.at("javascripts/vue/vue.js")"></script>
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
-   <h4 class="text-center">Edit the committee</h4>
+  <h4 class="text-center">Edit the committee</h4>
 
-    <form class="small-8 columns small-centered" id="comitee-updater" action="/update/committee" method="post" enctype="multipart/form-data">
+  <form class="small-8 columns small-centered" id="comitee-updater" action="/update/committee" method="post" enctype="multipart/form-data">
     <person v-for="(person, index) in people" v-on:shift="changePosition" v-on:bye="removePerson" v-bind:person="person" v-on:edit="editPerson" class="row" v-bind:index="index"></person>
-
     <div v-on:click="addPerson">New Member</div>
-    <div v-on:click="addPerson">Save</div>
-    <button>SUBMIT</button>
-    </form>
+    <button>Save</button>
+  </form>
 
 <script>
 
@@ -31,10 +29,11 @@ var imageUploader = Vue.component('image-uploader', {
                 console.log('file upload found')
                 var reader = new FileReader();
                 reader.onload = function (e) {
+                console.log('reader loaded')
                     this.image = e.target.result;
+                    this.$emit('updated', this.image)
                 }.bind(this)
-                this.$emit('updated')
-                this.image = reader.readAsDataURL(e.target.files[0]);
+                var imageUrl = reader.readAsDataURL(e.target.files[0]);
             }
         }
     }
@@ -42,11 +41,13 @@ var imageUploader = Vue.component('image-uploader', {
 
 
 var person = Vue.component('person', {
-    props: ['index', 'person'],
+    props: ['index', 'person', 'image'],
     data: function () {
         return {
             file: undefined,
-            updateImage: false
+            updateImage: false,
+            formImage : undefined,
+            personUpdates : this.person
         }
     },
 
@@ -60,7 +61,16 @@ var person = Vue.component('person', {
             this.$emit('edit', this.person)
         },
         shift: function (direction) {
-            this.$emit('shift', direction, this.person)
+        console.log('person updates object' +  JSON.stringify(this.personUpdates))
+            this.$emit('shift', direction, this.personUpdates)
+        },
+        replaceImage : function(url) {
+          console.log('detected image')
+          this.personUpdates.imageUrl = url
+          console.log('url used to update' +  url)
+
+          console.log('person updates object' +  JSON.stringify(this.personUpdates))
+
         },
         remove: function () {
             this.$emit('bye', this.person)
@@ -69,12 +79,12 @@ var person = Vue.component('person', {
             return 'member[' + this.index + ']' + val
         },
         imageUrl : function () {
-           return '/committee/' + this.person.technicalId + '/image'
+           return this.person.imageUrl ? this.person.imageUrl : '/committee/' + this.person.technicalId + '/image'
         }
     },
     template: '<div class="">\
                     <div runat="server" style="border:solid 1px">\
-                       <image-uploader v-bind:inputLabel="inputLabel(\'image\')" v-bind:image="imageUrl()" v-bind:previewheight="120" v-bind:previewwidth="120"></image-uploader>\
+                       <image-uploader v-on:updated="replaceImage" v-bind:inputLabel="inputLabel(\'image\')" v-bind:image="imageUrl()" v-bind:previewheight="120" v-bind:previewwidth="120"></image-uploader>\
                        <input type="text" v-on:change="change" placeholder="Committee Position" v-bind:name="inputLabel(\'description\')" v-model="this.person.description"/>\
                        <input type="hidden" v-bind:name="inputLabel(\'position\')" v-bind:value="this.person.position" readonly/>\
                        <input  type="hidden" v-bind:value="this.person.technicalId" v-bind:name="inputLabel(\'id\')">\
@@ -110,8 +120,6 @@ var committeeUpdater = new Vue({
             this.sortPeople()
             var position = 0;
             this.people.forEach(p => {p.randomId = this.generateRandomId(); p.position = position++;})
-
-
         }.bind(this);
         oReq.addEventListener("load", this.reqListener);
         oReq.open("GET", "/json/committee");
