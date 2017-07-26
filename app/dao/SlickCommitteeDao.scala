@@ -22,7 +22,7 @@ trait CommitteeComponent {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def description = column[String]("description")
-    def image = column[Array[Byte]]("image")
+    def image = column[Option[Array[Byte]]]("image")
     def position = column[Long]("position")
 
     // the ? method lifts the column into an option
@@ -50,7 +50,7 @@ class SlickCommitteeDao extends HasDatabaseConfig[JdbcProfile] with CommitteeCom
     dbConfig.db.run(committee += member)
   }
 
-  def imageById(id : Long): Future[Array[Byte]] = {
+  def imageById(id : Long): Future[Option[Array[Byte]]] = {
     val findById = committee.filter(_.id === id)
     return dbConfig.db.run(findById.map(_.image).result.head)
   }
@@ -66,7 +66,7 @@ class SlickCommitteeDao extends HasDatabaseConfig[JdbcProfile] with CommitteeCom
     println("Q is " + q)
 
 
-    val findUrl: QueryBase[Seq[Array[Byte]]] = committee.filter(_.id === member.id).map(_.image)
+    val findUrl: QueryBase[Seq[Option[Array[Byte]]]] = committee.filter(_.id === member.id).map(_.image)
 
     // messy code
     val image = if (member.image == null) {Await.result(dbConfig.db.run(findUrl.result), Duration(10, "seconds")).head} else {member.image}

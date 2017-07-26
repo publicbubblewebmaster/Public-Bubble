@@ -24,7 +24,7 @@ trait StaticPageComponent {
 
     def content = column[String]("content")
 
-    def image = column[Array[Byte]]("image")
+    def image = column[Option[Array[Byte]]]("image")
 
     // the ? method lifts the column into an option
     def * = (id.?, content, image) <> ((StaticPage.apply _).tupled, StaticPage.unapply)
@@ -43,7 +43,7 @@ class SlickStaticPageDao extends HasDatabaseConfig[JdbcProfile] with StaticPageC
 
   def updateFrontpage(content: String, image: Array[Byte]): Future[Boolean] = {
     val query = for {b <- staticpages if b.id === 1L} yield (b.id, b.content, b.image)
-    var imageForUpdate = if (image == null) {getFrontPage().image} else image
+    var imageForUpdate = if (image == null) {getFrontPage().image} else Some(image)
     db.run(query.update(1L, content, imageForUpdate)).map(_ == 1)
   }
 

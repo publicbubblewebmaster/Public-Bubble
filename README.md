@@ -26,7 +26,7 @@ set the following environment variables:
 1. JDBC_URL
 1. DATABASE_USERNAME
 1. DATABASE_PASSWORD
-1.
+1. GOOGLE_API_SERVER_KEY
 
 Initialize the database:
 ```sql

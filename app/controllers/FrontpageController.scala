@@ -24,7 +24,13 @@ object FrontpageController extends Controller {
   }
 
   def image = Action {
-    Ok(frontpageDao.getFrontPage().image)
+    val imageMaybe = frontpageDao.getFrontPage().image
+    imageMaybe match {
+      case Some(image) =>
+        Ok(image)
+      case None =>
+        NotFound("Frontpage image not found")
+    }
   }
 
   def updateFrontpage = Authenticated(parse.multipartFormData) {

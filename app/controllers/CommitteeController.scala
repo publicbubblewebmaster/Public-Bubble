@@ -34,16 +34,25 @@ object CommitteeController extends Controller {
       val fileforUpload = photo.filter(f => !f.ref.file.getName.isEmpty).map(f => Files.readAllBytes(f.ref.file.toPath))
 
       if (technicalId.isDefined && !technicalId.get.isEmpty) {
-        committeDao.update(Member(technicalId.map(_.toLong), description.get, fileforUpload.orNull, position)).foreach(_ => println("UPDATED"))
+        committeDao.update(Member(technicalId.map(_.toLong), description.get, fileforUpload, position)).foreach(_ => println("UPDATED"))
       } else {
-        committeDao.create(Member(None, description.getOrElse("EMPTY"), fileforUpload.orNull, position)).foreach(_ => println("CREATED"))
+        committeDao.create(Member(None, description.getOrElse("EMPTY"), fileforUpload, position)).foreach(_ => println("CREATED"))
       }
     })
     Future(Redirect("/update/committee"))
   }
 
   def image(id : Long) = Action.async {
-   committeDao.imageById(id).map(Ok(_))
+   committeDao.imageById(id).map(
+     maybeImage => {
+       if (maybeImage.isDefined) {
+         Ok(maybeImage.get)
+       } else {
+         NotFound("Committee member image missing")
+       }
+     }
+
+   )
   }
 
 }
