@@ -25,14 +25,16 @@
     <header class="row">
         <div id="bubble-banner" >
         <img style="height:50px" src="@routes.Assets.at("images/logo_mobile.svg")" class="large-4 columns show-for-small-only"">
-        <nav id="bubble-banner-nav" class="large-8 columns">
+        <nav id="bubble-banner-nav">
             <ul class="button-group">
-            <li><a class="button nav-button" href="/update/committee">
-                <label>Edit the committee</label>
+              <li><a class="button nav-button" href="/update/frontpage">
+                <img class="nav-icon" src="@routes.Assets.at("icons/fi-page.svg")">
+                <label>Update the frontpage</label>
                 </a>
             </li>
-            <li><a class="button nav-button" href="/update/frontpage">
-                <label>Edit the frontpage</label>
+              <li><a class="button nav-button" href="/update/committee">
+                <img class="nav-icon" src="@routes.Assets.at("icons/fi-torsos-all.svg")">
+                <label>Update the committee</label>
                 </a>
             </li>
             <li><a class="button nav-button" href="/create/event">
