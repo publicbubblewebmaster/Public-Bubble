@@ -3,11 +3,11 @@
 # ~~~~
 
 GET     /                           controllers.Application.aboutUs
-GET     /aboutUs                    controllers.Application.aboutUs
+GET     /about-us                   controllers.Application.aboutUs
 GET     /update/committee           controllers.CommitteeController.committeeEditor
 POST    /update/committee           controllers.CommitteeController.updateCommittee
-POST    /update/frontpage           controllers.FrontpageController.updateFrontpage
-GET     /update/frontpage           controllers.FrontpageController.frontpageEditor
+POST    /update/introduction        controllers.FrontpageController.updateFrontpage
+GET     /update/introduction        controllers.FrontpageController.frontpageEditor
 GET     /editor                     controllers.Security.showLoginForm
 GET     /logout                     controllers.Security.logout
 POST    /login                      controllers.Security.handleLogin
@@ -55,3 +55,4 @@ GET     /frontpage/image             controllers.FrontpageController.image
 GET     /blog/:id/image              controllers.BlogsController.image(id : Long)
 GET     /committee/:id/image         controllers.CommitteeController.image(id : Long)
 
+GET     /favicon.ico                 controllers.Assets.at(path="/public/", file="images/favicon.png")

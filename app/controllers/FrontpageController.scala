@@ -47,7 +47,7 @@ object FrontpageController extends Controller {
 
       Await.result(updatedFrontpage.map(
         b => if (b) {
-          Redirect("/update/frontpage")
+          Redirect("/update/introduction")
         } else {
           InternalServerError("Error updating frontpage")
         }

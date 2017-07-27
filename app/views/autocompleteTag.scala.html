@@ -4,7 +4,7 @@
 
 
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=@{Play.current.configuration.getString("google.api.key")}"></script>
-    <script type="text/jsx" src="@routes.Assets.at("javascripts/components/google-location-autocomplete.js")" ></script>
+    <script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/google-location-autocomplete.js")" ></script>
 
 <div id="autoComplete"></div>
 

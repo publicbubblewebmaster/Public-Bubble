@@ -42,13 +42,13 @@
     </div>
 </form>z
 
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/event-list.js")" ></script>
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-components.js")" ></script>
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/events-calendar.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/event-list.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/events-components.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/events-calendar.js")" ></script>
 
 @if(!eventForm.value.isEmpty) {
-<script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
+<script src="@routes.Assets.at("/public","/javascripts/foundation/foundation.alert.js")" defer></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/image-upload-button.js")" defer></script>
     <form class="small-8 columns small-centered" id="event-image-uploader" action="@routes.EventsController.uploadImage" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" v-bind:value="this.blogId()"/>
     <input type="hidden" name="domainObject" value="blog"/>

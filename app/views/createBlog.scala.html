@@ -2,7 +2,7 @@
 @contentCreator("Blog Form") {
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
-<script src="@routes.Assets.at("javascripts/vue/vue.js")"></script>
+<script src="@routes.Assets.at("/public","/javascripts/vue/vue.js")"></script>
 
 <div id="blogsBox" class="small-2 columns"></div>
 <div class="row">
@@ -40,11 +40,11 @@
     </div>
 </form>
 
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/entity-list.js")" ></script>
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/blogs-components.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/entity-list.js")" ></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/blogs-components.js")" ></script>
 @if(!blogForm.value.isEmpty) {
-<script src="@routes.Assets.at("javascripts/foundation/foundation.alert.js")" defer></script>
-<script type="text/jsx" src="@routes.Assets.at("javascripts/components/image-upload-button.js")" defer></script>
+<script src="@routes.Assets.at("/public","/javascripts/foundation/foundation.alert.js")" defer></script>
+<script type="text/jsx" src="@routes.Assets.at("/public","/javascripts/components/image-upload-button.js")" defer></script>
 
 
 <script>

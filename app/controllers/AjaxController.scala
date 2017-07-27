@@ -30,7 +30,7 @@ object AjaxController extends Controller {
 
   def deleteCommitteeMember(id: Long) = Action {
     val committee = Await.result(committeDao.delete(id), Duration(5, "seconds"))
-    Redirect("/update/frontpage")
+    Redirect("/update/introduction")
   }
 
 }

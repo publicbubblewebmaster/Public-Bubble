@@ -13,10 +13,10 @@
     <title>@title</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="@routes.Assets.at("stylesheets/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("stylesheets/sticky-footer.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("stylesheets/override.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("stylesheets/custom.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("/public","/stylesheets/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("/public","/stylesheets/sticky-footer.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("/public","/stylesheets/override.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("/public","/stylesheets/custom.css")" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="navbar.css" rel="stylesheet">
@@ -28,8 +28,8 @@
     <![endif]-->
 
     <!-- React -->
-    <script src="@routes.Assets.at("javascripts/react/react.js")"></script>
-    <script src="@routes.Assets.at("javascripts/react/JSXTransformer.js")"></script>
+    <script src="@routes.Assets.at("/public","/javascripts/react/react.js")"></script>
+    <script src="@routes.Assets.at("/public","/javascripts/react/JSXTransformer.js")"></script>
 
 </head>
 
@@ -45,38 +45,38 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-                <img class="main-logo" style="margin-left: -10px" src="@routes.Assets.at("images/logo_default_edit.svg")"">
+                <img class="main-logo" style="margin-left: -10px" src="@routes.Assets.at("/public","/images/logo_default_edit.svg")"">
             </a>
         </div>
         <div id="navbar" style="margin-left:200px"class="navbar-collapse collapse">
             <ul class="nav navbar-nav" >
-                <li><a  href="/aboutUs">
-                    <img class="icon-autosize" src="@routes.Assets.at("icons/fi-home.svg")"">
+                <li><a  href="/about-us">
+                    <img class="icon-autosize" src="@routes.Assets.at("/public","/icons/fi-home.svg")"">
                     <p class="nav-text">
                         About Us
                     </p>
                 </a>
                 </li>
                 <li><a href="/events">
-                    <img class="icon-autosize" src="@routes.Assets.at("icons/fi-calendar.svg")"">
+                    <img class="icon-autosize" src="@routes.Assets.at("/public","/icons/fi-calendar.svg")"">
                     <p class="nav-text">
                         Events
                     </p>
                 </a></li>
                 <li><a href="/blogs">
-                    <img class="icon-autosize" src="@routes.Assets.at("icons/fi-comments.svg")"">
+                    <img class="icon-autosize" src="@routes.Assets.at("/public","/icons/fi-comments.svg")"">
                     <p class="nav-text">
                         Blogs
                     </p>
                 </a></li>
                 <li><a href="/twitter">
-                    <img class="icon-autosize" src="@routes.Assets.at("icons/fi-social-twitter.svg")"">
+                    <img class="icon-autosize" src="@routes.Assets.at("/public","/icons/fi-social-twitter.svg")"">
                     <p class="nav-text">
                         Follow Us
                     </p>
                 </a></li>
                 <li><a href="/facebook">
-                    <img class="icon-autosize" src="@routes.Assets.at("icons/fi-like.svg")"">
+                    <img class="icon-autosize" src="@routes.Assets.at("/public","/icons/fi-like.svg")"">
                     <p class="nav-text">
                         Like Us
                     </p>
@@ -101,7 +101,7 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="@routes.Assets.at("stylesheets/bootstrap/js/bootstrap.min.js")"></script>
+<script src="@routes.Assets.at("/public","/stylesheets/bootstrap/js/bootstrap.min.js")"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 <!--Google Analytics-->
