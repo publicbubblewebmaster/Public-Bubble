@@ -28,6 +28,11 @@ set the following environment variables:
 1. DATABASE_PASSWORD
 1. GOOGLE_API_SERVER_KEY
 
+Connect to the database:
+```
+docker run -it  --link public_bubble_postgres postgres:9.4 psql --host public_bubble_postgres --user docker --db public_bubble_local
+```
+
 Initialize the database:
 ```sql
 insert into user (email, role) values ('email-address', 'admin');

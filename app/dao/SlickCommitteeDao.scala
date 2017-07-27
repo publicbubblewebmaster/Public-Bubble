@@ -69,7 +69,7 @@ class SlickCommitteeDao extends HasDatabaseConfig[JdbcProfile] with CommitteeCom
     val findUrl: QueryBase[Seq[Option[Array[Byte]]]] = committee.filter(_.id === member.id).map(_.image)
 
     // messy code
-    val image = if (member.image == null) {Await.result(dbConfig.db.run(findUrl.result), Duration(10, "seconds")).head} else {member.image}
+    val image : Option[Array[Byte]] = if (member.image.isEmpty) {Await.result(dbConfig.db.run(findUrl.result), Duration(10, "seconds")).head} else {member.image}
 
     return dbConfig.db.run(q.update(member.description, image, member.position))
   }
